@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ | 飲食店サポート</title>
+    <meta name="description" content="飲食店のメニュー表作成とウェブマーケティングに関するお問い合わせ。初回相談は無料です。お気軽にご連絡ください。">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-container container">
+            <div class="logo">
+                <a href="index.html">
+                    <span>飲食店サポート</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">ホーム</a></li>
+                    <li class="nav-item"><a href="menu-design.html" class="nav-link">メニュー表作成</a></li>
+                    <li class="nav-item"><a href="web-marketing.html" class="nav-link">ウェブマーケティング</a></li>
+                    <li class="nav-item"><a href="portfolio.html" class="nav-link">制作実績</a></li>
+                    <li class="nav-item"><a href="pricing.html" class="nav-link">料金プラン</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-cta">お問い合わせ</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- モバイルナビゲーション -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fas fa-times"></i>
+        </div>
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="index.html" class="mobile-nav-link">ホーム</a></li>
+            <li class="mobile-nav-item"><a href="menu-design.html" class="mobile-nav-link">メニュー表作成</a></li>
+            <li class="mobile-nav-item"><a href="web-marketing.html" class="mobile-nav-link">ウェブマーケティング</a></li>
+            <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link">制作実績</a></li>
+            <li class="mobile-nav-item"><a href="pricing.html" class="mobile-nav-link">料金プラン</a></li>
+        </ul>
+        <a href="contact.html" class="mobile-nav-cta">お問い合わせ</a>
+        <div class="mobile-nav-social">
+            <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- ヘッダーセクション -->
+    <section class="page-header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/contact-header.jpg');">
+        <div class="container">
+            <h1 class="page-title">お問い合わせ</h1>
+            <p class="page-subtitle">メニュー表作成やウェブマーケティングについて、お気軽にご相談ください</p>
+        </div>
+    </section>
+
+    <!-- お問い合わせフォーム -->
+    <section class="contact-form-section section">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2 class="section-title">お問い合わせ方法</h2>
+                    <p class="contact-description">以下のフォームからお問い合わせいただくか、電話やメールでも受け付けております。初回相談は無料です。</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="contact-method-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3 class="contact-method-title">メール</h3>
+                            <p class="contact-method-value">info@example.com</p>
+                        </div>
+                        <div class="contact-method">
+                            <div class="contact-method-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <h3 class="contact-method-title">電話</h3>
+                            <p class="contact-method-value">090-1234-5678</p>
+                            <p class="contact-method-note">（平日10:00〜18:00）</p>
+                        </div>
+                        <div class="contact-method">
+                            <div class="contact-method-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="contact-method-title">対応時間</h3>
+                            <p class="contact-method-value">平日10:00〜18:00</p>
+                            <p class="contact-method-note">（土日祝日は休業）</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-social">
+                        <h3 class="contact-social-title">SNS</h3>
+                        <div class="contact-social-links">
+                            <a href="#" class="contact-social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="contact-social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="contact-social-link"><i class="fab fa-facebook-f"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h2 class="section-title">お問い合わせフォーム</h2>
+                    <form id="contact-form" action="#" method="post">
+                        <div class="form-group">
+                            <label for="name">お名前 <span class="required">*</span></label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">メールアドレス <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">電話番号</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">店舗名・会社名</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label>お問い合わせ内容 <span class="required">*</span></label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="inquiry_type[]" value="menu_design">
+                                    <span>メニュー表作成について</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="inquiry_type[]" value="web_marketing">
+                                    <span>ウェブマーケティングについて</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="inquiry_type[]" value="pricing">
+                                    <span>料金について</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="inquiry_type[]" value="other">
+                                    <span>その他</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">お問い合わせ詳細 <span class="required">*</span></label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label privacy-label">
+                                <input type="checkbox" name="privacy_policy" required>
+                                <span><a href="#privacy-policy">プライバシーポリシー</a>に同意する <span class="required">*</span></span>
+                            </label>
+                        </div>
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary">送信する</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- よくある質問 -->
+    <section class="faq section" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2 class="section-title">よくある質問</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>初回相談は無料ですか？</h3>
+                        <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>はい、初回相談は無料です。お客様のご要望をヒアリングし、最適なプランをご提案いたします。</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>対応エリアはどこですか？</h3>
+                        <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>基本的にはオンラインでの対応となりますので、全国どこでもご利用いただけます。写真撮影など現地での作業が必要な場合は、別途ご相談ください。</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>納期はどのくらいですか？</h3>
+                        <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>メニュー表作成は基本的に2〜3週間、ウェブマーケティングの初期設定は1〜2週間を目安としています。ただし、内容や規模によって変動しますので、詳細はお問い合わせください。</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>支払い方法は何がありますか？</h3>
+                        <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>銀行振込、クレジットカード、PayPalに対応しています。詳細は料金プランページをご確認ください。</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>キャンセルポリシーはありますか？</h3>
+                        <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>契約後のキャンセルについては、作業の進行状況に応じて料金が発生する場合があります。詳細は契約時にご説明いたします。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- プライバシーポリシー -->
+    <section class="privacy-policy section" id="privacy-policy">
+        <div class="container">
+            <h2 class="section-title">プライバシーポリシー</h2>
+            <div class="privacy-policy-content">
+                <h3>1. 個人情報の収集について</h3>
+                <p>当サービスでは、お問い合わせやサービス提供のために、お名前、メールアドレス、電話番号などの個人情報を収集することがあります。これらの情報は、お客様との連絡やサービス提供、請求業務などに利用します。</p>
+                
+                <h3>2. 個人情報の利用目的</h3>
+                <p>収集した個人情報は、以下の目的で利用します。</p>
+                <ul>
+                    <li>お問い合わせへの回答</li>
+                    <li>サービスの提供</li>
+                    <li>請求業務</li>
+                    <li>サービス改善のための分析</li>
+                    <li>新サービスや更新情報のご案内（希望者のみ）</li>
+                </ul>
+                
+                <h3>3. 個人情報の第三者提供</h3>
+                <p>当サービスでは、法令に基づく場合を除き、お客様の同意なく個人情報を第三者に提供することはありません。</p>
+                
+                <h3>4. 個人情報の安全管理</h3>
+                <p>当サービスでは、個人情報の漏洩、紛失、改ざんなどを防ぐため、適切なセキュリティ対策を講じています。</p>
+                
+                <h3>5. 個人情報の開示・訂正・削除</h3>
+                <p>お客様ご自身の個人情報の開示、訂正、削除をご希望の場合は、お問い合わせフォームよりご連絡ください。</p>
+                
+                <h3>6. Cookieの使用</h3>
+                <p>当サイトでは、ユーザー体験の向上やサイト利用状況の分析のためにCookieを使用しています。Cookieの使用を望まない場合は、ブラウザの設定で無効化することができます。</p>
+                
+                <h3>7. プライバシーポリシーの変更</h3>
+                <p>当サービスは、必要に応じてプライバシーポリシーを変更することがあります。変更があった場合は、当サイトでお知らせします。</p>
+                
+                <p class="privacy-policy-date">最終更新日：2025年3月15日</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTAセクション -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">まずはお気軽にご相談ください</h2>
+            <p class="cta-subtitle">飲食店の売上アップに貢献するメニュー表作成とウェブマーケティング。あなたのお店に最適なプランをご提案します。</p>
+            <div class="cta-buttons">
+                <a href="tel:09012345678" class="btn btn-secondary">電話で相談する</a>
+                <a href="#contact-form" class="btn btn-secondary">フォームで相談する</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3 class="footer-title">飲食店サポート</h3>
+                    <p>飲食店のメニュー表作成とウェブマーケティングを専門とする副業サービス。おしゃれなメニュー表デザインと効果的な集客戦略で飲食店の売上アップをサポートします。</p>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">サービス</h3>
+                    <ul class="footer-links">
+                        <li><a href="menu-design.html" class="footer-link">メニュー表作成</a></li>
+                        <li><a href="web-marketing.html" class="footer-link">ウェブマーケティング</a></li>
+                        <li><a href="portfolio.html" class="footer-link">制作実績</a></li>
+                        <li><a href="pricing.html" class="footer-link">料金プラン</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">お問い合わせ</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <i class="fas fa-envelope footer-contact-icon"></i>
+                            <span>info@example.com</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-phone footer-contact-icon"></i>
+                            <span>090-1234-5678</span>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 飲食店サポート. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

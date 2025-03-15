@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>制作実績 | 飲食店サポート</title>
+    <meta name="description" content="飲食店のメニュー表作成とウェブマーケティングの制作実績。多くの飲食店様にご利用いただき、売上アップに貢献してきた実績をご紹介します。">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-container container">
+            <div class="logo">
+                <a href="index.html">
+                    <span>飲食店サポート</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">ホーム</a></li>
+                    <li class="nav-item"><a href="menu-design.html" class="nav-link">メニュー表作成</a></li>
+                    <li class="nav-item"><a href="web-marketing.html" class="nav-link">ウェブマーケティング</a></li>
+                    <li class="nav-item"><a href="portfolio.html" class="nav-link">制作実績</a></li>
+                    <li class="nav-item"><a href="pricing.html" class="nav-link">料金プラン</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-cta">お問い合わせ</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- モバイルナビゲーション -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fas fa-times"></i>
+        </div>
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="index.html" class="mobile-nav-link">ホーム</a></li>
+            <li class="mobile-nav-item"><a href="menu-design.html" class="mobile-nav-link">メニュー表作成</a></li>
+            <li class="mobile-nav-item"><a href="web-marketing.html" class="mobile-nav-link">ウェブマーケティング</a></li>
+            <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link">制作実績</a></li>
+            <li class="mobile-nav-item"><a href="pricing.html" class="mobile-nav-link">料金プラン</a></li>
+        </ul>
+        <a href="contact.html" class="mobile-nav-cta">お問い合わせ</a>
+        <div class="mobile-nav-social">
+            <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- ヘッダーセクション -->
+    <section class="page-header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/portfolio-header.jpg');">
+        <div class="container">
+            <h1 class="page-title">制作実績</h1>
+            <p class="page-subtitle">多くの飲食店様にご利用いただき、売上アップに貢献してきた実績をご紹介します</p>
+        </div>
+    </section>
+
+    <!-- ポートフォリオフィルター -->
+    <section class="portfolio-filter-section section">
+        <div class="container">
+            <div class="portfolio-filter-container">
+                <button class="portfolio-filter active" data-filter="all">すべて</button>
+                <button class="portfolio-filter" data-filter="menu-design">メニュー表デザイン</button>
+                <button class="portfolio-filter" data-filter="web-marketing">ウェブマーケティング</button>
+                <button class="portfolio-filter" data-filter="restaurant">レストラン</button>
+                <button class="portfolio-filter" data-filter="cafe">カフェ</button>
+                <button class="portfolio-filter" data-filter="izakaya">居酒屋</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ポートフォリオギャラリー -->
+    <section class="portfolio-gallery section">
+        <div class="container">
+            <div class="portfolio-container">
+                <!-- メニュー表デザイン実績 -->
+                <div class="portfolio-item menu-design restaurant">
+                    <img src="assets/images/portfolio-1.jpg" alt="イタリアンレストランのメニュー表" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">イタリアンレストラン</h3>
+                        <p class="portfolio-category">メニュー表デザイン</p>
+                        <a href="#portfolio-modal-1" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+                <div class="portfolio-item menu-design cafe">
+                    <img src="assets/images/portfolio-2.jpg" alt="カフェのメニュー表" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">カフェ</h3>
+                        <p class="portfolio-category">メニュー表デザイン</p>
+                        <a href="#portfolio-modal-2" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+                <div class="portfolio-item menu-design izakaya">
+                    <img src="assets/images/portfolio-3.jpg" alt="居酒屋のメニュー表" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">居酒屋</h3>
+                        <p class="portfolio-category">メニュー表デザイン</p>
+                        <a href="#portfolio-modal-3" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+                <div class="portfolio-item menu-design restaurant">
+                    <img src="assets/images/portfolio-4.jpg" alt="ラーメン店のメニュー表" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">ラーメン店</h3>
+                        <p class="portfolio-category">メニュー表デザイン</p>
+                        <a href="#portfolio-modal-4" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+
+                <!-- ウェブマーケティング実績 -->
+                <div class="portfolio-item web-marketing restaurant">
+                    <img src="assets/images/portfolio-5.jpg" alt="レストランのMEO対策" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">フレンチレストラン</h3>
+                        <p class="portfolio-category">MEO対策</p>
+                        <a href="#portfolio-modal-5" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+                <div class="portfolio-item web-marketing cafe">
+                    <img src="assets/images/portfolio-6.jpg" alt="カフェのSNS運用" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">スイーツカフェ</h3>
+                        <p class="portfolio-category">SNS運用</p>
+                        <a href="#portfolio-modal-6" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+                <div class="portfolio-item web-marketing izakaya">
+                    <img src="assets/images/portfolio-7.jpg" alt="居酒屋の広告運用" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">創作居酒屋</h3>
+                        <p class="portfolio-category">広告運用</p>
+                        <a href="#portfolio-modal-7" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+                <div class="portfolio-item web-marketing restaurant">
+                    <img src="assets/images/portfolio-8.jpg" alt="ラーメン店のウェブサイト制作" class="portfolio-image">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">つけ麺専門店</h3>
+                        <p class="portfolio-category">ウェブサイト制作</p>
+                        <a href="#portfolio-modal-8" class="portfolio-link portfolio-modal-open">詳細を見る</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ポートフォリオモーダル -->
+    <div class="portfolio-modal" id="portfolio-modal-1">
+        <div class="portfolio-modal-content">
+            <span class="portfolio-modal-close">&times;</span>
+            <div class="portfolio-modal-body">
+                <h2 class="portfolio-modal-title">イタリアンレストランのメニュー表デザイン</h2>
+                <div class="portfolio-modal-images">
+                    <img src="assets/images/portfolio-1-detail.jpg" alt="イタリアンレストランのメニュー表 詳細">
+                    <img src="assets/images/portfolio-1-detail-2.jpg" alt="イタリアンレストランのメニュー表 詳細2">
+                </div>
+                <div class="portfolio-modal-info">
+                    <div class="portfolio-modal-description">
+                        <h3>プロジェクト概要</h3>
+                        <p>高級イタリアンレストランのメニュー表をリニューアル。シックで上品なデザインに、料理の魅力を引き立てる写真と説明文を加え、客単価アップを目指しました。</p>
+                        <h3>課題と解決策</h3>
+                        <p>従来のメニュー表は情報が多すぎて読みにくく、高級感も不足していました。新デザインでは、余白を効果的に使い、上質な紙材を選定。コース料理を中心に構成し、アラカルトは別冊にすることで選びやすさを向上させました。</p>
+                        <h3>成果</h3>
+                        <p>新メニュー表導入後、客単価が15%向上。特にワインやデザートの注文が増加し、顧客満足度も向上しました。</p>
+                    </div>
+                    <div class="portfolio-modal-details">
+                        <div class="portfolio-modal-detail">
+                            <span class="portfolio-modal-detail-label">クライアント</span>
+                            <span class="portfolio-modal-detail-value">リストランテ・ベローナ</span>
+                        </div>
+                        <div class="portfolio-modal-detail">
+                            <span class="portfolio-modal-detail-label">カテゴリ</span>
+                            <span class="portfolio-modal-detail-value">メニュー表デザイン</span>
+                        </div>
+                        <div class="portfolio-modal-detail">
+                            <span class="portfolio-modal-detail-label">制作期間</span>
+                            <span class="portfolio-modal-detail-value">3週間</span>
+                        </div>
+                        <div class="portfolio-modal-detail">
+                            <span class="portfolio-modal-detail-label">使用ツール</span>
+                            <span class="portfolio-modal-detail-value">Adobe Illustrator, Photoshop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 他のポートフォリオモーダルも同様に実装 -->
+
+    <!-- お客様の声 -->
+    <section class="testimonials section" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2 class="section-title">お客様の声</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-item">
+                    <p class="testimonial-text">新しいメニュー表に変えてから、お客様からの反応が良くなり、客単価も上がりました。特に写真の撮り方やメニューの説明文が素晴らしいです。</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/testimonial-1.jpg" alt="山田様" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4 class="testimonial-name">山田様</h4>
+                            <p class="testimonial-position">イタリアンレストラン オーナー</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-text">MEO対策をお願いしてから、Googleでの検索順位が上がり、新規のお客様が増えました。投資以上のリターンがあり、大変満足しています。</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/testimonial-2.jpg" alt="佐藤様" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4 class="testimonial-name">佐藤様</h4>
+                            <p class="testimonial-position">カフェ オーナー</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-text">Instagram運用のサポートを受けて、フォロワー数が3倍に増えました。写真の撮り方や投稿のコツを教えてもらい、自分たちでも続けられるようになりました。</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/testimonial-3.jpg" alt="鈴木様" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4 class="testimonial-name">鈴木様</h4>
+                            <p class="testimonial-position">居酒屋 店長</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTAセクション -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">あなたの飲食店も成功事例に加えませんか？</h2>
+            <p class="cta-subtitle">メニュー表作成やウェブマーケティングについて、まずはお気軽にご相談ください。初回相談は無料です。</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-secondary">無料相談はこちら</a>
+                <a href="pricing.html" class="btn btn-secondary">料金プランを見る</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3 class="footer-title">飲食店サポート</h3>
+                    <p>飲食店のメニュー表作成とウェブマーケティングを専門とする副業サービス。おしゃれなメニュー表デザインと効果的な集客戦略で飲食店の売上アップをサポートします。</p>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">サービス</h3>
+                    <ul class="footer-links">
+                        <li><a href="menu-design.html" class="footer-link">メニュー表作成</a></li>
+                        <li><a href="web-marketing.html" class="footer-link">ウェブマーケティング</a></li>
+                        <li><a href="portfolio.html" class="footer-link">制作実績</a></li>
+                        <li><a href="pricing.html" class="footer-link">料金プラン</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">お問い合わせ</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <i class="fas fa-envelope footer-contact-icon"></i>
+                            <span>info@example.com</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-phone footer-contact-icon"></i>
+                            <span>090-1234-5678</span>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 飲食店サポート. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // ポートフォリオモーダル用のスクリプト
+        document.addEventListener('DOMContentLoaded', function() {
+            // モーダルを開く
+            const modalOpeners = document.querySelectorAll('.portfolio-modal-open');
+            modalOpeners.forEach(opener => {
+                opener.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const modalId = this.getAttribute('href');
+                    const modal = document.querySelector(modalId);
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden'; // スクロール防止
+                });
+            });
+            
+            // モーダルを閉じる
+            const modalClosers = document.querySelectorAll('.portfolio-modal-close');
+            modalClosers.forEach(closer => {
+                closer.addEventListener('click', function() {
+                    const modal = this.closest('.portfolio-modal');
+                    modal.style.display = 'none';
+                    document.body.style.overflow = ''; // スクロール再開
+                });
+            });
+            
+            // モーダル外クリックで閉じる
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('portfolio-modal')) {
+                    e.target.style.display = 'none';
+                    document.body.style.overflow = ''; // スクロール再開
+                }
+            });
+        });
+    </script>
+</body>
+</html>

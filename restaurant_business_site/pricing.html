@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>料金プラン | 飲食店サポート</title>
+    <meta name="description" content="飲食店のメニュー表作成とウェブマーケティングの料金プラン。リーズナブルな価格で高品質なサービスを提供します。">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-container container">
+            <div class="logo">
+                <a href="index.html">
+                    <span>飲食店サポート</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">ホーム</a></li>
+                    <li class="nav-item"><a href="menu-design.html" class="nav-link">メニュー表作成</a></li>
+                    <li class="nav-item"><a href="web-marketing.html" class="nav-link">ウェブマーケティング</a></li>
+                    <li class="nav-item"><a href="portfolio.html" class="nav-link">制作実績</a></li>
+                    <li class="nav-item"><a href="pricing.html" class="nav-link">料金プラン</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-cta">お問い合わせ</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- モバイルナビゲーション -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fas fa-times"></i>
+        </div>
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="index.html" class="mobile-nav-link">ホーム</a></li>
+            <li class="mobile-nav-item"><a href="menu-design.html" class="mobile-nav-link">メニュー表作成</a></li>
+            <li class="mobile-nav-item"><a href="web-marketing.html" class="mobile-nav-link">ウェブマーケティング</a></li>
+            <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link">制作実績</a></li>
+            <li class="mobile-nav-item"><a href="pricing.html" class="mobile-nav-link">料金プラン</a></li>
+        </ul>
+        <a href="contact.html" class="mobile-nav-cta">お問い合わせ</a>
+        <div class="mobile-nav-social">
+            <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- ヘッダーセクション -->
+    <section class="page-header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/pricing-header.jpg');">
+        <div class="container">
+            <h1 class="page-title">料金プラン</h1>
+            <p class="page-subtitle">リーズナブルな価格で高品質なサービスを提供します</p>
+        </div>
+    </section>
+
+    <!-- 料金プラン切り替え -->
+    <section class="pricing-toggle-section section">
+        <div class="container">
+            <div class="pricing-toggle-container">
+                <button class="pricing-toggle active" data-pricing="menu-design">メニュー表作成</button>
+                <button class="pricing-toggle" data-pricing="web-marketing">ウェブマーケティング</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- メニュー表作成料金 -->
+    <section class="pricing-tables section" id="menu-design-pricing">
+        <div class="container">
+            <div class="pricing-table" data-pricing="menu-design">
+                <h2 class="section-title">メニュー表作成料金</h2>
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-card-title">ベーシックプラン</h3>
+                            <div class="pricing-card-price">
+                                <span class="price">¥20,000</span>
+                                <span class="period">〜</span>
+                            </div>
+                        </div>
+                        <div class="pricing-card-body">
+                            <ul class="pricing-card-features">
+                                <li><i class="fas fa-check"></i> 1〜2ページのメニュー表</li>
+                                <li><i class="fas fa-check"></i> 基本デザイン</li>
+                                <li><i class="fas fa-check"></i> テキスト入力</li>
+                                <li><i class="fas fa-check"></i> 修正2回まで</li>
+                                <li><i class="fas fa-times"></i> 写真撮影アドバイス</li>
+                                <li><i class="fas fa-times"></i> 印刷サポート</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card-footer">
+                            <a href="contact.html" class="btn btn-primary">お問い合わせ</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="pricing-card-badge">人気</div>
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-card-title">スタンダードプラン</h3>
+                            <div class="pricing-card-price">
+                                <span class="price">¥40,000</span>
+                                <span class="period">〜</span>
+                            </div>
+                        </div>
+                        <div class="pricing-card-body">
+                            <ul class="pricing-card-features">
+                                <li><i class="fas fa-check"></i> 3〜5ページのメニュー表</li>
+                                <li><i class="fas fa-check"></i> カスタムデザイン</li>
+                                <li><i class="fas fa-check"></i> テキスト入力・編集</li>
+                                <li><i class="fas fa-check"></i> 修正3回まで</li>
+                                <li><i class="fas fa-check"></i> 写真撮影アドバイス</li>
+                                <li><i class="fas fa-check"></i> 印刷サポート</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card-footer">
+                            <a href="contact.html" class="btn btn-primary">お問い合わせ</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-card-title">プレミアムプラン</h3>
+                            <div class="pricing-card-price">
+                                <span class="price">¥80,000</span>
+                                <span class="period">〜</span>
+                            </div>
+                        </div>
+                        <div class="pricing-card-body">
+                            <ul class="pricing-card-features">
+                                <li><i class="fas fa-check"></i> 6ページ以上のメニュー表</li>
+                                <li><i class="fas fa-check"></i> 完全オリジナルデザイン</li>
+                                <li><i class="fas fa-check"></i> テキスト入力・編集・校正</li>
+                                <li><i class="fas fa-check"></i> 修正回数無制限</li>
+                                <li><i class="fas fa-check"></i> 写真撮影アドバイス</li>
+                                <li><i class="fas fa-check"></i> 印刷サポート（印刷費込み）</li>
+                                <li><i class="fas fa-check"></i> デジタルメニュー作成</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card-footer">
+                            <a href="contact.html" class="btn btn-primary">お問い合わせ</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-notes">
+                    <p>※ 料金はメニュー表の複雑さや内容によって変動する場合があります。</p>
+                    <p>※ 写真撮影が必要な場合は、別途料金が発生します。</p>
+                    <p>※ 印刷費用はプレミアムプラン以外は含まれていません。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ウェブマーケティング料金 -->
+    <section class="pricing-tables section" id="web-marketing-pricing" style="display: none;">
+        <div class="container">
+            <div class="pricing-table" data-pricing="web-marketing">
+                <h2 class="section-title">ウェブマーケティング料金</h2>
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-card-title">初期設定プラン</h3>
+                            <div class="pricing-card-price">
+                                <span class="price">¥50,000</span>
+                                <span class="period">（初回のみ）</span>
+                            </div>
+                        </div>
+                        <div class="pricing-card-body">
+                            <ul class="pricing-card-features">
+                                <li><i class="fas fa-check"></i> 現状分析</li>
+                                <li><i class="fas fa-check"></i> 競合調査</li>
+                                <li><i class="fas fa-check"></i> 戦略立案</li>
+                                <li><i class="fas fa-check"></i> Googleビジネスプロフィール最適化</li>
+                                <li><i class="fas fa-check"></i> SNSアカウント設定</li>
+                                <li><i class="fas fa-times"></i> 広告アカウント設定</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card-footer">
+                            <a href="contact.html" class="btn btn-primary">お問い合わせ</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="pricing-card-badge">人気</div>
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-card-title">月額運用プラン</h3>
+                            <div class="pricing-card-price">
+                                <span class="price">¥30,000</span>
+                                <span class="period">／月〜</span>
+                            </div>
+                        </div>
+                        <div class="pricing-card-body">
+                            <ul class="pricing-card-features">
+                                <li><i class="fas fa-check"></i> MEO対策</li>
+                                <li><i class="fas fa-check"></i> SNS運用（週2回投稿）</li>
+                                <li><i class="fas fa-check"></i> 口コミ対応</li>
+                                <li><i class="fas fa-check"></i> 月次レポート</li>
+                                <li><i class="fas fa-check"></i> 改善提案</li>
+                                <li><i class="fas fa-times"></i> 広告運用</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card-footer">
+                            <a href="contact.html" class="btn btn-primary">お問い合わせ</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-card-title">プレミアムプラン</h3>
+                            <div class="pricing-card-price">
+                                <span class="price">¥80,000</span>
+                                <span class="period">／月〜</span>
+                            </div>
+                        </div>
+                        <div class="pricing-card-body">
+                            <ul class="pricing-card-features">
+                                <li><i class="fas fa-check"></i> MEO対策</li>
+                                <li><i class="fas fa-check"></i> SNS運用（週3回投稿）</li>
+                                <li><i class="fas fa-check"></i> 口コミ対応</li>
+                                <li><i class="fas fa-check"></i> 広告運用（予算別途）</li>
+                                <li><i class="fas fa-check"></i> ウェブサイト更新</li>
+                                <li><i class="fas fa-check"></i> 週次・月次レポート</li>
+                                <li><i class="fas fa-check"></i> 定期ミーティング</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card-footer">
+                            <a href="contact.html" class="btn btn-primary">お問い合わせ</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-notes">
+                    <p>※ 広告費は料金に含まれていません。</p>
+                    <p>※ 契約期間は基本的に3ヶ月からとなります。</p>
+                    <p>※ SNS運用の投稿回数は調整可能です。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- オプションサービス -->
+    <section class="options-section section" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2 class="section-title">オプションサービス</h2>
+            <div class="options-container">
+                <div class="option-item">
+                    <div class="option-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="option-content">
+                        <h3 class="option-title">料理写真撮影</h3>
+                        <p class="option-description">プロのフードフォトグラファーによる料理写真の撮影。</p>
+                        <p class="option-price">¥5,000〜／1品</p>
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="option-content">
+                        <h3 class="option-title">デジタルメニュー作成</h3>
+                        <p class="option-description">QRコードで閲覧できるデジタルメニューの作成。</p>
+                        <p class="option-price">¥15,000〜</p>
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-icon">
+                        <i class="fas fa-ad"></i>
+                    </div>
+                    <div class="option-content">
+                        <h3 class="option-title">広告運用</h3>
+                        <p class="option-description">Google広告やSNS広告の設定と運用。</p>
+                        <p class="option-price">¥20,000〜／月（広告費別途）</p>
+                    </div>
+                </div>
+                <div class="option-item">
+                    <div class="option-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="option-content">
+                        <h3 class="option-title">ウェブサイト制作</h3>
+                        <p class="option-description">飲食店向けの集客に特化したウェブサイト制作。</p>
+                        <p class="option-price">¥100,000〜</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 支払い方法 -->
+    <section class="payment-section section">
+        <div class="container">
+            <h2 class="section-title">支払い方法</h2>
+            <div class="payment-container">
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <div class="payment-method-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3 class="payment-method-title">銀行振込</h3>
+                        <p class="payment-method-description">指定の銀行口座にお振込みいただきます。</p>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-method-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3 class="payment-method-title">クレジットカード</h3>
+                        <p class="payment-method-description">VISA、MasterCard、JCB、AMEXに対応しています。</p>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-method-icon">
+                            <i class="fab fa-paypal"></i>
+                        </div>
+                        <h3 class="payment-method-title">PayPal</h3>
+                        <p class="payment-method-description">PayPalアカウントからのお支払いも可能です。</p>
+                    </div>
+                </div>
+                <div class="payment-terms">
+                    <h3>お支払い条件</h3>
+                    <ul>
+                        <li>メニュー表作成：着手金50%、納品時50%</li>
+                        <li>ウェブマーケティング：初期費用は契約時、月額費用は毎月前払い</li>
+                        <li>オプションサービス：サービス提供前にお支払い</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特典・割引情報 -->
+    <section class="discount-section section" style="background-color: var(--light-gray);">
+        <div class="container">
+            <h2 class="section-title">特典・割引情報</h2>
+            <div class="discount-container">
+                <div class="discount-item">
+                    <div class="discount-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="discount-content">
+                        <h3 class="discount-title">セットプラン割引</h3>
+                        <p class="discount-description">メニュー表作成とウェブマーケティングを同時にご契約いただくと、初期費用が20%オフになります。</p>
+                    </div>
+                </div>
+                <div class="discount-item">
+                    <div class="discount-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="discount-content">
+                        <h3 class="discount-title">長期契約割引</h3>
+                        <p class="discount-description">ウェブマーケティングを6ヶ月以上契約いただくと、月額料金が10%オフになります。</p>
+                    </div>
+                </div>
+                <div class="discount-item">
+                    <div class="discount-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="discount-content">
+                        <h3 class="discount-title">紹介特典</h3>
+                        <p class="discount-description">お知り合いをご紹介いただき、契約が成立した場合、次回のご利用時に10,000円割引いたします。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTAセクション -->
+    <section class="cta">
+        <div class="container">
+            <h2 class="cta-title">お見積りは無料です</h2>
+            <p class="cta-subtitle">具体的な料金やサービス内容について、お気軽にお問い合わせください。ご要望に合わせたプランをご提案いたします。</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-secondary">お問い合わせはこちら</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3 class="footer-title">飲食店サポート</h3>
+                    <p>飲食店のメニュー表作成とウェブマーケティングを専門とする副業サービス。おしゃれなメニュー表デザインと効果的な集客戦略で飲食店の売上アップをサポートします。</p>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">サービス</h3>
+                    <ul class="footer-links">
+                        <li><a href="menu-design.html" class="footer-link">メニュー表作成</a></li>
+                        <li><a href="web-marketing.html" class="footer-link">ウェブマーケティング</a></li>
+                        <li><a href="portfolio.html" class="footer-link">制作実績</a></li>
+                        <li><a href="pricing.html" class="footer-link">料金プラン</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">お問い合わせ</h3>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <i class="fas fa-envelope footer-contact-icon"></i>
+                            <span>info@example.com</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="fas fa-phone footer-contact-icon"></i>
+                            <span>090-1234-5678</span>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 飲食店サポート. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
