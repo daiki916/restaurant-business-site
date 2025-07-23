@@ -94,8 +94,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // 簡易的なバリデーション
             let isValid = true;
             const requiredFields = contactForm.querySelectorAll('[required]');
-            
+
             requiredFields.forEach(field => {
+                if (field.type === 'checkbox') {
+                    // チェックボックスの値は checked 状態を確認
+                    if (!field.checked) {
+                        field.classList.add('error');
+                    } else {
+                        field.classList.remove('error');
+                    }
+                    return; // 値はまとめて別途検証
+                }
+
                 if (!field.value.trim()) {
                     isValid = false;
                     field.classList.add('error');
@@ -103,6 +113,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     field.classList.remove('error');
                 }
             });
+
+            // お問い合わせ種別チェックボックスのバリデーション
+            const inquiryCheckboxes = contactForm.querySelectorAll('input[name="inquiry_type[]"]');
+            const inquiryChecked = Array.from(inquiryCheckboxes).some(cb => cb.checked);
+            if (!inquiryChecked) {
+                isValid = false;
+                inquiryCheckboxes.forEach(cb => cb.classList.add('error'));
+            } else {
+                inquiryCheckboxes.forEach(cb => cb.classList.remove('error'));
+            }
             
             // メールアドレスのバリデーション
             const emailField = contactForm.querySelector('input[type="email"]');

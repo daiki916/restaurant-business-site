@@ -737,3 +737,12 @@ ul, ol {
   opacity: 1;
   visibility: visible;
 }
+
+/* ===== フォームエラースタイル ===== */
+.form-group input.error,
+.form-group textarea.error {
+  border-color: var(--main-color);
+}
+.checkbox-group .error {
+  outline: 2px solid var(--main-color);
+}
