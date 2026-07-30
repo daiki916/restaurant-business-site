@@ -58,7 +58,7 @@
     <div class="overlay"></div>
 
     <!-- ヘッダーセクション -->
-    <section class="page-header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/contact-header.jpg');">
+    <section class="page-header" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/contact-header.svg');">
         <div class="container">
             <h1 class="page-title">お問い合わせ</h1>
             <p class="page-subtitle">メニュー表作成やウェブマーケティングについて、お気軽にご相談ください</p>
@@ -79,15 +79,7 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <h3 class="contact-method-title">メール</h3>
-                            <p class="contact-method-value">info@example.com</p>
-                        </div>
-                        <div class="contact-method">
-                            <div class="contact-method-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <h3 class="contact-method-title">電話</h3>
-                            <p class="contact-method-value">090-1234-5678</p>
-                            <p class="contact-method-note">（平日10:00〜18:00）</p>
+                            <p class="contact-method-value">daiki6662@gmail.com</p>
                         </div>
                         <div class="contact-method">
                             <div class="contact-method-icon">
@@ -111,7 +103,12 @@
                 
                 <div class="contact-form">
                     <h2 class="section-title">お問い合わせフォーム</h2>
-                    <form id="contact-form" action="#" method="post">
+                    <form id="contact-form" action="https://formsubmit.co/daiki6662@gmail.com" method="post">
+                        <!-- FormSubmit 設定（画面には表示されません） -->
+                        <input type="hidden" name="_subject" value="【飲食店サポート】サイトからのお問い合わせ">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
                         <div class="form-group">
                             <label for="name">お名前 <span class="required">*</span></label>
                             <input type="text" id="name" name="name" required>
@@ -266,7 +263,7 @@
             <h2 class="cta-title">まずはお気軽にご相談ください</h2>
             <p class="cta-subtitle">飲食店の売上アップに貢献するメニュー表作成とウェブマーケティング。あなたのお店に最適なプランをご提案します。</p>
             <div class="cta-buttons">
-                <a href="tel:09012345678" class="btn btn-secondary">電話で相談する</a>
+                <a href="mailto:daiki6662@gmail.com" class="btn btn-secondary">メールで相談する</a>
                 <a href="#contact-form" class="btn btn-secondary">フォームで相談する</a>
             </div>
         </div>
@@ -294,11 +291,7 @@
                     <div class="footer-contact">
                         <div class="footer-contact-item">
                             <i class="fas fa-envelope footer-contact-icon"></i>
-                            <span>info@example.com</span>
-                        </div>
-                        <div class="footer-contact-item">
-                            <i class="fas fa-phone footer-contact-icon"></i>
-                            <span>090-1234-5678</span>
+                            <span>daiki6662@gmail.com</span>
                         </div>
                     </div>
                     <div class="footer-social">

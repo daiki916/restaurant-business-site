@@ -60,8 +60,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // スムーススクロール
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            // モーダルを開くリンクはスクロール対象外
+            if (this.classList.contains('portfolio-modal-open')) return;
+
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             
@@ -86,24 +89,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // フォームバリデーション（お問い合わせページ用）
+    // バリデーションを通過した場合はそのまま送信する（送信先は form の action 属性）
     const contactForm = document.querySelector('#contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             // 簡易的なバリデーション
             let isValid = true;
             const requiredFields = contactForm.querySelectorAll('[required]');
-            
+
             requiredFields.forEach(field => {
-                if (!field.value.trim()) {
+                if (field.type === 'checkbox' ? !field.checked : !field.value.trim()) {
                     isValid = false;
                     field.classList.add('error');
                 } else {
                     field.classList.remove('error');
                 }
             });
-            
+
             // メールアドレスのバリデーション
             const emailField = contactForm.querySelector('input[type="email"]');
             if (emailField && emailField.value.trim()) {
@@ -113,16 +115,51 @@ document.addEventListener('DOMContentLoaded', function() {
                     emailField.classList.add('error');
                 }
             }
-            
-            if (isValid) {
-                // フォーム送信処理（実際の実装では適切なAPIエンドポイントに送信）
-                alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
-                contactForm.reset();
-            } else {
+
+            if (!isValid) {
+                e.preventDefault();
                 alert('入力内容に誤りがあります。必須項目を確認してください。');
             }
+            // isValid の場合は preventDefault せず、action に設定された送信先へそのまま送信される
         });
     }
+
+    // FAQアコーディオン
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function() {
+            this.closest('.faq-item').classList.toggle('active');
+        });
+    });
+
+    // ポートフォリオモーダルの開閉
+    document.querySelectorAll('.portfolio-modal-open').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = document.querySelector(this.getAttribute('href'));
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    document.querySelectorAll('.portfolio-modal').forEach(modal => {
+        // ×ボタンで閉じる
+        const closeBtn = modal.querySelector('.portfolio-modal-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+        // モーダルの外側クリックで閉じる
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
     
     // ポートフォリオフィルター（ポートフォリオページ用）
     const portfolioFilters = document.querySelectorAll('.portfolio-filter');
@@ -160,12 +197,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const pricingType = this.getAttribute('data-pricing');
                 const pricingTables = document.querySelectorAll('.pricing-table');
-                
+
+                // 親セクション（.pricing-tables）ごと表示を切り替える
                 pricingTables.forEach(table => {
+                    const section = table.closest('.pricing-tables') || table;
                     if (table.getAttribute('data-pricing') === pricingType) {
+                        section.style.display = 'block';
                         table.style.display = 'block';
                     } else {
-                        table.style.display = 'none';
+                        section.style.display = 'none';
                     }
                 });
             });

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+<rect width="200" height="200" fill="#FFF8E1"/>
+<circle cx="100" cy="100" r="90" fill="#FF9800"/>
+<text x="100" y="128" font-family="'Hiragino Sans','Noto Sans JP',sans-serif" font-size="80" font-weight="bold" fill="#FFFFFF" text-anchor="middle">鈴</text>
+</svg>

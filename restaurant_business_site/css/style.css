@@ -191,7 +191,7 @@ ul, ol {
   background-color: var(--light-gray);
   padding: calc(var(--spacing-xl) + 60px) 0 var(--spacing-xl);
   text-align: center;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/hero-bg.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/images/hero-bg.svg');
   background-size: cover;
   background-position: center;
   color: var(--white);
@@ -736,4 +736,954 @@ ul, ol {
 .overlay.active {
   opacity: 1;
   visibility: visible;
+}
+
+/* =====================================================
+   下層ページ共通スタイル
+   （menu-design / web-marketing / portfolio / pricing / contact）
+   ===================================================== */
+
+/* ===== ページヘッダー ===== */
+.page-header {
+  background-color: var(--text-color);
+  background-size: cover;
+  background-position: center;
+  color: var(--white);
+  text-align: center;
+  padding: calc(var(--spacing-xl) + 60px) 0 var(--spacing-lg);
+}
+
+.page-title {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.page-subtitle {
+  font-size: var(--font-md);
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ===== 汎用 ===== */
+.text-center {
+  text-align: center;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* ===== サービス詳細（menu-design / web-marketing） ===== */
+.service-detail-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.service-detail-text {
+  flex: 1 1 55%;
+}
+
+.service-detail-text .section-title {
+  text-align: left;
+}
+
+.service-detail-text .section-title::after {
+  left: 0;
+  transform: none;
+}
+
+.service-detail-text p {
+  margin-bottom: var(--spacing-sm);
+  color: var(--dark-gray);
+}
+
+.service-detail-image {
+  flex: 1 1 40%;
+}
+
+.service-detail-image img {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 100%;
+}
+
+/* ===== プロセス（作成・支援の流れ） ===== */
+.process-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.process-item {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md) var(--spacing-sm);
+  text-align: center;
+  position: relative;
+}
+
+.process-number {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-sm);
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--light-gray);
+  line-height: 1;
+}
+
+.process-icon {
+  font-size: 2rem;
+  color: var(--main-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.process-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.process-description {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+  text-align: left;
+}
+
+/* ===== 成功事例（web-marketing） ===== */
+.case-studies-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.case-study-item {
+  display: flex;
+  gap: var(--spacing-md);
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+}
+
+.case-study-image {
+  flex: 1 1 35%;
+  min-width: 0;
+}
+
+.case-study-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.case-study-content {
+  flex: 1 1 65%;
+  padding: var(--spacing-md);
+}
+
+.case-study-title {
+  font-size: var(--font-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.case-study-stats {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.case-study-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--base-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  min-width: 110px;
+}
+
+.case-study-stat-value {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--accent-color);
+  line-height: 1.2;
+}
+
+.case-study-stat-label {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.case-study-details p {
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+/* ===== よくある質問（アコーディオン） ===== */
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.faq-item {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.faq-question:hover {
+  background-color: var(--base-color);
+}
+
+.faq-question h3 {
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+
+.faq-icon {
+  color: var(--main-color);
+  flex: none;
+  transition: var(--transition);
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 var(--spacing-md) var(--spacing-sm);
+  color: var(--dark-gray);
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+/* ===== 制作実績（portfolio） ===== */
+.portfolio-filter-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.portfolio-filter {
+  font-family: inherit;
+  font-size: var(--font-xs);
+  background-color: var(--white);
+  color: var(--text-color);
+  border: 1px solid var(--light-gray);
+  border-radius: 20px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.portfolio-filter:hover {
+  border-color: var(--main-color);
+  color: var(--main-color);
+}
+
+.portfolio-filter.active {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+  color: var(--white);
+}
+
+/* ポートフォリオモーダル */
+.portfolio-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1100;
+  padding: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.portfolio-modal.active {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.portfolio-modal-content {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  max-width: 800px;
+  width: 100%;
+  margin: var(--spacing-md) auto;
+  padding: var(--spacing-md);
+  position: relative;
+}
+
+.portfolio-modal-close {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-sm);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--dark-gray);
+  transition: var(--transition);
+}
+
+.portfolio-modal-close:hover {
+  color: var(--main-color);
+}
+
+.portfolio-modal-title {
+  font-size: var(--font-md);
+  margin-bottom: var(--spacing-sm);
+  padding-right: var(--spacing-md);
+}
+
+.portfolio-modal-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.portfolio-modal-images img {
+  border-radius: var(--border-radius);
+  width: 100%;
+}
+
+.portfolio-modal-info {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.portfolio-modal-description {
+  flex: 1 1 60%;
+}
+
+.portfolio-modal-description h3 {
+  font-size: var(--font-sm);
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
+  color: var(--main-color);
+}
+
+.portfolio-modal-description h3:first-child {
+  margin-top: 0;
+}
+
+.portfolio-modal-description p {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.portfolio-modal-details {
+  flex: 1 1 30%;
+  background-color: var(--base-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  align-self: flex-start;
+}
+
+.portfolio-modal-detail {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-sm);
+}
+
+.portfolio-modal-detail-label {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.portfolio-modal-detail-value {
+  font-weight: 500;
+}
+
+/* ===== 料金プラン（pricing） ===== */
+.pricing-toggle-section {
+  padding-bottom: 0;
+}
+
+.pricing-toggle-container {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  background-color: var(--light-gray);
+  border-radius: 30px;
+  padding: 4px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.pricing-toggle {
+  font-family: inherit;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  border-radius: 26px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.pricing-toggle.active {
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+.pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.pricing-card {
+  background-color: var(--white);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: var(--transition);
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card.featured {
+  border: 2px solid var(--main-color);
+}
+
+.pricing-card-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--main-color);
+  color: var(--white);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 2px var(--spacing-sm);
+}
+
+.pricing-card-header {
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-sm);
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.pricing-card-title {
+  font-size: var(--font-md);
+  margin-bottom: var(--spacing-xs);
+}
+
+.pricing-card-price .price {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--main-color);
+}
+
+.pricing-card-price .period {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.pricing-card-body {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.pricing-card-features li {
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px dashed var(--light-gray);
+  font-size: var(--font-xs);
+}
+
+.pricing-card-features li:last-child {
+  border-bottom: none;
+}
+
+.pricing-card-features .fa-check {
+  color: var(--accent-color);
+  margin-right: var(--spacing-xs);
+}
+
+.pricing-card-features .fa-times {
+  color: var(--light-gray);
+  margin-right: var(--spacing-xs);
+}
+
+.pricing-card-footer {
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  text-align: center;
+}
+
+.pricing-card-footer .btn {
+  width: 100%;
+}
+
+.pricing-notes {
+  margin-top: var(--spacing-md);
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+/* ===== オプションサービス（pricing） ===== */
+.options-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.option-item {
+  display: flex;
+  gap: var(--spacing-sm);
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+}
+
+.option-icon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--main-color);
+  color: var(--white);
+  font-size: 1.25rem;
+}
+
+.option-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.option-description {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+  margin-bottom: var(--spacing-xs);
+}
+
+.option-price {
+  font-weight: 700;
+  color: var(--main-color);
+}
+
+/* ===== 支払い方法（pricing） ===== */
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.payment-method {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.payment-method-icon {
+  font-size: 2rem;
+  color: var(--main-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.payment-method-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.payment-method-description {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.payment-terms {
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+}
+
+.payment-terms h3 {
+  font-size: var(--font-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.payment-terms li {
+  position: relative;
+  padding-left: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.payment-terms li::before {
+  content: '・';
+  position: absolute;
+  left: 0;
+}
+
+/* ===== 特典・割引（pricing） ===== */
+.discount-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.discount-item {
+  display: flex;
+  gap: var(--spacing-sm);
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+}
+
+.discount-icon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--sub-color);
+  color: var(--white);
+  font-size: 1.25rem;
+}
+
+.discount-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  margin-bottom: var(--spacing-xs);
+}
+
+.discount-description {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+/* ===== お問い合わせ（contact） ===== */
+.contact-container {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: flex-start;
+}
+
+.contact-info {
+  flex: 1 1 40%;
+}
+
+.contact-form {
+  flex: 1 1 55%;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+}
+
+.contact-info .section-title,
+.contact-form .section-title {
+  text-align: left;
+  font-size: var(--font-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-info .section-title::after,
+.contact-form .section-title::after {
+  left: 0;
+  transform: none;
+}
+
+.contact-description {
+  color: var(--dark-gray);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-method {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  grid-auto-flow: dense;
+  column-gap: var(--spacing-sm);
+  align-items: center;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-sm);
+}
+
+.contact-method-icon {
+  grid-row: span 3;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--main-color);
+  color: var(--white);
+  font-size: 1.25rem;
+}
+
+.contact-method-title {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+  font-weight: 500;
+}
+
+.contact-method-value {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.contact-method-note {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.contact-social-title {
+  font-size: var(--font-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.contact-social-links {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.contact-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+.contact-social-link:hover {
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+/* フォーム */
+.form-group {
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-group > label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+}
+
+.required {
+  color: var(--main-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--font-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  background-color: var(--base-color);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--main-color);
+  background-color: var(--white);
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: var(--main-color);
+  background-color: #FDECEA;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-sm);
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.checkbox-label input {
+  accent-color: var(--main-color);
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.privacy-label {
+  display: flex;
+}
+
+.form-submit {
+  margin-top: var(--spacing-md);
+}
+
+.form-submit .btn {
+  width: 100%;
+  border: none;
+  font-family: inherit;
+  font-size: var(--font-sm);
+}
+
+/* フォーム送信完了メッセージ */
+.form-success {
+  background-color: #E8F5E9;
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  color: var(--accent-color);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+}
+
+/* プライバシーポリシー */
+.privacy-policy-content {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+}
+
+.privacy-policy-content h3 {
+  font-size: var(--font-sm);
+  margin: var(--spacing-md) 0 var(--spacing-xs);
+}
+
+.privacy-policy-content h3:first-child {
+  margin-top: 0;
+}
+
+.privacy-policy-content p {
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.privacy-policy-content ul {
+  margin: var(--spacing-xs) 0 var(--spacing-sm);
+}
+
+.privacy-policy-content li {
+  position: relative;
+  padding-left: var(--spacing-sm);
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+.privacy-policy-content li::before {
+  content: '・';
+  position: absolute;
+  left: 0;
+}
+
+.privacy-policy-date {
+  margin-top: var(--spacing-md);
+  text-align: right;
+  font-size: var(--font-xs);
+  color: var(--dark-gray);
+}
+
+/* ===== 下層ページのレスポンシブ ===== */
+@media (max-width: 767px) {
+  .service-detail-content {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .case-study-item {
+    flex-direction: column;
+  }
+
+  .case-study-image img {
+    max-height: 220px;
+  }
+
+  .contact-container {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .contact-form {
+    width: 100%;
+  }
+
+  .pricing-card.featured {
+    order: -1;
+  }
+
+  .portfolio-modal-info {
+    flex-direction: column;
+  }
 }
