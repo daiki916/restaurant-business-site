@@ -44,7 +44,7 @@ const targets = ids.length
   : await page.$$eval('.board[id]', els => els.map(e => e.id));
 
 for (const id of targets) {
-  const el = await page.$('#' + CSS.escape(id));
+  const el = await page.$(`[id="${id.replace(/"/g, '\\"')}"]`);
   if (!el) { console.error(`skip: #${id} が見つかりません`); continue; }
   await el.scrollIntoViewIfNeeded();
   const name = id.replace(/^b-/, '');
