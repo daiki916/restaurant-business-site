@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9800"/><stop offset="1" stop-color="#FFC107"/></linearGradient></defs>
-<rect width="800" height="600" fill="url(#g)"/>
-<circle cx="680.0" cy="120.0" r="210.0" fill="#FFFFFF" opacity="0.08"/>
-<circle cx="80.0" cy="540.0" r="168.00000000000003" fill="#FFFFFF" opacity="0.08"/>
-<rect x="240.0" y="236.0" width="320" height="128" rx="8" fill="#FFFFFF" opacity="0.92"/>
-<text x="400.0" y="292.0" font-family="'Hiragino Sans','Noto Sans JP',sans-serif" font-size="40" font-weight="bold" fill="#4E342E" text-anchor="middle">カフェメニュー</text>
-<text x="400.0" y="336.0" font-family="'Hiragino Sans','Noto Sans JP',sans-serif" font-size="20" fill="#FF9800" text-anchor="middle">ドリンク・スイーツ</text>
-</svg>
