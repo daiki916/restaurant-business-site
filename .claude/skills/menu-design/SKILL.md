@@ -83,6 +83,9 @@ Canva MCPが接続されている場合の手順。Canvaが写真・素材、こ
 
 ## 参照
 
-- `references/patterns.md` — 4つの型の詳細設計規則(レイアウト・実例分析)
+- `references/patterns.md` — 4つの型の詳細設計規則(レイアウト・実例分析・お手本4点の解剖)
+- `references/canva-observations.md` — Canvaテンプレートの構造実測値(フォントサイズ比・配色・落とし穴)と解剖手順。Canvaパイプラインを使う前に読むこと
 - `references/pipeline.md` — アートボードの組み方・フォント・書き出し手順
 - `scripts/render.mjs` — PNG書き出しスクリプト
+
+新しいジャンルの案件を受けたら、`references/canva-observations.md` の解剖手順で類例をサンプリングして実測値を追記してから作ると精度が上がる(スキルは育てるもの)。
