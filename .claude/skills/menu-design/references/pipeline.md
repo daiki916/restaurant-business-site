@@ -3,23 +3,34 @@
 デザインはHTML/CSSのアートボードとして組み、Playwright(Chromium)でPNGに書き出す。
 Canva等のGUIより速く、ピクセル単位で規則を守れて、差分管理もできる。
 
-## 1. フォント(最初に1回)
+## 1. フォント(最初に1回)— 縦書き対応の実戦知識込み
 
 CDNは使えない環境が多いので、npmで取得してローカル参照する:
 
 ```bash
 mkdir -p /tmp/fonts && cd /tmp/fonts
-npm i --no-save @fontsource/noto-sans-jp @fontsource/noto-serif-jp
+npm i --no-save @fontsource/noto-sans-jp @fontsource/zen-old-mincho @fontsource/yuji-syuku
 ```
 
-アートボードのCSSで woff2 を直接参照:
+**⚠️ 縦書き(writing-mode)を使う紙面での重大な罠(実測済み):**
 
-```css
-@font-face { font-family:'NSans';  src:url('/tmp/fonts/node_modules/@fontsource/noto-sans-jp/files/noto-sans-jp-japanese-400-normal.woff2') format('woff2'); font-weight:400; }
-@font-face { font-family:'NSans';  src:url('.../noto-sans-jp-japanese-700-normal.woff2') format('woff2'); font-weight:700; }
-@font-face { font-family:'NSerif'; src:url('.../noto-serif-jp-japanese-400-normal.woff2') format('woff2'); font-weight:400; }
-@font-face { font-family:'NSerif'; src:url('.../noto-serif-jp-japanese-700-normal.woff2') format('woff2'); font-weight:700; }
+- **fontsource版 Noto Serif JP / Shippori Mincho は縦組みメトリクスが壊れている。**
+  収録外グリフや一部漢字が送り幅ゼロになり文字が層状に重なる。明朝は **Zen Old Mincho を使うこと**(400/700/900、縦組み正常)。
+- 単一woff2(*-japanese-*)の@font-face参照は、**収録外の漢字がシステムフォールバック**
+  (コンテナ環境はUnifont JPのみ)に落ち、縦組みで送り幅ゼロ&かな脱落を起こす。
+  **パッケージの `<link rel=stylesheet href=.../400.css>` を読み込む**(全サブセット+unicode-range)方式にする。
+- 筆文字 Yuji Syuku は一部漢字が縦組みで壊れる。**極小の縦ラベル(産地タグ・税込注記)や
+  筆文字の縦キャッチは「疑似縦組み」で組む**と全フォントで確実:
+  `writing-mode:horizontal-tb; width:1.2em; word-break:break-all; text-align:center; line-height:1.3`
+  (句読点は `display:inline-block; transform:translate(.4em,-.6em)` で右上に補正)
+- 数字だけ横向きにする縦中横は `text-combine-upright:all` のspanで安定。
+
+```html
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/noto-sans-jp/700.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/zen-old-mincho/700.css">
 ```
+
+CSSでは font-family:'Noto Sans JP' / 'Zen Old Mincho' / 'Yuji Syuku' と本名で指定する。
 
 ## 2. アートボードの約束事
 
@@ -37,6 +48,14 @@ body { font-family:'NSans',sans-serif; background:#222; display:flex; flex-direc
 - サイズ: 画面用 800×600 / 正方形 800×800 / A4縦 794×1123
 - 1ファイルに複数ボードを並べてよい(#id で個別書き出しする)
 - 位置は absolute で決め打ちしてよい(レスポンシブ不要。紙面は固定寸)
+
+## 2.5 縦書きレイアウトの構造ルール(実測済み)
+
+- 縦書きコンテナ内の要素は**必ず display:block にする**。インラインのまま並べると列が重なる
+- 1品=1列にするには `.item{display:block; height:100%}`(ブロックが右→左に列として積まれる)
+- 列間隔は margin-left(物理)で。品名の列幅は line-height が決める(1.3〜1.55)
+- 縦書きブロックに絶対配置で被せる要素は、ブロックの**内容量が列数を増やす**ことを忘れずに
+  (品名2行なら幅2列分)。座標決め打ちの前に内容の列数を数える
 
 ## 3. 質感の作り方(写真が無いとき)
 
@@ -62,6 +81,9 @@ node scripts/render.mjs <artboard.html> <出力dir> [board-id...]
 - 全ボード書き出し(id省略時)or 指定idのみ
 - deviceScaleFactor 2 で 800×600 → 1600×1200 PNG
 - `document.fonts.ready` を待ってから撮影するのでフォント欠けは起きない
+- **viewportは必ずボードより大きく**(A4縦なら height:1250以上)。ボードがviewportより
+  高いとPlaywrightが分割撮影して継ぎ接ぎし、フォント再描画とズレて文字が二重写りする
+- unicode-range分割フォント使用時は fonts.ready 後にさらに loading==0 をループ確認してから撮る
 
 Playwright が無い環境では: `PLAYWRIGHT_BROWSERS_PATH` 済みのグローバル playwright を
 `import pw from '<global path>/playwright/index.js'` で読む(render.mjs が対応済み)。

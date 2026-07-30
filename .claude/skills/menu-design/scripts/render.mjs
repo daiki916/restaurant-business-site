@@ -31,7 +31,7 @@ await mkdir(outDir, { recursive: true });
 
 const browser = await chromium.launch();
 const page = await (await browser.newContext({
-  viewport: { width: 1000, height: 800 },
+  viewport: { width: 1100, height: 1250 },
   deviceScaleFactor: 2,
 })).newPage();
 
