@@ -62,6 +62,13 @@ Canva MCPが接続されている場合の手順。Canvaが写真・素材、こ
 
 座標系の注意: read-design の `pos: A,B` は **A=top(y), B=left(x)**。テキストの font_size 変更時は幅が足りないと折返すので、先に resize_element で幅を確保する。
 
+### パイプラインγ: AI写真×CSS紙面(最高品質・要API設定)
+
+`scripts/gen-photo.sh` で料理写真を生成し(gpt-image-1)、HTML/CSSの紙面に `object-fit:cover` で組み込む。
+写真の空き空間(湯気・暗部)に文字を置く。プロンプトの定石はスクリプト冒頭のコメントを読む。
+前提条件: 環境のネットワーク許可(api.openai.com)+ OPENAI_API_KEY。未設定なら403で失敗するので
+ユーザーに設定を依頼するか、ユーザーがチャットに貼った写真を使う(実店舗写真が最優先、次にAI生成)。
+
 ### パイプラインβ: HTML/CSS(写真が不要・図版中心のとき)
 
 比較表・インフォグラフィック・文字中心の品書きなど。手順・テンプレート・フォント設定は `references/pipeline.md` を読むこと。書き出しは `scripts/render.mjs` を使う(車輪の再発明をしない)。
