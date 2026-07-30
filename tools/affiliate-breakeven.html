@@ -1,0 +1,428 @@
+<title>リスティングアフィリエイト 損益分岐シミュレータ</title>
+
+<style>
+  :root {
+    --ground:      #F4F6F7;
+    --surface:     #FFFFFF;
+    --rule:        #D8DFE2;
+    --rule-strong: #A9B6BB;
+    --ink:         #14181C;
+    --ink-muted:   #5D686E;
+    --ink-faint:   #87949A;
+    --profit:      #1B6E5A;
+    --profit-bg:   #E4EFEA;
+    --loss:        #B3271E;
+    --loss-bg:     #F7E7E4;
+    --warn:        #9A6510;
+    --warn-bg:     #F5EDDD;
+
+    --mincho: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", "Songti SC", serif;
+    --gothic: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Meiryo", system-ui, sans-serif;
+    --mono:   ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+    --step--1: clamp(.75rem, .72rem + .15vw, .8125rem);
+    --step-0:  clamp(.875rem, .85rem + .2vw, .9375rem);
+    --step-1:  clamp(1rem, .96rem + .3vw, 1.125rem);
+    --step-2:  clamp(1.25rem, 1.15rem + .6vw, 1.5rem);
+    --step-3:  clamp(1.625rem, 1.4rem + 1.4vw, 2.375rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0F1316; --surface: #171D21; --rule: #2A3338; --rule-strong: #46545B;
+      --ink: #E6EBEE; --ink-muted: #9CAAB1; --ink-faint: #6E7C83;
+      --profit: #4FBF9C; --profit-bg: #14312A;
+      --loss: #F0776B; --loss-bg: #381916;
+      --warn: #D9A34A; --warn-bg: #33280F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0F1316; --surface: #171D21; --rule: #2A3338; --rule-strong: #46545B;
+    --ink: #E6EBEE; --ink-muted: #9CAAB1; --ink-faint: #6E7C83;
+    --profit: #4FBF9C; --profit-bg: #14312A;
+    --loss: #F0776B; --loss-bg: #381916;
+    --warn: #D9A34A; --warn-bg: #33280F;
+  }
+  :root[data-theme="light"] {
+    --ground: #F4F6F7; --surface: #FFFFFF; --rule: #D8DFE2; --rule-strong: #A9B6BB;
+    --ink: #14181C; --ink-muted: #5D686E; --ink-faint: #87949A;
+    --profit: #1B6E5A; --profit-bg: #E4EFEA;
+    --loss: #B3271E; --loss-bg: #F7E7E4;
+    --warn: #9A6510; --warn-bg: #F5EDDD;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--gothic);
+    font-size: var(--step-0);
+    line-height: 1.7;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .eyebrow {
+    font-size: var(--step--1);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 .5rem;
+  }
+
+  h1 {
+    font-family: var(--mincho);
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1.25;
+    text-wrap: balance;
+    margin: 0 0 .6rem;
+    letter-spacing: .01em;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 34em;
+    color: var(--ink-muted);
+  }
+
+  h2 {
+    font-family: var(--mincho);
+    font-size: var(--step-2);
+    font-weight: 600;
+    margin: 0 0 .25rem;
+    letter-spacing: .01em;
+  }
+
+  .sect-note { margin: 0 0 1.25rem; color: var(--ink-muted); font-size: var(--step--1); max-width: 40em; }
+
+  /* ---- 案件プリセット ---- */
+
+  .scroller { overflow-x: auto; border: 1px solid var(--rule); border-radius: 2px; background: var(--surface); }
+
+  table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+  caption { text-align: left; padding: .75rem .9rem; color: var(--ink-muted); font-size: var(--step--1); border-bottom: 1px solid var(--rule); }
+  th, td { padding: .55rem .9rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  thead th {
+    font-size: .6875rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 600; border-bottom: 1px solid var(--rule-strong);
+  }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+  .pick {
+    font: inherit; font-size: var(--step--1);
+    background: none; border: 1px solid var(--rule-strong); border-radius: 2px;
+    color: var(--ink); padding: .2rem .7rem; cursor: pointer;
+  }
+  .pick:hover { border-color: var(--ink); }
+  .pick[aria-pressed="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+
+  .flag {
+    display: inline-block; font-size: .6875rem; letter-spacing: .04em;
+    padding: .1rem .45rem; border-radius: 2px; margin-right: .3rem;
+  }
+  .flag--stop { background: var(--loss-bg); color: var(--loss); }
+  .flag--warn { background: var(--warn-bg); color: var(--warn); }
+
+  /* ---- 入力 ---- */
+
+  .inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  .field { background: var(--surface); padding: .9rem 1rem 1rem; display: flex; flex-direction: column; gap: .35rem; }
+  .field label { font-size: .6875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .field .hint { font-size: var(--step--1); color: var(--ink-muted); line-height: 1.5; }
+  .entry { display: flex; align-items: baseline; gap: .35rem; }
+  .entry input {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    font-size: var(--step-1); width: 100%; min-width: 0;
+    background: none; border: 0; border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink); padding: .15rem 0; border-radius: 0;
+  }
+  .entry input:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-bottom-color: transparent; }
+  .unit { font-size: var(--step--1); color: var(--ink-muted); flex: none; }
+
+  /* ---- 判定帯 ---- */
+
+  .verdict {
+    border: 1px solid var(--rule); border-left: 4px solid var(--edge, var(--rule-strong));
+    background: var(--fill, var(--surface));
+    border-radius: 2px; padding: 1.1rem 1.25rem;
+    display: flex; flex-direction: column; gap: .3rem;
+  }
+  .verdict[data-state="profit"] { --edge: var(--profit); --fill: var(--profit-bg); }
+  .verdict[data-state="loss"]   { --edge: var(--loss);   --fill: var(--loss-bg); }
+  .verdict[data-state="thin"]   { --edge: var(--warn);   --fill: var(--warn-bg); }
+
+  .verdict-head { font-family: var(--mincho); font-size: var(--step-2); font-weight: 600; line-height: 1.3; }
+  .verdict[data-state="profit"] .verdict-head { color: var(--profit); }
+  .verdict[data-state="loss"]   .verdict-head { color: var(--loss); }
+  .verdict[data-state="thin"]   .verdict-head { color: var(--warn); }
+  .verdict-body { font-size: var(--step--1); color: var(--ink-muted); max-width: 44em; }
+  .verdict-body strong { color: var(--ink); font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  /* ---- 指標 ---- */
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 2px; }
+  .metric { background: var(--surface); padding: .9rem 1rem 1rem; display: flex; flex-direction: column; gap: .1rem; }
+  .metric dt { font-size: .6875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .metric dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: var(--step-2); line-height: 1.3; }
+  .metric .sub { font-family: var(--gothic); font-size: var(--step--1); color: var(--ink-muted); line-height: 1.5; }
+  .metric dd.is-profit { color: var(--profit); }
+  .metric dd.is-loss { color: var(--loss); }
+
+  .formula {
+    font-family: var(--mono); font-size: var(--step--1);
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 2px;
+    padding: .9rem 1rem; overflow-x: auto; white-space: pre; line-height: 1.9; color: var(--ink-muted);
+  }
+
+  footer { border-top: 1px solid var(--rule); padding-top: 1.25rem; font-size: var(--step--1); color: var(--ink-muted); }
+  footer a { color: inherit; text-decoration: underline; text-decoration-color: var(--rule-strong); text-underline-offset: 2px; }
+  footer a:hover { color: var(--ink); }
+  footer ul { margin: .5rem 0 0; padding-left: 1.2rem; }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">損益分岐シミュレータ</p>
+    <h1>その案件は、出稿する前から赤字が決まっている</h1>
+    <p class="lede">
+      リスティングアフィリエイトの成否は、報酬単価とクリック単価の比で決まる。
+      広告を出す前に、1クリックあたりいくら残るのかを確定させる。
+    </p>
+  </header>
+
+  <section>
+    <h2>案件を選ぶ</h2>
+    <p class="sect-note">
+      @Satoru_Affi の投稿が「狙い目」として挙げた10案件。報酬単価は投稿者の申告値。
+      規約フラグは Google 広告および A8.net の公開ポリシーに基づく。
+    </p>
+    <div class="scroller">
+      <table>
+        <caption>単価をタップすると、下の入力欄に反映される</caption>
+        <thead>
+          <tr>
+            <th scope="col">案件</th>
+            <th scope="col">成果条件</th>
+            <th scope="col" class="num">報酬単価</th>
+            <th scope="col" class="num">月10万に必要な成果数</th>
+            <th scope="col">規約上の障害</th>
+          </tr>
+        </thead>
+        <tbody id="presets"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>自分の数字を入れる</h2>
+    <p class="sect-note">
+      総合CVR は「広告クリック → 承認された成果」までの通し率。ここを楽観視すると必ず赤字になる。
+      実測が出るまでは 2%（クリック50回で成果1件）で置くのが安全。
+    </p>
+    <div class="inputs">
+      <div class="field">
+        <label for="payout">報酬単価</label>
+        <div class="entry"><input id="payout" type="number" min="0" step="10" value="250" inputmode="numeric"><span class="unit">円</span></div>
+        <p class="hint">ASP の成果報酬。承認前の額ではなく確定額で。</p>
+      </div>
+      <div class="field">
+        <label for="cpc">クリック単価（CPC）</label>
+        <div class="entry"><input id="cpc" type="number" min="0" step="1" value="40" inputmode="numeric"><span class="unit">円</span></div>
+        <p class="hint">Google 広告のキーワードプランナーで実測値を確認する。</p>
+      </div>
+      <div class="field">
+        <label for="cvr">総合CVR</label>
+        <div class="entry"><input id="cvr" type="number" min="0" step="0.1" value="2" inputmode="decimal"><span class="unit">%</span></div>
+        <p class="hint">クリックから承認成果まで。非承認・重複判定を織り込む。</p>
+      </div>
+      <div class="field">
+        <label for="clicks">月間クリック数</label>
+        <div class="entry"><input id="clicks" type="number" min="0" step="100" value="1000" inputmode="numeric"><span class="unit">回</span></div>
+        <p class="hint">獲得できる見込みの検索クリック数。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="verdict" id="verdict" data-state="loss">
+    <div class="verdict-head" id="verdict-head">—</div>
+    <div class="verdict-body" id="verdict-body">—</div>
+  </section>
+
+  <section>
+    <h2>内訳</h2>
+    <dl class="metrics" id="metrics"></dl>
+  </section>
+
+  <section>
+    <h2>計算式</h2>
+    <div class="formula" id="formula">—</div>
+  </section>
+
+  <footer>
+    <p>
+      本ツールは概算。実際には ASP の承認率、Google 広告の品質スコアによる実CPC変動、
+      消費税・源泉の扱いで数字は動く。<strong>出稿前に撤退ラインを決めておくこと。</strong>
+    </p>
+    <ul>
+      <li>検証レポート — <code>docs/x-post-review.md</code></li>
+      <li>規約適合の手順書 — <code>docs/compliant-affiliate-playbook.md</code></li>
+      <li><a href="https://support.google.com/adspolicy/answer/16427718?hl=en">Insufficient original content — Google Ads Policy</a>（ブリッジページ規定）</li>
+      <li><a href="https://support.a8.net/a8/as/faq/2014/05/post_172.html">禁止キーワードって何？ — A8.netヘルプ</a>（商標入札の禁止範囲）</li>
+      <li><a href="https://support.google.com/adspolicy/answer/15328393?hl=ja">マッチングとコンパニオン サービス — Google 広告ポリシー</a>（認定要件）</li>
+    </ul>
+  </footer>
+
+</div>
+
+<script>
+  const PRESETS = [
+    { name: "カシーボ",     cond: "無料アプリDL",   payout: 200,  flags: [["warn", "商標KW"]] },
+    { name: "タウンワーク", cond: "無料アプリDL",   payout: 250,  flags: [["stop", "リクルート商標"]] },
+    { name: "モッピー",     cond: "無料会員登録",   payout: 300,  flags: [["warn", "セレス商標"]] },
+    { name: "マッハバイト", cond: "無料登録",       payout: 300,  flags: [["stop", "リブセンス商標"]] },
+    { name: "Lemino",       cond: "無料体験登録",   payout: 1200, flags: [["stop", "ドコモ商標"]] },
+    { name: "進研ゼミ",     cond: "無料体験教材",   payout: 1500, flags: [["stop", "ベネッセ商標"]] },
+    { name: "Jメール",      cond: "無料アプリDL",   payout: 1800, flags: [["stop", "Google認定必須"], ["warn", "商標KW"]] },
+    { name: "マリッシュ",   cond: "無料会員登録",   payout: 2000, flags: [["stop", "Google認定必須"], ["warn", "商標KW"]] },
+    { name: "with",         cond: "無料会員登録",   payout: 2200, flags: [["stop", "Google認定必須"], ["warn", "商標KW"]] },
+  ];
+
+  const yen = n => Math.round(n).toLocaleString("ja-JP");
+  const yen1 = n => n.toLocaleString("ja-JP", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  const $ = id => document.getElementById(id);
+  const fields = { payout: $("payout"), cpc: $("cpc"), cvr: $("cvr"), clicks: $("clicks") };
+
+  /* ---- 案件テーブル ---- */
+
+  $("presets").innerHTML = PRESETS.map((p, i) => `
+    <tr>
+      <th scope="row"><button class="pick" type="button" data-payout="${p.payout}" data-i="${i}" aria-pressed="false">${p.name}</button></th>
+      <td>${p.cond}</td>
+      <td class="num">${yen(p.payout)} 円</td>
+      <td class="num">${yen(Math.ceil(100000 / p.payout))} 件</td>
+      <td>${p.flags.map(([k, t]) => `<span class="flag flag--${k}">${t}</span>`).join("")}</td>
+    </tr>
+  `).join("");
+
+  document.querySelectorAll(".pick").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".pick").forEach(b => b.setAttribute("aria-pressed", "false"));
+      btn.setAttribute("aria-pressed", "true");
+      fields.payout.value = btn.dataset.payout;
+      render();
+    });
+  });
+
+  /* ---- 計算 ---- */
+
+  function compute() {
+    const payout = Math.max(0, +fields.payout.value || 0);
+    const cpc    = Math.max(0, +fields.cpc.value || 0);
+    const cvr    = Math.max(0, +fields.cvr.value || 0) / 100;
+    const clicks = Math.max(0, +fields.clicks.value || 0);
+
+    const revPerClick = payout * cvr;            // 1クリックの期待報酬
+    const perClick    = revPerClick - cpc;       // 1クリックの損益
+    const beCpc       = revPerClick;             // 損益分岐CPC
+    const beCvr       = payout > 0 ? cpc / payout : Infinity; // 損益分岐CVR
+    const cpa         = cvr > 0 ? cpc / cvr : Infinity;
+
+    const spend       = clicks * cpc;
+    const conversions = clicks * cvr;
+    const revenue     = conversions * payout;
+    const profit      = revenue - spend;
+
+    // 月10万円の利益に必要なクリック数
+    const clicksFor100k = perClick > 0 ? Math.ceil(100000 / perClick) : Infinity;
+
+    return { payout, cpc, cvr, clicks, revPerClick, perClick, beCpc, beCvr, cpa, spend, conversions, revenue, profit, clicksFor100k };
+  }
+
+  /* ---- 描画 ---- */
+
+  function render() {
+    const r = compute();
+    const v = $("verdict");
+
+    const margin = r.revPerClick > 0 ? r.perClick / r.revPerClick : -1;
+    const state = r.perClick > 0 ? (margin < 0.3 ? "thin" : "profit") : "loss";
+    v.dataset.state = state;
+
+    if (r.payout <= 0 || r.cvr <= 0) {
+      $("verdict-head").textContent = "報酬単価と総合CVRを入力してください";
+      $("verdict-body").textContent = "どちらかが 0 のままでは成果が発生しません。";
+    } else if (state === "loss") {
+      const gap = r.cpc - r.beCpc;
+      $("verdict-head").textContent = `赤字。1クリックごとに ${yen1(Math.abs(r.perClick))} 円ずつ失う`;
+      $("verdict-body").innerHTML =
+        `この条件で成立させるには、CPCを <strong>${yen1(r.beCpc)} 円</strong>以下（現在より <strong>${yen1(gap)} 円</strong>安く）にするか、` +
+        `総合CVRを <strong>${yen1(r.beCvr * 100)}%</strong> 以上（現在の <strong>${yen1((r.beCvr / r.cvr) || 0)}倍</strong>）に上げる必要がある。` +
+        `月間${yen(r.clicks)}クリックを出すと <strong>${yen(Math.abs(r.profit))} 円</strong>の損失。`;
+    } else if (state === "thin") {
+      $("verdict-head").textContent = `黒字だが薄い。1クリックあたり ${yen1(r.perClick)} 円`;
+      $("verdict-body").innerHTML =
+        `利益率は <strong>${yen1(margin * 100)}%</strong>。CPCが <strong>${yen1(r.beCpc)} 円</strong>を超えるか、` +
+        `承認率の低下でCVRが <strong>${yen1(r.beCvr * 100)}%</strong> を割ると即座に赤字化する。` +
+        `月10万円の利益には <strong>${isFinite(r.clicksFor100k) ? yen(r.clicksFor100k) : "∞"}</strong> クリック必要。`;
+    } else {
+      $("verdict-head").textContent = `黒字。1クリックあたり ${yen1(r.perClick)} 円`;
+      $("verdict-body").innerHTML =
+        `利益率 <strong>${yen1(margin * 100)}%</strong>。損益分岐CPCは <strong>${yen1(r.beCpc)} 円</strong>で、` +
+        `現在のCPCに <strong>${yen1(r.beCpc - r.cpc)} 円</strong>の余裕がある。` +
+        `月10万円の利益には <strong>${yen(r.clicksFor100k)}</strong> クリック（成果 <strong>${yen(Math.ceil(r.clicksFor100k * r.cvr))}</strong> 件）必要。`;
+    }
+
+    const sign = n => (n > 0 ? "is-profit" : n < 0 ? "is-loss" : "");
+    const metrics = [
+      ["損益分岐CPC", `${yen1(r.beCpc)} 円`, "これを超えたら1クリックごとに損する", ""],
+      ["損益分岐CVR", isFinite(r.beCvr) ? `${yen1(r.beCvr * 100)} %` : "—", "これを下回ったら赤字", ""],
+      ["実CPA", isFinite(r.cpa) ? `${yen(r.cpa)} 円` : "—", `報酬単価 ${yen(r.payout)} 円との差で勝負が決まる`, sign(r.payout - r.cpa)],
+      ["1クリック損益", `${yen1(r.perClick)} 円`, "期待報酬 − CPC", sign(r.perClick)],
+      ["月間広告費", `${yen(r.spend)} 円`, "先に出ていく現金", ""],
+      ["月間成果数", `${yen1(r.conversions)} 件`, "承認ベース", ""],
+      ["月間報酬", `${yen(r.revenue)} 円`, "翌々月に入ってくる", ""],
+      ["月間損益", `${r.profit >= 0 ? "+" : "−"}${yen(Math.abs(r.profit))} 円`, "報酬 − 広告費", sign(r.profit)],
+    ];
+
+    $("metrics").innerHTML = metrics.map(([t, val, sub, cls]) => `
+      <div class="metric">
+        <dt>${t}</dt>
+        <dd class="${cls}">${val}</dd>
+        <div class="sub">${sub}</div>
+      </div>
+    `).join("");
+
+    $("formula").textContent =
+      `期待報酬／クリック = 報酬単価 × 総合CVR\n` +
+      `                   = ${yen(r.payout)} × ${yen1(r.cvr * 100)}%  = ${yen1(r.revPerClick)} 円\n\n` +
+      `1クリック損益      = 期待報酬 − CPC\n` +
+      `                   = ${yen1(r.revPerClick)} − ${yen1(r.cpc)}  = ${yen1(r.perClick)} 円\n\n` +
+      `損益分岐CPC        = 報酬単価 × 総合CVR       = ${yen1(r.beCpc)} 円\n` +
+      `損益分岐CVR        = CPC ÷ 報酬単価           = ${isFinite(r.beCvr) ? yen1(r.beCvr * 100) + " %" : "—"}\n` +
+      `月10万円の必要クリック = 100,000 ÷ 1クリック損益 = ${isFinite(r.clicksFor100k) ? yen(r.clicksFor100k) + " 回" : "達成不可能（1クリックごとに損失）"}`;
+  }
+
+  Object.values(fields).forEach(el => el.addEventListener("input", render));
+  render();
+</script>
