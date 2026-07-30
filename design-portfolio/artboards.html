@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/noto-sans-jp/400.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/noto-sans-jp/700.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/noto-sans-jp/900.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/zen-old-mincho/400.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/zen-old-mincho/700.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/zen-old-mincho/900.css">
+<link rel="stylesheet" href="/tmp/fonts/node_modules/@fontsource/yuji-syuku/400.css">
+<style>
+@font-face { font-family:'FudeS'; src:url('/tmp/fonts/node_modules/@fontsource/yuji-syuku/files/yuji-syuku-japanese-400-normal.woff2') format('woff2'); }
+
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans JP',sans-serif; background:#222; display:flex; flex-direction:column; gap:24px; padding:24px;
+       font-feature-settings:"palt"; -webkit-font-smoothing:antialiased; }
+.board { position:relative; overflow:hidden; flex:none; }
+
+/* ============================================================
+   C型: 縦書き筆文字お品書き  794x1123
+   ============================================================ */
+#b-oshinagaki { width:794px; height:1123px;
+  background:
+    radial-gradient(620px 480px at 18% 12%, rgba(255,255,255,.55), transparent 70%),
+    radial-gradient(720px 560px at 85% 88%, rgba(166,120,60,.10), transparent 70%),
+    radial-gradient(500px 400px at 70% 30%, rgba(255,255,255,.35), transparent 70%),
+    #f2e9d3;
+  color:#2b2722;
+}
+#b-oshinagaki .frame { position:absolute; inset:18px; border:1px solid rgba(43,39,34,.28); pointer-events:none; }
+#b-oshinagaki .frame::after { content:''; position:absolute; inset:4px; border:1px solid rgba(43,39,34,.14); }
+
+/* 右端: 筆文字の縦書きキャッチ(紙面全高を貫く) */
+#b-oshinagaki .catch { position:absolute; top:64px; right:58px; display:flex; flex-direction:row-reverse; gap:26px; align-items:flex-start; color:#26221d; }
+#b-oshinagaki .cmain { writing-mode:horizontal-tb; width:66px; font-family:'FudeS'; font-size:55px; line-height:1.34; word-break:break-all; text-align:center; }
+#b-oshinagaki .cmain .pu { display:inline-block; transform:translate(.4em,-.62em); }
+#b-oshinagaki .catch small { display:block; writing-mode:vertical-rl; font-size:19px; font-family:'Zen Old Mincho'; font-weight:400; letter-spacing:.32em; margin-top:30px; color:rgba(43,39,34,.72); }
+#b-oshinagaki .rakkan { position:absolute; z-index:3; right:66px; bottom:146px; width:34px; height:58px; background:#a63c2f;
+  color:#f2e9d3; writing-mode:vertical-rl; font-family:'Zen Old Mincho'; font-weight:700; font-size:15px; letter-spacing:.1em;
+  display:flex; align-items:center; justify-content:center; border-radius:3px; }
+
+/* 左上: セクション見出し(漢字一字を特大に) */
+#b-oshinagaki .sec { position:absolute; top:66px; left:64px; display:flex; align-items:flex-start; gap:18px; }
+#b-oshinagaki .sec .kan { font-family:'Zen Old Mincho'; font-weight:900; font-size:112px; line-height:1; letter-spacing:0; }
+#b-oshinagaki .sec .side { margin-top:14px; }
+#b-oshinagaki .sec .side .en { font-size:12px; letter-spacing:.42em; color:#a63c2f; font-weight:700; }
+#b-oshinagaki .sec .side .rule { width:56px; height:1px; background:rgba(43,39,34,.5); margin:10px 0; }
+#b-oshinagaki .sec .side .copy { font-family:'Zen Old Mincho'; font-size:16px; letter-spacing:.12em; line-height:1.9; }
+
+/* 品書き: 縦書き 1品=1列 右から左へ */
+#b-oshinagaki .menu { position:absolute; top:310px; left:36px; height:660px; width:608px;
+  writing-mode:vertical-rl; }
+#b-oshinagaki .item { display:block; height:100%; margin-left:18px; }
+#b-oshinagaki .item .name { display:block; font-family:'Zen Old Mincho'; font-weight:700; font-size:27px; letter-spacing:.1em; line-height:1.35; }
+#b-oshinagaki .item .price { display:block; padding-top:372px; margin-left:5px; font-size:14px; letter-spacing:.1em; color:rgba(43,39,34,.78); line-height:1; }
+#b-oshinagaki .tcy { text-combine-upright:all; font-weight:700; font-size:15px; color:#2b2722; }
+#b-oshinagaki .tag { display:block; writing-mode:horizontal-tb; width:24px; margin-left:7px; background:#2c3a58; color:#f2e9d3;
+  font-size:11px; font-weight:700; padding:8px 0 10px; border-radius:0 0 3px 3px; line-height:1.5; text-align:center; word-break:break-all; }
+#b-oshinagaki .new { display:inline-block; writing-mode:horizontal-tb; background:#a63c2f; color:#f2e9d3; font-size:13px; font-family:'Noto Sans JP'; font-weight:700;
+  padding:4px 3px; margin-bottom:8px; border-radius:2px; }
+
+#b-oshinagaki .band { position:absolute; left:40px; right:40px; top:792px; height:228px;
+  background:
+    linear-gradient(90deg, rgba(20,14,10,.0) 55%, rgba(20,14,10,.55) 100%),
+    url('file:///home/user/restaurant-business-site/assets/photos/yakitori-dark.jpg') center 56%/cover no-repeat;
+  box-shadow:inset 0 0 0 1px rgba(242,233,211,.35), 0 16px 38px rgba(43,39,34,.3); }
+#b-oshinagaki .band .bcap { position:absolute; right:26px; top:30px; writing-mode:horizontal-tb; width:30px;
+  font-family:'FudeS'; font-size:26px; line-height:1.4; word-break:break-all; text-align:center; color:#f2e9d3;
+  text-shadow:0 2px 12px rgba(0,0,0,.6); }
+#b-oshinagaki .band .bsub { position:absolute; right:70px; top:34px; writing-mode:horizontal-tb; width:14px;
+  font-size:11px; line-height:1.6; word-break:break-all; text-align:center; color:rgba(242,233,211,.85); letter-spacing:0; }
+
+/* 下部: 事務情報 1列 */
+#b-oshinagaki .info { position:absolute; left:40px; right:40px; bottom:40px; border-top:1px solid rgba(43,39,34,.4);
+  padding-top:14px; display:flex; justify-content:center; gap:18px; font-size:10.5px; letter-spacing:.08em; white-space:nowrap; color:rgba(43,39,34,.85); }
+
+/* ============================================================
+   D型: 暖簾ヘッダーの季節コース表  794x1123
+   ============================================================ */
+#b-unagi { width:794px; height:1123px; background:
+    radial-gradient(600px 460px at 30% 40%, rgba(255,255,255,.5), transparent 70%),
+    #f8f2e4; color:#33291d; }
+#b-unagi .noren { position:absolute; top:0; left:0; right:0; height:232px; display:flex; gap:10px; padding:0 0; }
+#b-unagi .noren .p { flex:1; position:relative; border-radius:0 0 10px 10px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,.06) 0 1px, transparent 1px 9px),
+    linear-gradient(180deg, #263a5e, #2b4168 55%, #253758);
+  box-shadow: inset 0 -18px 30px rgba(0,0,0,.25); }
+#b-unagi .noren .vt { position:absolute; display:block; writing-mode:vertical-rl; color:#f2ead6; line-height:2; }
+#b-unagi .noren .lead { top:34px; left:50%; transform:translateX(-50%); font-family:'Zen Old Mincho'; font-size:17px; letter-spacing:.3em; line-height:2.1; }
+#b-unagi .logo { position:absolute; top:46px; left:50%; transform:translateX(-50%); width:128px; height:128px; border:2.5px solid #f2ead6;
+  border-radius:50%; display:flex; align-items:center; justify-content:center; }
+#b-unagi .logo span { font-family:'FudeS'; font-size:64px; color:#f2ead6; }
+#b-unagi .season { top:30px; right:64px; font-family:'Zen Old Mincho'; font-size:15px; letter-spacing:.4em; border:1px solid rgba(242,234,214,.7); padding:12px 5px; }
+#b-unagi .title { top:20px; right:118px; font-family:'FudeS'; font-size:44px; letter-spacing:.18em; line-height:1.2; }
+
+/* 青海波 */
+#b-unagi .wave { position:absolute; left:0; right:0; bottom:96px; height:300px; opacity:.14;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'><g fill='none' stroke='%232b4168' stroke-width='1.6'><circle cx='0' cy='40' r='36'/><circle cx='0' cy='40' r='26'/><circle cx='0' cy='40' r='16'/><circle cx='80' cy='40' r='36'/><circle cx='80' cy='40' r='26'/><circle cx='80' cy='40' r='16'/><circle cx='40' cy='60' r='36'/><circle cx='40' cy='60' r='26'/><circle cx='40' cy='60' r='16'/></g></svg>");
+  background-size:80px 40px;
+  -webkit-mask-image:linear-gradient(180deg, transparent, #000 40%);
+  mask-image:linear-gradient(180deg, transparent, #000 40%); }
+
+/* 品ブロック(縦書き・漢数字価格) */
+#b-unagi .dish { position:absolute; writing-mode:vertical-rl; }
+#b-unagi .dish .nm { display:block; line-height:1.55; font-family:'Zen Old Mincho'; font-weight:700; font-size:30px; letter-spacing:.16em; line-height:1.7; color:#2c2216; }
+#b-unagi .dish .pr { display:block; padding-top:28px; margin-left:8px; line-height:1; font-family:'Zen Old Mincho'; font-size:24px; letter-spacing:.16em; color:#a63c2f; font-weight:600; }
+#b-unagi .dish .tax { display:block; writing-mode:horizontal-tb; width:13px; margin-top:14px; margin-left:6px; line-height:1.6; font-size:11.5px; color:rgba(51,41,29,.6); word-break:break-all; text-align:center; }
+#b-unagi .d1 { top:308px; right:96px; }
+#b-unagi .d2 { top:520px; left:120px; }
+#b-unagi .desc { position:absolute; font-size:12.5px; line-height:2.1; letter-spacing:.06em; color:rgba(51,41,29,.78); width:236px; }
+#b-unagi .desc1 { top:322px; right:330px; }
+#b-unagi .desc2 { top:534px; left:346px; }
+#b-unagi .rule-v { position:absolute; top:320px; left:50%; width:1px; height:180px; background:rgba(51,41,29,.25); }
+#b-unagi .photo { position:absolute; right:64px; top:690px; width:320px; height:210px;
+  background:url('file:///home/user/restaurant-business-site/assets/photos/unagi-kabayaki.jpg') center 45%/cover no-repeat;
+  border:5px solid #f6efdc; box-shadow:0 14px 34px rgba(51,41,29,.28); }
+#b-unagi .photo .cap { position:absolute; left:-1px; bottom:-1px; background:rgba(38,28,18,.82); color:#f2e8d5;
+  font-size:10.5px; letter-spacing:.22em; padding:5px 10px; }
+#b-unagi .hanko { position:absolute; right:88px; bottom:150px; width:46px; height:46px; background:#a63c2f; border-radius:4px;
+  color:#f8f2e4; display:flex; align-items:center; justify-content:center; font-family:'Zen Old Mincho'; font-weight:700; font-size:15px; letter-spacing:.05em; }
+#b-unagi .shop { position:absolute; display:block; left:64px; top:660px; writing-mode:vertical-rl; font-family:'Zen Old Mincho'; font-size:13.5px; letter-spacing:.28em; color:rgba(51,41,29,.75); line-height:1.9; }
+
+/* 最下部: 追加情報の帯 */
+#b-unagi .band { position:absolute; left:0; right:0; bottom:0; height:96px; background:#463322; color:#f2e8d5;
+  display:flex; align-items:center; padding:0 56px; gap:34px; }
+#b-unagi .band .l { white-space:nowrap; font-family:'Zen Old Mincho'; font-size:19px; letter-spacing:.22em; }
+#b-unagi .band .plus { font-size:13px; white-space:nowrap; }
+#b-unagi .band .plus b { font-size:30px; font-weight:900; color:#e2b95e; letter-spacing:0; }
+#b-unagi .band .list { margin-left:auto; font-size:11px; letter-spacing:.08em; line-height:2; color:rgba(242,232,213,.9); text-align:right; }
+
+/* ============================================================
+   B型: 対決・分割  800x800
+   ============================================================ */
+#b-versus { width:800px; height:800px; background:#17120f; color:#fff; }
+#b-versus .half { position:absolute; top:0; bottom:64px; width:50%; }
+#b-versus .L { left:0; background:
+  linear-gradient(180deg, rgba(126,23,19,.93) 0%, rgba(126,23,19,.62) 38%, rgba(96,15,12,.55) 62%, rgba(84,12,10,.92) 100%),
+  url('file:///home/user/restaurant-business-site/assets/photos/tsukemen-rich.jpg') center 62%/cover no-repeat; }
+#b-versus .R { right:0; background:
+  linear-gradient(180deg, rgba(16,12,9,.94) 0%, rgba(16,12,9,.66) 38%, rgba(10,8,6,.62) 62%, rgba(8,6,5,.94) 100%),
+  url('file:///home/user/restaurant-business-site/assets/photos/ramen-shio.jpg') 68% 42%/220% no-repeat; }
+#b-versus .seam { position:absolute; top:0; bottom:64px; left:50%; width:2px; background:linear-gradient(180deg, transparent, #d8a94e 18%, #d8a94e 82%, transparent); }
+
+#b-versus .badge { position:absolute; top:56px; width:104px; height:104px; border:2px solid rgba(255,255,255,.85); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-family:'Zen Old Mincho'; font-weight:700; font-size:30px; letter-spacing:.14em; text-indent:.14em; }
+#b-versus .L .badge { left:148px; }
+#b-versus .R .badge { right:148px; }
+
+#b-versus .q { position:absolute; top:190px; left:50%; transform:translateX(-50%); writing-mode:vertical-rl; z-index:3;
+  font-family:'Zen Old Mincho'; font-weight:900; font-size:72px; letter-spacing:.1em; color:#fff; line-height:1;
+  text-shadow:0 6px 30px rgba(0,0,0,.55); }
+
+#b-versus .bowl { position:absolute; top:206px; width:120px; opacity:.5; }
+#b-versus .L .bowl { left:140px; }
+#b-versus .R .bowl { right:140px; }
+
+#b-versus .nm { position:absolute; top:330px; writing-mode:vertical-rl; font-family:'Zen Old Mincho'; font-weight:700; font-size:33px; letter-spacing:.16em; line-height:1.5; }
+#b-versus .L .nm { left:118px; }
+#b-versus .R .nm { right:118px; }
+#b-versus .sizzle { position:absolute; display:block; line-height:1.15; top:346px; writing-mode:vertical-rl; font-family:'FudeS'; font-size:19px; letter-spacing:.2em; color:rgba(255,255,255,.88); text-shadow:0 2px 12px rgba(0,0,0,.6); }
+#b-versus .L .sizzle { left:256px; }
+#b-versus .R .sizzle { right:256px; }
+
+#b-versus .price { position:absolute; bottom:96px; width:100%; text-align:center; }
+#b-versus .price .cap { font-size:12px; letter-spacing:.3em; color:rgba(255,255,255,.8); margin-bottom:6px; text-shadow:0 1px 8px rgba(0,0,0,.6); }
+#b-versus .price b { font-family:'Noto Sans JP'; font-weight:900; font-size:64px; color:#d8a94e; letter-spacing:.01em; }
+#b-versus .price span { font-size:20px; color:#d8a94e; }
+
+#b-versus .band { position:absolute; left:0; right:0; bottom:0; height:64px; background:#efe4cd; color:#26201a;
+  display:flex; align-items:center; justify-content:center; gap:24px; font-size:12.5px; letter-spacing:.2em; }
+#b-versus .band .sep { width:1px; height:16px; background:rgba(38,32,26,.4); }
+</style>
+</head>
+<body>
+
+<!-- ================= C型 ================= -->
+<div class="board" id="b-oshinagaki">
+  <div class="frame"></div>
+
+  <div class="sec">
+    <div class="kan">肴</div>
+    <div class="side">
+      <div class="en">SAKANA — QUICK BITES</div>
+      <div class="rule"></div>
+      <div class="copy">盃がすすむ、自慢の小皿。<br>お待たせしません、すぐ出ます。</div>
+    </div>
+  </div>
+
+  <div class="catch"><span class="cmain">まずは肴と<span class="pu">、</span>一杯を<span class="pu">。</span></span><small>炭火と酒の店 六花</small></div>
+  <div class="rakkan">六花</div>
+
+  <div class="menu">
+    <div class="item">
+      <span class="tag">伊勢志摩</span>
+      <span class="name">あかもくポン酢</span>
+      <span class="price"><span class="tcy">380</span>円</span>
+    </div>
+    <div class="item">
+      <span class="name">やみつき塩キャベツ</span>
+      <span class="price"><span class="tcy">300</span>円</span>
+    </div>
+    <div class="item">
+      <span class="name">蛸わさび</span>
+      <span class="price"><span class="tcy">330</span>円</span>
+    </div>
+    <div class="item">
+      <span class="tag">土佐沖</span>
+      <span class="name"><span class="new">新</span>藁焼き炙りしめ鯖</span>
+      <span class="price"><span class="tcy">580</span>円</span>
+    </div>
+    <div class="item">
+      <span class="name">山芋の梅肉和え</span>
+      <span class="price"><span class="tcy">380</span>円</span>
+    </div>
+    <div class="item">
+      <span class="tag">大阪仕込</span>
+      <span class="name">牛すじどて焼き</span>
+      <span class="price"><span class="tcy">480</span>円</span>
+    </div>
+    <div class="item">
+      <span class="name">自家製ぬか漬け盛り</span>
+      <span class="price"><span class="tcy">420</span>円</span>
+    </div>
+    <div class="item">
+      <span class="name"><span class="new">新</span>蟹味噌甲羅焼き</span>
+      <span class="price"><span class="tcy">680</span>円</span>
+    </div>
+  </div>
+
+  <div class="band"><span class="bcap">炭火、香る。</span><span class="bsub">名物は備長炭で</span></div>
+
+  <div class="info">
+    <span>炭火と酒の店 六花 ROKKA</span><span>花町駅東口 徒歩三分</span><span>TEL 03-1234-5678</span><span>17:00-23:30(L.O.23:00)</span><span>表示価格は税抜きです</span>
+  </div>
+</div>
+
+<!-- ================= D型 ================= -->
+<div class="board" id="b-unagi">
+  <div class="noren">
+    <div class="p"><span class="vt lead">ふっくら蒲焼を、<br>だしで味わう。</span></div>
+    <div class="p"><div class="logo"><span>鰻</span></div></div>
+    <div class="p"><span class="vt season">夏のご馳走</span><span class="vt title">うなぎ</span></div>
+  </div>
+
+  <div class="wave"></div>
+
+  <div class="dish d1">
+    <span class="nm">うなぎのひつまぶし風<br>だし茶漬け膳</span>
+    <span class="pr">一、九八〇円</span>
+    <span class="tax">税込二、一七八円</span>
+  </div>
+  <div class="desc desc1">蒲焼はまずそのまま。次にお出汁をかけて、薬味とともに二度おいしい夏の膳です。肝吸い・季節の小鉢付き。</div>
+
+  <div class="dish d2">
+    <span class="nm">鰻蒲焼と漬けまぐろの<br>あいのせ丼</span>
+    <span class="pr">一、七八〇円</span>
+    <span class="tax">税込一、九五八円</span>
+  </div>
+  <div class="desc desc2">香ばしい蒲焼と、まろやかな漬けまぐろを一椀で。数量限定、なくなり次第じまいです。</div>
+
+  <div class="photo"><span class="cap">うなぎのひつまぶし風</span></div>
+  <div class="hanko">甘味</div>
+  <div class="shop">甘味茶房 ひさご 七月一日より</div>
+
+  <div class="band">
+    <span class="l">お飲み物セット</span>
+    <span class="plus">+<b>200</b>円(税込220円)</span>
+    <span class="list">珈琲(アイス・ホット)・水出し煎茶・ほうじ茶ラテ<br>りんごジュース・アイス烏龍茶</span>
+  </div>
+</div>
+
+<!-- ================= B型 ================= -->
+<div class="board" id="b-versus">
+  <div class="half L">
+    <div class="badge">濃厚</div>
+    <div class="nm">炎の辛味噌<br>つけ麺</div>
+    <div class="sizzle">ごり、どろ。</div>
+    <div class="price"><div class="cap">並・税込</div><b>950</b><span>円</span></div>
+  </div>
+  <div class="half R">
+    <div class="badge">淡麗</div>
+    <div class="nm">淡麗昆布水<br>塩そば</div>
+    <div class="sizzle">すっ、きり。</div>
+    <div class="price"><div class="cap">並・税込</div><b>900</b><span>円</span></div>
+  </div>
+  <div class="seam"></div>
+  <div class="q">どっち派。</div>
+  <div class="band">
+    <span>麺屋 雷紋 RAIMON</span><span class="sep"></span><span>花町駅前店</span><span class="sep"></span><span>TEL 03-1234-5678</span><span class="sep"></span><span>TAKE OUT 可</span>
+  </div>
+</div>
+
+</body>
+</html>
