@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" role="img"
+     aria-label="料理の写真と価格が整理されたメニュー表と、注文データが上向きに伸びるグラフのイラスト">
+  <defs>
+    <style>
+      .ln { fill: none; stroke: #cfc2ab; stroke-width: 2; stroke-linecap: round; }
+      .bar { fill: #e2d9c9; }
+      .bar-d { fill: #cfc2ab; }
+      .ttl { font-family: "Noto Serif JP", serif; font-weight: 700; fill: #17140f; }
+      .lbl { font-family: "Noto Sans JP", sans-serif; font-weight: 700; fill: #625a50; }
+    </style>
+  </defs>
+
+  <!-- 背景の面 -->
+  <circle cx="628" cy="150" r="152" fill="#f6efe1"/>
+  <circle cx="152" cy="566" r="126" fill="#e6efec"/>
+
+  <!-- メニュー表 -->
+  <g>
+    <rect x="208" y="112" width="380" height="500" rx="10" fill="#17140f" opacity=".07"/>
+    <rect x="200" y="100" width="380" height="500" rx="10" fill="#ffffff" stroke="#e2d9c9" stroke-width="2"/>
+
+    <!-- 店名まわり -->
+    <g transform="translate(390 152)">
+      <g fill="none" stroke="#143a34" stroke-width="2.2" stroke-linejoin="round">
+        <rect x="-7" y="-22" width="14" height="11" rx="1.5"/>
+        <rect x="-21" y="-6" width="14" height="11" rx="1.5"/>
+        <rect x="7" y="-6" width="14" height="11" rx="1.5"/>
+      </g>
+      <text class="ttl" x="0" y="32" font-size="21" text-anchor="middle" letter-spacing="6">御 献 立</text>
+      <line class="ln" x1="-40" y1="48" x2="40" y2="48" stroke="#b33a2b"/>
+    </g>
+
+    <!-- おすすめ枠（朱でハイライト） -->
+    <g>
+      <rect x="228" y="228" width="324" height="76" rx="6" fill="#fbeeeb"/>
+      <rect x="228" y="228" width="4" height="76" rx="2" fill="#b33a2b"/>
+      <rect x="252" y="248" width="128" height="11" rx="5.5" fill="#b33a2b" opacity=".75"/>
+      <rect x="252" y="270" width="184" height="8" rx="4" class="bar"/>
+      <rect x="252" y="284" width="120" height="8" rx="4" class="bar"/>
+      <text class="lbl" x="536" y="262" font-size="16" text-anchor="end" fill="#8c2a1e">¥1,480</text>
+      <g transform="translate(470 276)">
+        <rect x="0" y="0" width="66" height="20" rx="10" fill="#b33a2b"/>
+        <text x="33" y="14.5" font-size="11" text-anchor="middle" fill="#ffffff"
+              font-family="'Noto Sans JP',sans-serif" font-weight="700">一番人気</text>
+      </g>
+    </g>
+
+    <!-- 通常の品目 -->
+    <g>
+      <rect x="252" y="336" width="112" height="10" rx="5" class="bar-d"/>
+      <line class="ln" x1="374" y1="342" x2="492" y2="342" stroke-dasharray="2 6"/>
+      <rect x="500" y="337" width="36" height="9" rx="4.5" class="bar-d"/>
+      <rect x="252" y="356" width="160" height="7" rx="3.5" class="bar"/>
+
+      <rect x="252" y="400" width="132" height="10" rx="5" class="bar-d"/>
+      <line class="ln" x1="394" y1="406" x2="492" y2="406" stroke-dasharray="2 6"/>
+      <rect x="500" y="401" width="36" height="9" rx="4.5" class="bar-d"/>
+      <rect x="252" y="420" width="140" height="7" rx="3.5" class="bar"/>
+
+      <rect x="252" y="464" width="96" height="10" rx="5" class="bar-d"/>
+      <line class="ln" x1="358" y1="470" x2="492" y2="470" stroke-dasharray="2 6"/>
+      <rect x="500" y="465" width="36" height="9" rx="4.5" class="bar-d"/>
+      <rect x="252" y="484" width="172" height="7" rx="3.5" class="bar"/>
+    </g>
+
+    <line class="ln" x1="252" y1="532" x2="536" y2="532"/>
+    <rect x="330" y="552" width="128" height="8" rx="4" class="bar"/>
+  </g>
+
+  <!-- 料理の皿 -->
+  <g transform="translate(150 556)">
+    <circle r="84" fill="#ffffff" stroke="#e2d9c9" stroke-width="2"/>
+    <circle r="62" fill="none" stroke="#f4eee4" stroke-width="2"/>
+    <path d="M-34 8a34 30 0 0 1 68 0z" fill="#b33a2b" opacity=".85"/>
+    <path d="M-34 8h68" stroke="#8c2a1e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <circle cx="-14" cy="-8" r="8" fill="#f6efe1"/>
+    <circle cx="12" cy="-3" r="6" fill="#f6efe1"/>
+    <path d="M22 22c14-2 24-8 30-16" class="ln" stroke="#143a34" stroke-width="3"/>
+    <!-- 湯気 -->
+    <g fill="none" stroke="#cfc2ab" stroke-width="2.5" stroke-linecap="round" opacity=".8">
+      <path d="M-22-42c8-8-8-16 0-24"/>
+      <path d="M0-50c8-8-8-16 0-24"/>
+      <path d="M22-42c8-8-8-16 0-24"/>
+    </g>
+  </g>
+
+  <!-- 注文データのカード -->
+  <g transform="translate(524 132)">
+    <rect x="6" y="8" width="228" height="140" rx="12" fill="#17140f" opacity=".08"/>
+    <rect x="0" y="0" width="228" height="140" rx="12" fill="#143a34"/>
+    <text x="22" y="34" font-size="12" letter-spacing="2"
+          font-family="'Noto Sans JP',sans-serif" font-weight="700" fill="#b08d4f">ORDER DATA</text>
+    <!-- 棒グラフ -->
+    <g fill="#2c5a52">
+      <rect x="22" y="86" width="18" height="30" rx="3"/>
+      <rect x="48" y="74" width="18" height="42" rx="3"/>
+      <rect x="74" y="80" width="18" height="36" rx="3"/>
+      <rect x="100" y="62" width="18" height="54" rx="3"/>
+    </g>
+    <g fill="#b08d4f">
+      <rect x="126" y="52" width="18" height="64" rx="3"/>
+      <rect x="152" y="40" width="18" height="76" rx="3"/>
+    </g>
+    <path d="M26 96 L58 82 L84 88 L110 70 L136 60 L166 44" fill="none" stroke="#f3efe7"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M182 52l14-14m0 0h-11m11 0v11" fill="none" stroke="#f3efe7"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="22" y="122" width="184" height="1.5" rx="0.75" fill="#2c5a52"/>
+  </g>
+
+  <!-- 箸 -->
+  <g stroke="#b08d4f" stroke-width="6" stroke-linecap="round" opacity=".85">
+    <line x1="632" y1="640" x2="742" y2="516"/>
+    <line x1="660" y1="652" x2="762" y2="536"/>
+  </g>
+</svg>

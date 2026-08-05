@@ -1,250 +1,725 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="no-js">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>飲食店メニュー表作成・ウェブマーケティング | 副業サービス</title>
-    <meta name="description" content="飲食店のメニュー表作成とウェブマーケティングを専門とする副業サービス。おしゃれなメニュー表デザインと効果的な集客戦略で飲食店の売上アップをサポートします。">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>品書き｜飲食店専門のメニューデザイン＆集客支援</title>
+<meta name="description" content="味は変えずに、注文される順番を変える。原価と粗利から逆算したメニュー設計と、MEO・SNSの集客支援で飲食店の利益づくりを支えます。初回相談は無料、オンライン対応可。">
+<link rel="canonical" href="https://shinagaki.example.jp/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="品書き（SHINAGAKI）">
+<meta property="og:title" content="品書き｜飲食店専門のメニューデザイン＆集客支援">
+<meta property="og:description" content="一枚の品書きが、店の利益をつくる。原価と粗利から逆算したメニュー設計で「売りたい一品」がいちばん選ばれる状態をつくります。">
+<meta property="og:url" content="https://shinagaki.example.jp/">
+<meta property="og:image" content="https://shinagaki.example.jp/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbf8f3">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/main.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "品書き（SHINAGAKI）",
+  "description": "飲食店専門のメニューデザインと集客支援サービス",
+  "url": "https://shinagaki.example.jp/",
+  "image": "https://shinagaki.example.jp/assets/img/og-image.png",
+  "areaServed": "JP",
+  "priceRange": "¥¥",
+  "address": { "@type": "PostalAddress", "addressCountry": "JP", "addressRegion": "福岡県" },
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "メニューデザイン" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web集客支援（MEO・SNS運用）" } }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "料金はいくらくらいかかりますか？", "acceptedAnswer": { "@type": "Answer", "text": "メニューデザインは1枚あたり49,800円から、Web集客支援は月額39,800円からご用意しています。ご相談時にお見積りをお出しし、ご了承いただいてから着手します。" } },
+    { "@type": "Question", "name": "納品までどれくらいかかりますか？", "acceptedAnswer": { "@type": "Answer", "text": "メニューデザインは初回相談から約3週間が目安です。お急ぎの場合はご相談ください。" } },
+    { "@type": "Question", "name": "遠方でも依頼できますか？", "acceptedAnswer": { "@type": "Answer", "text": "オンラインで全国対応しています。打ち合わせはビデオ通話、原稿や写真のやりとりはメールとクラウドで完結します。" } },
+    { "@type": "Question", "name": "印刷まで任せられますか？", "acceptedAnswer": { "@type": "Answer", "text": "提携印刷所への手配まで代行できます。印刷費は実費のみで、仲介手数料はいただきません。" } },
+    { "@type": "Question", "name": "修正は何回まで対応してもらえますか？", "acceptedAnswer": { "@type": "Answer", "text": "デザイン確定までの修正は回数無制限、納品後90日以内の軽微な修正は2回まで無料です。" } },
+    { "@type": "Question", "name": "解約に違約金はかかりますか？", "acceptedAnswer": { "@type": "Answer", "text": "月額プランは最低契約期間なし、当月末までのご連絡で翌月から停止できます。違約金は一切いただきません。" } }
+  ]
+}
+</script>
 </head>
 <body>
-    <!-- ヘッダー -->
-    <header class="header">
-        <div class="header-container container">
-            <div class="logo">
-                <a href="index.html">
-                    <span>飲食店サポート</span>
-                </a>
-            </div>
-            <nav class="nav">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="index.html" class="nav-link">ホーム</a></li>
-                    <li class="nav-item"><a href="menu-design.html" class="nav-link">メニュー表作成</a></li>
-                    <li class="nav-item"><a href="web-marketing.html" class="nav-link">ウェブマーケティング</a></li>
-                    <li class="nav-item"><a href="portfolio.html" class="nav-link">制作実績</a></li>
-                    <li class="nav-item"><a href="pricing.html" class="nav-link">料金プラン</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-cta">お問い合わせ</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </nav>
-        </div>
-    </header>
+<a class="skip-link" href="#main">本文へスキップ</a>
 
-    <!-- モバイルナビゲーション -->
-    <div class="mobile-nav">
-        <div class="mobile-nav-close">
-            <i class="fas fa-times"></i>
+<!-- アイコンスプライト（画面には表示されません） -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM8 8h8M8 12h5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12.5 16V8M17 16v-6"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7H7l1.5-2.5h7L17 7h2.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="12.5" r="3.4"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 15.5a2.5 2.5 0 0 1-2.5 2.5H8l-4 3V6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v6c0 4.6-3.1 8.2-7.5 9.5C7.6 20.2 4.5 16.6 4.5 12V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7v.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m4 4 16 16M20 4 4 20"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5M8.5 13h7M8.5 17h4.5"/></symbol>
+</svg>
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <a class="brand" href="index.html">
+      <img class="brand__mark" src="assets/img/logo.svg" alt="" width="34" height="34">
+      <span class="brand__name">品書き<span class="brand__sub">SHINAGAKI</span></span>
+    </a>
+
+    <nav class="nav" aria-label="メインナビゲーション">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="index.html" aria-current="page">ホーム</a></li>
+        <li><a class="nav__link" href="menu-design.html">メニューデザイン</a></li>
+        <li><a class="nav__link" href="web-marketing.html">集客支援</a></li>
+        <li><a class="nav__link" href="works.html">制作事例</a></li>
+        <li><a class="nav__link" href="pricing.html">料金</a></li>
+        <li><a class="nav__link" href="about.html">運営者</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn header__cta" href="contact.html">
+      無料で相談する<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="drawer" data-nav-toggle>
+      <span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span data-nav-toggle-label>メニュー</span>
+    </button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" data-drawer>
+  <nav aria-label="モバイルナビゲーション">
+    <ul class="drawer__list">
+      <li><a class="drawer__link" href="index.html" aria-current="page">ホーム<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+      <li><a class="drawer__link" href="menu-design.html">メニューデザイン<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+      <li><a class="drawer__link" href="web-marketing.html">Web集客支援<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+      <li><a class="drawer__link" href="works.html">制作事例<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+      <li><a class="drawer__link" href="pricing.html">料金プラン<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+      <li><a class="drawer__link" href="about.html">運営者について<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a></li>
+    </ul>
+  </nav>
+  <div class="drawer__cta">
+    <a class="btn btn--lg" href="contact.html">無料で相談する</a>
+    <a class="btn btn--ghost btn--lg" href="pricing.html">料金プランを見る</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ============================ ファーストビュー ============================ -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <p class="hero__eyebrow"><span class="dot" aria-hidden="true"></span>飲食店専門／メニューデザイン ＆ 集客支援</p>
+        <h1 class="hero__title">一枚の品書きが、<br><span class="accent">店の利益</span>をつくる。</h1>
+        <p class="hero__lead">
+          味は変えずに、注文される順番を変える。原価と粗利から逆算したメニュー設計で、
+          「本当に売りたい一品」がいちばん選ばれる状態をつくります。
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--lg" href="contact.html">
+            無料でメニュー診断を受ける<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+          </a>
+          <a class="btn btn--ghost btn--lg" href="works.html">制作事例を見る</a>
         </div>
-        <ul class="mobile-nav-list">
-            <li class="mobile-nav-item"><a href="index.html" class="mobile-nav-link">ホーム</a></li>
-            <li class="mobile-nav-item"><a href="menu-design.html" class="mobile-nav-link">メニュー表作成</a></li>
-            <li class="mobile-nav-item"><a href="web-marketing.html" class="mobile-nav-link">ウェブマーケティング</a></li>
-            <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link">制作実績</a></li>
-            <li class="mobile-nav-item"><a href="pricing.html" class="mobile-nav-link">料金プラン</a></li>
-        </ul>
-        <a href="contact.html" class="mobile-nav-cta">お問い合わせ</a>
-        <div class="mobile-nav-social">
-            <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
-        </div>
+        <p class="hero__note">オンライン30分・全国対応／その場で契約を迫ることはありません。</p>
+      </div>
+      <div class="hero__art">
+        <img src="assets/img/hero-art.svg" width="800" height="700" decoding="async"
+             alt="おすすめの一品が目立つように設計されたメニュー表と、注文データが上向きに伸びるグラフのイラスト">
+      </div>
     </div>
-    <div class="overlay"></div>
+  </section>
 
-    <!-- ヒーローセクション -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">飲食店の売上アップを実現する<br>メニュー表作成とウェブマーケティング</h1>
-                <p class="hero-subtitle">おしゃれなメニュー表デザインと効果的な集客戦略で、あなたの飲食店をサポートします</p>
-                <div class="hero-buttons">
-                    <a href="contact.html" class="btn btn-primary">無料相談はこちら</a>
-                    <a href="portfolio.html" class="btn btn-secondary">制作実績を見る</a>
-                </div>
-            </div>
+  <!-- ============================ 実績数値 ============================ -->
+  <!-- SAMPLE: 数値はサンプルです。実績データに差し替えてください -->
+  <section class="stats" aria-label="サービスの実績">
+    <div class="container">
+      <ul class="stats__list">
+        <li class="stats__item">
+          <span class="stats__num">240<span class="unit">店舗</span></span>
+          <span class="stats__label">累計の制作・支援店舗数</span>
+        </li>
+        <li class="stats__item">
+          <span class="stats__num">+11.4<span class="unit">%</span></span>
+          <span class="stats__label">リニューアル後3か月の<br>平均客単価の変化</span>
+        </li>
+        <li class="stats__item">
+          <span class="stats__num">82<span class="unit">%</span></span>
+          <span class="stats__label">2回目以降もご依頼<br>いただいた割合</span>
+        </li>
+        <li class="stats__item">
+          <span class="stats__num">0<span class="unit">円</span></span>
+          <span class="stats__label">初回相談・お見積り</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================ 悩み・課題 ============================ -->
+  <section class="section problem" aria-labelledby="problem-title">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="section-label">Problem</p>
+        <h2 class="section-title" id="problem-title">こんな状態のまま、<br>営業していませんか。</h2>
+        <p class="section-lead">ひとつでも当てはまるなら、伸びしろはメニューにあります。</p>
+      </div>
+
+      <ul class="problem__list reveal">
+        <li class="problem__item">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+          <span>開店時に作ったメニューを、値上げ以外ほとんど見直していない。</span>
+        </li>
+        <li class="problem__item">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+          <span>自信のある看板料理より、安い定番メニューばかりが注文される。</span>
+        </li>
+        <li class="problem__item">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+          <span>料理写真がスマートフォン撮りのままで、実物の魅力が伝わっていない。</span>
+        </li>
+        <li class="problem__item">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"></use></svg>
+          <span>Googleマップやインスタグラムを、何を更新すればいいか分からず放置している。</span>
+        </li>
+      </ul>
+
+      <div class="problem__turn reveal">
+        <h3>売れない原因は、味ではなく<br><em>「並べ方」</em>かもしれません。</h3>
+        <p>
+          お客様がメニューに目を通す時間は、席についてからのわずか数分。
+          その短い時間でどこに視線が向かうかは、レイアウト・価格の並び順・写真の使い方でほとんど決まります。
+          品書きは、味も原価も変えずに利益を動かせる、数少ない打ち手です。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 選ばれる理由 ============================ -->
+  <section class="section section--alt" aria-labelledby="reason-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="section-label">Why us</p>
+        <h2 class="section-title" id="reason-title">品書きが選ばれる、3つの理由</h2>
+        <p class="section-lead">見た目を整えるだけの制作会社とも、テンプレートとも違うところをお伝えします。</p>
+      </div>
+
+      <div class="reason">
+        <article class="reason__item reveal">
+          <p class="reason__no" aria-hidden="true">01</p>
+          <div class="reason__body">
+            <h3>「きれい」ではなく<br>「利益」から設計します</h3>
+            <p>
+              デザインを描き始める前に、全メニューの原価率と注文数を一緒に整理します。
+              粗利の高い料理が埋もれていないか、値ごろ感の基準になる価格はどれか。
+              数字を見てから紙面の設計に入るので、感覚ではなく根拠で配置を決められます。
+            </p>
+          </div>
+          <dl class="reason__aside">
+            <dt>具体的にやること</dt>
+            <dd>原価率・注文数のヒアリングとABC分析</dd>
+            <dd>看板料理を決める「主役の一品」設計</dd>
+            <dd>松竹梅の3段階価格でセット率を高める構成</dd>
+          </dl>
+        </article>
+
+        <article class="reason__item reveal">
+          <p class="reason__no" aria-hidden="true">02</p>
+          <div class="reason__body">
+            <h3>飲食店だけを、<br>ずっと見てきました</h3>
+            <p>
+              居酒屋、カフェ、ラーメン店、テイクアウト。業態ごとに、お客様がメニューを見る姿勢も滞在時間も違います。
+              券売機の並びとコース表では、正解がまったく別物です。
+              飲食に絞ってきたからこそ、業態に合った型を最初から提案できます。
+            </p>
+          </div>
+          <dl class="reason__aside">
+            <dt>対応してきた業態</dt>
+            <dd>居酒屋・ダイニングバー</dd>
+            <dd>カフェ・ベーカリー</dd>
+            <dd>ラーメン・定食・券売機まわり</dd>
+            <dd>焼肉・レストラン・テイクアウト</dd>
+          </dl>
+        </article>
+
+        <article class="reason__item reveal">
+          <p class="reason__no" aria-hidden="true">03</p>
+          <div class="reason__body">
+            <h3>つくって終わり、<br>にはしません</h3>
+            <p>
+              納品から90日間は、注文データの変化を一緒に確認します。
+              狙った一品が伸びていなければ、価格の見せ方や配置を調整します。
+              デザインは提出した時点ではなく、数字が動いてはじめて仕事だと考えています。
+            </p>
+          </div>
+          <dl class="reason__aside">
+            <dt>納品後のサポート</dt>
+            <dd>90日間の効果検証レポート（1回）</dd>
+            <dd>軽微な修正は2回まで無料</dd>
+            <dd>季節メニューの差し替えテンプレート提供</dd>
+          </dl>
+        </article>
+      </div>
+
+      <div class="reveal" style="margin-top: clamp(2.5rem, 1rem + 4vw, 4rem)">
+        <h3 class="h3" style="margin-bottom: var(--sp-4)">他の選択肢との違い</h3>
+        <div class="table-scroll">
+          <table class="c-table">
+            <caption class="visually-hidden">品書き、一般的なデザイン会社、無料テンプレートの比較表</caption>
+            <thead>
+              <tr>
+                <th scope="col">比較項目</th>
+                <th scope="col" class="is-highlight">品書き</th>
+                <th scope="col">一般的なデザイン会社</th>
+                <th scope="col">無料テンプレート</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">費用の目安</th>
+                <td class="is-highlight">4.98万円〜</td>
+                <td>15万円〜30万円</td>
+                <td>0円</td>
+              </tr>
+              <tr>
+                <th scope="row">メニュー構成の設計</th>
+                <td class="is-highlight">原価・注文数から設計</td>
+                <td>原稿は店舗側で用意</td>
+                <td>なし</td>
+              </tr>
+              <tr>
+                <th scope="row">飲食業態の知見</th>
+                <td class="is-highlight">飲食店に特化</td>
+                <td>業種は幅広く担当</td>
+                <td>汎用デザイン</td>
+              </tr>
+              <tr>
+                <th scope="row">納品後のフォロー</th>
+                <td class="is-highlight">90日間の効果検証つき</td>
+                <td>別途費用</td>
+                <td>なし</td>
+              </tr>
+              <tr>
+                <th scope="row">初回相談から納品まで</th>
+                <td class="is-highlight">約3週間</td>
+                <td>1〜2か月</td>
+                <td>即日（自作）</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    </section>
+        <p class="text-xs text-muted" style="margin-top: var(--sp-3)">
+          ※ 他社の費用・期間は、公開されている一般的な相場をもとにした目安です。
+        </p>
+      </div>
+    </div>
+  </section>
 
-    <!-- サービス紹介セクション -->
-    <section class="services section">
-        <div class="container">
-            <h2 class="section-title">提供サービス</h2>
-            <div class="services-container">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <h3 class="service-title">メニュー表作成サービス</h3>
-                    <p class="service-description">お店のコンセプトに合わせたおしゃれなメニュー表をデザイン。お客様の目を引き、注文率をアップさせるメニュー表で売上向上に貢献します。</p>
-                    <a href="menu-design.html" class="service-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <h3 class="service-title">ウェブマーケティングサービス</h3>
-                    <p class="service-description">MEO対策、SNS運用、広告運用など、飲食店に特化したウェブマーケティング戦略で新規顧客の獲得とリピーター増加をサポートします。</p>
-                    <a href="web-marketing.html" class="service-link">詳しく見る <i class="fas fa-arrow-right"></i></a>
-                </div>
+  <!-- ============================ サービス内容 ============================ -->
+  <section class="section" aria-labelledby="service-title">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="section-label">Service</p>
+        <h2 class="section-title" id="service-title">提供している2つのサービス</h2>
+        <p class="section-lead">店内の「注文」と、店外からの「来店」。売上をつくる両側を担当します。</p>
+      </div>
+
+      <div class="grid grid--2">
+        <article class="card card--link reveal">
+          <span class="card__icon"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg></span>
+          <h3 class="card__title">メニューデザイン</h3>
+          <p class="card__text">
+            グランドメニュー、季節のおすすめ、券売機の並び、テイクアウト用のリーフレットまで。
+            原価と注文データから構成を組み立て、印刷手配まで一貫して対応します。
+          </p>
+          <ul class="check-list">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>メニュー構成・価格設計</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>デザイン制作（紙・POP・券売機）</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>料理写真の撮影ディレクション</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>提携印刷所への手配代行</li>
+          </ul>
+          <a class="link-arrow" href="menu-design.html">
+            メニューデザインの詳細<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+          </a>
+        </article>
+
+        <article class="card card--link reveal reveal-delay-1">
+          <span class="card__icon card__icon--deep"><svg class="icon" aria-hidden="true"><use href="#i-chart"></use></svg></span>
+          <h3 class="card__title">Web集客支援</h3>
+          <p class="card__text">
+            Googleマップの整備と口コミ対応、インスタグラムの運用設計。
+            「近くで探している人」に見つけてもらい、来店の一歩手前まで背中を押す導線をつくります。
+          </p>
+          <ul class="check-list">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>Googleビジネスプロフィール整備（MEO）</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>口コミ返信の方針づくりと代行</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>インスタグラムの投稿設計・運用</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>月次レポートと改善提案</li>
+          </ul>
+          <a class="link-arrow" href="web-marketing.html">
+            Web集客支援の詳細<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 流れ ============================ -->
+  <section class="section section--alt" aria-labelledby="flow-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="section-label">Flow</p>
+        <h2 class="section-title" id="flow-title">ご相談から効果検証までの5ステップ</h2>
+        <p class="section-lead">はじめての方でも迷わないよう、いつ何をするかを最初にお伝えします。</p>
+      </div>
+
+      <ol class="steps reveal">
+        <li class="step">
+          <h3 class="step__title">無料相談</h3>
+          <div class="step__text">
+            <p>オンライン30分。現在のメニューと、いま困っていることを伺います。
+              その場でお見積りの目安をお伝えし、契約を迫ることはありません。</p>
+            <span class="step__meta">所要30分／費用0円</span>
+          </div>
+        </li>
+        <li class="step">
+          <h3 class="step__title">現状分析とメニュー設計</h3>
+          <div class="step__text">
+            <p>原価率と直近3か月の注文数を共有いただき、主力・準主力・整理候補に分類します。
+              構成案をご確認いただいてからデザインに進みます。</p>
+            <span class="step__meta">約1週間</span>
+          </div>
+        </li>
+        <li class="step">
+          <h3 class="step__title">デザイン制作</h3>
+          <div class="step__text">
+            <p>初回案を2パターンご提案し、方向性を選んでいただきます。
+              確定までの修正回数に制限はありません。写真が必要な場合は撮影も手配します。</p>
+            <span class="step__meta">約2週間／修正無制限</span>
+          </div>
+        </li>
+        <li class="step">
+          <h3 class="step__title">納品・印刷手配</h3>
+          <div class="step__text">
+            <p>印刷用データと、店舗で差し替えできる編集用ファイルの両方をお渡しします。
+              提携印刷所への発注も代行でき、印刷費は実費のみです。</p>
+            <span class="step__meta">最短3営業日で納品</span>
+          </div>
+        </li>
+        <li class="step">
+          <h3 class="step__title">効果検証と改善</h3>
+          <div class="step__text">
+            <p>導入から90日後、注文データの変化をレポートにまとめます。
+              狙った一品が伸びていない場合は、配置と価格の見せ方を調整します。</p>
+            <span class="step__meta">90日後／レポート1回無料</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================ 制作事例 ============================ -->
+  <!-- SAMPLE: 以下の事例・数値・お客様の声はサンプルです。実績に差し替えてください -->
+  <section class="section" aria-labelledby="works-title">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="section-label">Works</p>
+        <h2 class="section-title" id="works-title">課題から結果まで、3つの事例</h2>
+        <p class="section-lead">デザインの前後で、店内の注文がどう変わったかを公開しています。</p>
+      </div>
+
+      <div class="grid grid--3">
+        <article class="case reveal">
+          <figure class="case__figure">
+            <img src="assets/img/work-izakaya.svg" width="480" height="360" loading="lazy" decoding="async"
+                 alt="縦書きで主力の一品を大きく見せた、居酒屋向けグランドメニューのデザイン例">
+          </figure>
+          <div class="case__body">
+            <div class="case__tags">
+              <span class="tag tag--accent">居酒屋</span><span class="tag">福岡市／28席</span>
             </div>
+            <h3 class="case__title">名物料理を、一番上に戻した。</h3>
+            <p class="text-sm text-muted">
+              品数が92点まで増え、看板の馬刺しが下段に埋もれていた状態。
+              注文数の少ない31品を整理し、主力3品を一枚目に集約しました。
+            </p>
+            <dl class="case__result">
+              <dt>客単価の変化（3か月後）</dt>
+              <dd>3,180円 → 3,620円</dd>
+            </dl>
+          </div>
+        </article>
+
+        <article class="case reveal reveal-delay-1">
+          <figure class="case__figure">
+            <img src="assets/img/work-cafe.svg" width="480" height="360" loading="lazy" decoding="async"
+                 alt="料理写真をグリッドに並べた、カフェ向けメニューのデザイン例">
+          </figure>
+          <div class="case__body">
+            <div class="case__tags">
+              <span class="tag tag--accent">カフェ</span><span class="tag">横浜市／18席</span>
+            </div>
+            <h3 class="case__title">「近くのカフェ」で、<br>見つかる店になった。</h3>
+            <p class="text-sm text-muted">
+              Googleマップの情報が未整備で、写真は3枚のみ。
+              撮影とプロフィール整備、口コミ返信の運用を3か月続けました。
+            </p>
+            <dl class="case__result">
+              <dt>マップ経由の来店（月間）</dt>
+              <dd>32件 → 94件</dd>
+            </dl>
+          </div>
+        </article>
+
+        <article class="case reveal reveal-delay-2">
+          <figure class="case__figure">
+            <img src="assets/img/work-ramen.svg" width="480" height="360" loading="lazy" decoding="async"
+                 alt="券売機のボタン配置と店頭ポスターを刷新した、ラーメン店向けデザイン例">
+          </figure>
+          <div class="case__body">
+            <div class="case__tags">
+              <span class="tag tag--accent">ラーメン</span><span class="tag">大阪市／カウンター12席</span>
+            </div>
+            <h3 class="case__title">券売機の並びを、<br>迷わない順番に。</h3>
+            <p class="text-sm text-muted">
+              行列時に注文が滞っていた券売機を再設計。
+              特製ラーメンとトッピングを隣接させ、視線の流れに沿って配置しました。
+            </p>
+            <dl class="case__result">
+              <dt>1人あたりの平均注文点数</dt>
+              <dd>1.6点 → 2.1点</dd>
+            </dl>
+          </div>
+        </article>
+      </div>
+
+      <div class="btn-row btn-row--center reveal" style="margin-top: var(--sp-7)">
+        <a class="btn btn--ghost btn--lg" href="works.html">
+          すべての制作事例を見る<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ お客様の声 ============================ -->
+  <section class="section section--alt" aria-labelledby="voice-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="section-label">Voice</p>
+        <h2 class="section-title" id="voice-title">ご依頼いただいた方の声</h2>
+      </div>
+      <div class="grid grid--2">
+        <figure class="voice reveal">
+          <blockquote class="voice__text">
+            <p>正直、メニューを作り直すだけで何か変わるのか半信半疑でした。
+              でも「なぜこの並びなのか」を数字で説明してもらえたので納得できました。
+              いまは自分でも季節メニューを差し替えられるようになっています。</p>
+          </blockquote>
+          <figcaption class="voice__person">
+            <img class="voice__avatar" src="assets/img/avatar-1.svg" width="48" height="48" loading="lazy" alt="">
+            <span>
+              <span class="voice__name">和食居酒屋 店主 T.M さま</span>
+              <span class="voice__role">福岡市中央区／開業12年</span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="voice reveal reveal-delay-1">
+          <blockquote class="voice__text">
+            <p>SNSは何を投稿すればいいか分からず止まっていました。
+              月に何をどれだけ出すかを決めてもらえたので、スタッフでも回せています。
+              毎月のレポートで、やったことと結果が一致するのが安心です。</p>
+          </blockquote>
+          <figcaption class="voice__person">
+            <img class="voice__avatar" src="assets/img/avatar-2.svg" width="48" height="48" loading="lazy" alt="">
+            <span>
+              <span class="voice__name">カフェ オーナー Y.S さま</span>
+              <span class="voice__role">横浜市／開業3年</span>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 運営者 ============================ -->
+  <section class="section" aria-labelledby="owner-title">
+    <div class="container owner">
+      <div class="owner__portrait reveal">
+        <img src="assets/img/owner.svg" width="400" height="460" loading="lazy" decoding="async"
+             alt="メニュー表を手にした代表・佐々木遼のイラスト">
+      </div>
+      <div class="reveal reveal-delay-1">
+        <p class="section-label">Owner</p>
+        <h2 class="section-title" id="owner-title" style="margin-bottom: var(--sp-5)">運営者について</h2>
+        <p class="owner__quote">「そのデザイン、<br>売上に効きますか」と<br>自分に問い続けています。</p>
+        <p class="text-muted">
+          飲食チェーンの店舗運営を7年、その後デザイン会社で販促物の制作を5年担当しました。
+          現場では「売れないメニュー」を、制作側では「きれいだが数字が動かないデザイン」を、どちらも見てきました。
+          その両方を知っている人間が間に立てば、もっと良い結果が出せるはずだと考えて独立しています。
+        </p>
+        <p class="owner__sign text-muted">品書き 代表<strong>佐々木 遼</strong></p>
+        <div class="btn-row" style="margin-top: var(--sp-6)">
+          <a class="btn btn--ghost" href="about.html">
+            経歴とスタンスを見る<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+          </a>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- 特徴・強みセクション -->
-    <section class="features section">
-        <div class="container">
-            <h2 class="section-title">選ばれる理由</h2>
-            <div class="features-container">
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3 class="feature-title">飲食店専門</h3>
-                    <p class="feature-description">飲食業界に特化したノウハウで、効果的なデザインと集客戦略をご提案します。</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-thumbs-up"></i>
-                    </div>
-                    <h3 class="feature-title">実績多数</h3>
-                    <p class="feature-description">多くの飲食店様にご利用いただき、売上アップに貢献してきた実績があります。</p>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <h3 class="feature-title">リーズナブルな価格</h3>
-                    <p class="feature-description">副業だからこそ実現できる、高品質かつリーズナブルな価格設定です。</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- ============================ FAQ ============================ -->
+  <section class="section section--alt" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title" id="faq-title">よくあるご質問</h2>
+        <p class="section-lead">お問い合わせの前に、よく聞かれることをまとめました。</p>
+      </div>
 
-    <!-- 実績ハイライトセクション -->
-    <section class="portfolio section">
-        <div class="container">
-            <h2 class="section-title">制作実績</h2>
-            <div class="portfolio-container">
-                <div class="portfolio-item">
-                    <img src="assets/images/portfolio-1.jpg" alt="イタリアンレストランのメニュー表" class="portfolio-image">
-                    <div class="portfolio-overlay">
-                        <h3 class="portfolio-title">イタリアンレストラン</h3>
-                        <p class="portfolio-category">メニュー表デザイン</p>
-                        <a href="portfolio.html" class="portfolio-link">詳細を見る</a>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="assets/images/portfolio-2.jpg" alt="カフェのMEO対策" class="portfolio-image">
-                    <div class="portfolio-overlay">
-                        <h3 class="portfolio-title">カフェ</h3>
-                        <p class="portfolio-category">MEO対策</p>
-                        <a href="portfolio.html" class="portfolio-link">詳細を見る</a>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="assets/images/portfolio-3.jpg" alt="居酒屋のメニュー表" class="portfolio-image">
-                    <div class="portfolio-overlay">
-                        <h3 class="portfolio-title">居酒屋</h3>
-                        <p class="portfolio-category">メニュー表デザイン</p>
-                        <a href="portfolio.html" class="portfolio-link">詳細を見る</a>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center" style="margin-top: 2rem; text-align: center;">
-                <a href="portfolio.html" class="btn btn-primary">すべての実績を見る</a>
-            </div>
-        </div>
-    </section>
+      <div class="faq reveal">
+        <details class="faq__item">
+          <summary class="faq__q">料金はいくらくらいかかりますか？</summary>
+          <div class="faq__a"><p>メニューデザインは1枚あたり49,800円から、Web集客支援は月額39,800円からです。
+            初回相談のあとに正式なお見積りをお出しし、ご了承いただいてから着手します。
+            見積り後に金額が増えることはありません。</p></div>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">納品までどれくらいかかりますか？</summary>
+          <div class="faq__a"><p>初回相談から約3週間が目安です。内訳は、構成設計に1週間、デザイン制作に2週間ほど。
+            オープンや繁忙期に合わせたい場合は、スケジュールを調整しますのでご相談ください。</p></div>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">遠方でも依頼できますか？</summary>
+          <div class="faq__a"><p>オンラインで全国に対応しています。打ち合わせはビデオ通話、原稿や写真のやりとりはメールとクラウドで完結します。
+            撮影が必要な場合のみ、交通費の実費をいただいて訪問します。</p></div>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">印刷まで任せられますか？</summary>
+          <div class="faq__a"><p>提携印刷所への手配まで代行できます。印刷費は実費のみで、仲介手数料はいただきません。
+            お店で使っている印刷所がある場合は、そのままお使いいただけるデータ形式でお渡しします。</p></div>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">修正は何回まで対応してもらえますか？</summary>
+          <div class="faq__a"><p>デザインが確定するまでの修正は回数無制限です。
+            納品後も90日以内であれば、価格変更などの軽微な修正を2回まで無料で承ります。</p></div>
+        </details>
+        <details class="faq__item">
+          <summary class="faq__q">月額プランの解約に違約金はかかりますか？</summary>
+          <div class="faq__a"><p>最低契約期間はありません。当月末までにご連絡いただければ、翌月から停止します。
+            違約金や解約手数料は一切いただきません。</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
 
-    <!-- お客様の声セクション -->
-    <section class="testimonials section">
-        <div class="container">
-            <h2 class="section-title">お客様の声</h2>
-            <div class="testimonials-container">
-                <div class="testimonial-item">
-                    <p class="testimonial-text">新しいメニュー表に変えてから、お客様からの反応が良くなり、客単価も上がりました。特に写真の撮り方やメニューの説明文が素晴らしいです。</p>
-                    <div class="testimonial-author">
-                        <img src="assets/images/testimonial-1.jpg" alt="山田様" class="testimonial-avatar">
-                        <div class="testimonial-info">
-                            <h4 class="testimonial-name">山田様</h4>
-                            <p class="testimonial-position">イタリアンレストラン オーナー</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item">
-                    <p class="testimonial-text">MEO対策をお願いしてから、Googleでの検索順位が上がり、新規のお客様が増えました。投資以上のリターンがあり、大変満足しています。</p>
-                    <div class="testimonial-author">
-                        <img src="assets/images/testimonial-2.jpg" alt="佐藤様" class="testimonial-avatar">
-                        <div class="testimonial-info">
-                            <h4 class="testimonial-name">佐藤様</h4>
-                            <p class="testimonial-position">カフェ オーナー</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- ============================ 最終CTA ============================ -->
+  <section class="section cta" aria-labelledby="cta-title">
+    <div class="container">
+      <p class="section-label" style="justify-content:center">Contact</p>
+      <h2 class="cta__title" id="cta-title">まず、いまのメニューを<br>見せてください。</h2>
+      <p class="cta__lead">
+        写真を1枚送っていただくだけで構いません。
+        どこに伸びしろがありそうかを、その場でお伝えします。
+        依頼するかどうかは、話を聞いてから決めていただいて大丈夫です。
+      </p>
+      <ul class="cta__assure">
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>初回相談・お見積りは無料</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>その場で契約は迫りません</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>営業電話はいたしません</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>オンラインで全国対応</li>
+      </ul>
+      <div class="btn-row btn-row--center">
+        <a class="btn btn--lg" href="contact.html">
+          無料相談を申し込む<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+        </a>
+        <a class="btn btn--onDeep btn--lg" href="pricing.html">料金プランを見る</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- CTAセクション -->
-    <section class="cta">
-        <div class="container">
-            <h2 class="cta-title">あなたの飲食店の売上アップをサポートします</h2>
-            <p class="cta-subtitle">メニュー表作成やウェブマーケティングについて、まずはお気軽にご相談ください。初回相談は無料です。</p>
-            <div class="cta-buttons">
-                <a href="contact.html" class="btn btn-secondary">無料相談はこちら</a>
-                <a href="pricing.html" class="btn btn-secondary">料金プランを見る</a>
-            </div>
-        </div>
-    </section>
+</main>
 
-    <!-- フッター -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-column">
-                    <h3 class="footer-title">飲食店サポート</h3>
-                    <p>飲食店のメニュー表作成とウェブマーケティングを専門とする副業サービス。おしゃれなメニュー表デザインと効果的な集客戦略で飲食店の売上アップをサポートします。</p>
-                </div>
-                <div class="footer-column">
-                    <h3 class="footer-title">サービス</h3>
-                    <ul class="footer-links">
-                        <li><a href="menu-design.html" class="footer-link">メニュー表作成</a></li>
-                        <li><a href="web-marketing.html" class="footer-link">ウェブマーケティング</a></li>
-                        <li><a href="portfolio.html" class="footer-link">制作実績</a></li>
-                        <li><a href="pricing.html" class="footer-link">料金プラン</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3 class="footer-title">お問い合わせ</h3>
-                    <div class="footer-contact">
-                        <div class="footer-contact-item">
-                            <i class="fas fa-envelope footer-contact-icon"></i>
-                            <span>info@example.com</span>
-                        </div>
-                        <div class="footer-contact-item">
-                            <i class="fas fa-phone footer-contact-icon"></i>
-                            <span>090-1234-5678</span>
-                        </div>
-                    </div>
-                    <div class="footer-social">
-                        <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="footer-social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="footer-social-link"><i class="fab fa-facebook-f"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 飲食店サポート. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
+<footer class="footer" data-footer>
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="index.html">
+          <img class="brand__mark" src="assets/img/logo.svg" alt="" width="34" height="34" loading="lazy">
+          <span class="brand__name">品書き<span class="brand__sub">SHINAGAKI</span></span>
+        </a>
+        <p class="footer__about">
+          飲食店専門のメニューデザインとWeb集客支援。
+          原価と注文データから構成を設計し、納品後の効果検証まで伴走します。
+        </p>
+        <ul class="footer__social">
+          <li><a href="#" aria-label="インスタグラム（新しいタブで開きます）" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-instagram"></use></svg></a></li>
+          <li><a href="#" aria-label="X（旧Twitter）（新しいタブで開きます）" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></a></li>
+          <li><a href="#" aria-label="ブログ（新しいタブで開きます）" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-note"></use></svg></a></li>
+        </ul>
+      </div>
 
-    <script src="js/script.js"></script>
+      <nav aria-label="サービスの一覧">
+        <h2 class="footer__title">SERVICE</h2>
+        <ul class="footer__links">
+          <li><a href="menu-design.html">メニューデザイン</a></li>
+          <li><a href="web-marketing.html">Web集客支援</a></li>
+          <li><a href="works.html">制作事例</a></li>
+          <li><a href="pricing.html">料金プラン</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="サイト情報">
+        <h2 class="footer__title">INFORMATION</h2>
+        <ul class="footer__links">
+          <li><a href="about.html">運営者について</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+        <!-- SAMPLE: 事業者情報は実際の内容に差し替えてください -->
+        <p class="footer__about text-xs" style="margin-top:var(--sp-5)">
+          品書き（SHINAGAKI）<br>
+          福岡県福岡市中央区○○ 1-2-3<br>
+          営業時間 10:00–19:00（土日祝を除く）
+        </p>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p><small>&copy; 2026 品書き（SHINAGAKI）</small></p>
+      <nav aria-label="規約">
+        <ul>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky-cta" data-sticky-cta aria-hidden="true">
+  <a class="btn btn--ghost" href="pricing.html">料金を見る</a>
+  <a class="btn" href="contact.html">無料で相談する</a>
+</div>
+
 </body>
 </html>
