@@ -38,8 +38,8 @@
         </header>
 
         <main class="app app-wide">
-            <div class="demo-banner hidden" id="demo-banner">
-                デモモード:データはこのブラウザ内にのみ保存されます(端末間の共有には SETUP.md のGAS設定が必要です)
+            <div class="demo-banner hidden" id="demo-banner" title="タップで閉じる">
+                デモモード:データはこのブラウザ内にのみ保存されます(端末間の共有には SETUP.md のGAS設定が必要です) ✕
             </div>
 
             <!-- ツールバー 1段目: 週ナビ+状態 -->
@@ -61,7 +61,7 @@
             <!-- ツールバー 2段目: 操作ボタン -->
             <div class="toolbar-row">
                 <button class="btn btn-sm" id="reload-btn" type="button">↻ 再読込</button>
-                <button class="btn btn-sm" id="emp-btn" type="button">⚙ 従業員管理</button>
+                <button class="btn btn-sm" id="emp-btn" type="button">⚙ スタッフ管理</button>
                 <button class="btn btn-sm btn-publish" id="publish-btn" type="button">この週を確定して公開</button>
             </div>
 
@@ -71,8 +71,7 @@
             </div>
 
             <p class="text-xs text-mid" style="margin-top: 0.75rem;">
-                操作: 希望チップ(点線)をタップ=確定 / 確定チップをタップ=解除 /
-                確定チップの「…」=時刻・メモ編集 / セルの空き部分をタップ=希望なしでも追加
+                希望(点線)をタップで確定 / 確定をタップで解除 / 「…」で時刻編集 / 空きセルで追加
             </p>
         </main>
     </div>

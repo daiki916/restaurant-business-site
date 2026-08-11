@@ -65,16 +65,16 @@
     var cfg = this.config;
     var nextWeek = Core.getWeekStart(Core.addDays(Core.todayStr(), 7), cfg.WEEK_STARTS_ON);
     var dates = Core.weekDates(nextWeek);
-    var lunch = cfg.BLOCKS[0] || { start: "11:00", end: "15:00" };
-    var dinner = cfg.BLOCKS[1] || { start: "17:00", end: "22:00" };
+    var block1 = cfg.BLOCKS[0] || { start: "08:30", end: "13:00" };
+    var block2 = cfg.BLOCKS[1] || { start: "13:00", end: "19:00" };
     var patterns = [
       // [dayIndex, employeeIndex, status, blocks]
-      [0, 0, "work", [lunch]], [0, 1, "work", [dinner]],
-      [1, 0, "work", [lunch, dinner]], [1, 2, "work", [dinner]], [1, 3, "off", []],
-      [2, 1, "work", [lunch]], [2, 3, "work", [dinner]],
-      [3, 0, "off", []], [3, 2, "work", [lunch, dinner]],
-      [4, 1, "work", [dinner]], [4, 3, "work", [lunch]],
-      [5, 0, "work", [dinner]], [5, 2, "work", [dinner]]
+      [0, 0, "work", [block1]], [0, 1, "work", [block2]],
+      [1, 0, "work", [block1, block2]], [1, 2, "work", [block2]], [1, 3, "off", []],
+      [2, 1, "work", [block1]], [2, 3, "work", [block2]],
+      [3, 0, "off", []], [3, 2, "work", [block1, block2]],
+      [4, 1, "work", [block2]], [4, 3, "work", [block1]],
+      [5, 0, "work", [block2]], [5, 2, "work", [block2]]
     ];
     var requests = patterns.map(function (p) {
       return {

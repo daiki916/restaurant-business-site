@@ -174,6 +174,20 @@
     return { el: modal, overlay: overlay, close: close };
   }
 
+  /* ===== デモモードバナー(タップで閉じる・セッション中は再表示しない) ===== */
+
+  function setupDemoBanner(isDemo) {
+    var el = document.getElementById("demo-banner");
+    if (!el || !isDemo) return;
+    var KEY = "shiftapp:v1:demoBannerClosed";
+    if (sessionStorage.getItem(KEY) === "1") return;
+    el.classList.remove("hidden");
+    el.addEventListener("click", function () {
+      el.classList.add("hidden");
+      sessionStorage.setItem(KEY, "1");
+    });
+  }
+
   /* ===== クリップボード ===== */
 
   function copyText(text) {
@@ -231,6 +245,7 @@
     escapeHtml: escapeHtml,
     toast: toast,
     openModal: openModal,
+    setupDemoBanner: setupDemoBanner,
     copyText: copyText,
     sha256Hex: sha256Hex
   };

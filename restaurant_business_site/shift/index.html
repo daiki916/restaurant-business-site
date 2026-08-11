@@ -29,9 +29,9 @@
     </header>
 
     <main class="app">
-        <!-- デモモードバナー(デモモード時のみJSで表示) -->
-        <div class="demo-banner hidden" id="demo-banner">
-            デモモード:データはこのブラウザ内にのみ保存されます
+        <!-- デモモードバナー(デモモード時のみJSで表示。タップで閉じる) -->
+        <div class="demo-banner hidden" id="demo-banner" title="タップで閉じる">
+            デモモード:データはこのブラウザ内にのみ保存されます ✕
         </div>
 
         <!-- ビューA: 名前選択(初回のみ) -->
@@ -41,7 +41,7 @@
             <div class="name-grid" id="name-grid"></div>
             <div class="empty-state hidden" id="name-empty">
                 <span class="empty-icon">◎</span>
-                まだ従業員が登録されていません。<br>店長に登録を依頼してください。
+                まだスタッフが登録されていません。<br>管理者に登録を依頼してください。
             </div>
             <div class="emp-add-row hidden" id="self-register" style="margin-top: 1.25rem;">
                 <input type="text" id="self-register-name" placeholder="名前を入力して登録" maxlength="20">
@@ -72,7 +72,7 @@
                         <span id="note-toggle-mark">▼</span>
                     </button>
                     <div class="note-body hidden" id="note-body">
-                        <textarea id="week-note" rows="2" placeholder="例: 水曜は18時以降なら入れます"></textarea>
+                        <textarea id="week-note" rows="2" placeholder="例: 水曜は17時までなら入れます"></textarea>
                     </div>
                 </div>
             </div>

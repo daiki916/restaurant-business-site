@@ -25,7 +25,7 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     $("store-name").textContent = cfg.STORE_NAME;
-    if (storage.mode === "local") $("demo-banner").classList.remove("hidden");
+    Core.setupDemoBanner(storage.mode === "local");
     bindToolbar();
 
     if (cfg.ADMIN_PIN_HASH && sessionStorage.getItem(UNLOCK_KEY) !== "1") {
@@ -696,7 +696,7 @@
 
   function openEmployeeModal() {
     var m = Core.openModal(
-      '<div class="modal-title">従業員管理</div>' +
+      '<div class="modal-title">スタッフ管理</div>' +
       '<div class="modal-body">' +
       '<div class="emp-list" id="emp-list"></div>' +
       '<div class="emp-add-row">' +
@@ -775,7 +775,7 @@
       clearBtn.addEventListener("click", function () {
         var c = Core.openModal(
           '<div class="modal-title">全データを消去しますか?</div>' +
-          '<p class="text-mid text-xs">このブラウザに保存された従業員・希望・確定シフトをすべて削除します。元に戻せません。</p>' +
+          '<p class="text-mid text-xs">このブラウザに保存されたスタッフ・希望・確定シフトをすべて削除します。元に戻せません。</p>' +
           '<div class="modal-actions">' +
           '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
           '<button type="button" class="btn btn-danger" data-role="ok">消去する</button>' +

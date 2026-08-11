@@ -31,7 +31,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     $("store-name").textContent = cfg.STORE_NAME;
     $("deadline-note").textContent = cfg.SUBMIT_DEADLINE_TEXT || "";
-    if (storage.mode === "local") $("demo-banner").classList.remove("hidden");
+    Core.setupDemoBanner(storage.mode === "local");
 
     bindEvents();
 
@@ -276,13 +276,12 @@
         var on = d.status === "work" && d.blocks[def.id];
         html += '<button type="button" class="block-btn' + (on ? " is-on" : "") + '"' +
           ' data-action="toggle" data-date="' + date + '" data-def="' + def.id + '">' +
-          '<span class="block-icon">' + Core.escapeHtml(def.icon || "") + '</span>' +
+          (def.icon ? '<span class="block-icon">' + Core.escapeHtml(def.icon) + '</span>' : "") +
           Core.escapeHtml(def.label) + '</button>';
       });
       var offOn = d.status === "off";
       html += '<button type="button" class="block-btn block-off' + (offOn ? " is-on" : "") + '"' +
-        ' data-action="toggle" data-date="' + date + '" data-def="__off__">' +
-        '<span class="block-icon">✕</span>休み</button>';
+        ' data-action="toggle" data-date="' + date + '" data-def="__off__">休み</button>';
       html += '</div>';
 
       // 選択済みブロックの時刻表示
