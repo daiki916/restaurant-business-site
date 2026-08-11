@@ -1090,32 +1090,12 @@ input::placeholder, textarea::placeholder {
   color: var(--ink-2);
 }
 
-/* 判子は右上に押す。クリックは下の記入(取り消し)に通す */
+/* 判子は右上に押す。クリックは記入全体に通す(タップでダイアログが開く) */
 .mark-fixed .stamp-mark {
   position: absolute;
   top: 3px;
   right: 3px;
   pointer-events: none;
-}
-
-/* 「…」は右下へ逃がし、判子と当たり判定が重ならないようにする */
-.mark-fixed .chip-more {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  min-width: 24px;
-  min-height: 22px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 1px;
-  font-weight: 400;
-  line-height: 1;
-  color: var(--ink-3);
-}
-
-.mark-fixed .chip-more:hover {
-  color: var(--ink);
 }
 
 /* 休み希望 */
@@ -1205,6 +1185,71 @@ input::placeholder, textarea::placeholder {
   padding: var(--sp-2) var(--sp-3);
   background: var(--paper-band);
   border-left: 3px solid var(--rule-mid);
+}
+
+/* スタッフが出した希望の控え(ダイアログの上部) */
+.wish-line {
+  font-size: var(--t-sm);
+  color: var(--ink);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--paper-band);
+  border-left: 3px solid var(--ink-3);
+}
+
+.wish-line .num {
+  font-weight: 500;
+}
+
+/* ワンタップで入れ直せる時間 */
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.btn.preset {
+  min-height: 36px;
+  padding: 0.3em 0.8em;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+}
+
+.btn.preset:hover {
+  color: var(--ink);
+}
+
+/* 一括確定の内訳 */
+.bulk-list {
+  list-style: none;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  border-top: 1px solid var(--rule);
+}
+
+.bulk-list li {
+  padding: 0.3em 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.dialog-actions .spacer {
+  flex: 1;
+}
+
+/* ダイアログの主要ボタンに入る判子は、押し込みアニメを出さない */
+.dialog-actions .stamp-mark {
+  transform: rotate(-5deg) scale(0.85);
+}
+
+.btn:disabled {
+  color: var(--ink-3);
+  border-color: var(--rule);
+  background: var(--paper);
+  cursor: default;
+}
+
+.btn-stamp:disabled {
+  color: var(--ink-3);
+  border-color: var(--rule);
 }
 
 /* ===== 覚え書き(トースト) ===== */

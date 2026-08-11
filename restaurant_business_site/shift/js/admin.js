@@ -18,7 +18,7 @@
   var weekStart = Core.getWeekStart(Core.addDays(Core.todayStr(), 7), cfg.WEEK_STARTS_ON); // デフォルトは来週
   var weekData = { requests: [], assignments: [], meta: { published: false, publishedAt: "" } };
   var pollTimer = null;
-  var justStampedId = null;   // 押した直後の1コマだけ判子アニメを再生する
+  var justStamped = {};   // 押した直後のコマだけ判子アニメを再生する(id → true)
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -162,6 +162,7 @@
     renderSubmitCounter();
     renderPublishState();
     renderGrid();
+    renderBulkButton();
   }
 
   /* ===== ツールバー ===== */
@@ -176,6 +177,7 @@
     $("reload-btn").addEventListener("click", function () {
       loadAll().then(function () { Core.toast("最新の状態に更新しました"); });
     });
+    $("bulk-btn").addEventListener("click", onBulkConfirm);
     $("emp-btn").addEventListener("click", openEmployeeModal);
     $("publish-btn").addEventListener("click", onPublishClick);
     $("shift-grid").addEventListener("click", onGridClick);
@@ -232,11 +234,11 @@
     if (!meta.published) {
       badge.className = "note-mark";
       badge.textContent = "下書き";
-      btn.textContent = "この週を確定する";
+      btn.textContent = "スタッフに公開";
     } else if (hasChangesAfterPublish()) {
       badge.className = "note-mark is-pending";
       badge.textContent = "公開済み(変更あり)";
-      btn.textContent = "変更を出し直す";
+      btn.textContent = "変更を公開";
     } else {
       badge.className = "note-mark is-done";
       badge.innerHTML = Core.stampHtml(false) + " 公開済み";
@@ -320,7 +322,7 @@
     });
 
     grid.innerHTML = html;
-    justStampedId = null;   // アニメは押した直後の1回だけ
+    justStamped = {};   // アニメは押した直後の1回だけ
   }
 
   // 従業員の最終提出日時("8/9 21:14" 形式)。未提出なら空文字
@@ -382,12 +384,10 @@
     // 確定 — 判子を押した記入
     assignments.forEach(function (a) {
       marks += '<div class="mark mark-fixed" style="--tag:' + color + '"' +
-        ' data-action="unassign" data-id="' + a.id + '" title="タップで取り消し / …で時刻と備考">' +
+        ' data-action="open-assigned" data-id="' + a.id + '" title="タップで時間の変更・取り消し">' +
         markInner(a.start, a.end) +
         (a.note ? '<span class="mark-memo">' + Core.escapeHtml(a.note) + '</span>' : "") +
-        Core.stampHtml(a.id === justStampedId) +
-        '<span class="chip-more" data-action="edit-asg" data-id="' + a.id +
-        '" title="時刻と備考を直す">…</span>' +
+        Core.stampHtml(!!justStamped[a.id]) +
         '</div>';
     });
 
@@ -423,14 +423,30 @@
     var action = el.dataset.action;
 
     if (action === "promote") {
-      addAssignment(el.dataset.emp, el.dataset.date, el.dataset.start, el.dataset.end, "");
-    } else if (action === "edit-asg") {
-      e.stopPropagation();
-      openEditModal(el.dataset.id);
-    } else if (action === "unassign") {
-      removeAssignment(el.dataset.id);
+      // 希望をタップ: 時間を調整してから確定してもらう
+      openShiftDialog({
+        employeeId: el.dataset.emp,
+        date: el.dataset.date,
+        start: el.dataset.start,
+        end: el.dataset.end
+      });
+    } else if (action === "open-assigned") {
+      // 確定をタップ: 時間の変更と取り消し
+      var a = weekData.assignments.find(function (x) { return x.id === el.dataset.id; });
+      if (a) {
+        openShiftDialog({
+          employeeId: a.employeeId, date: a.date,
+          start: a.start, end: a.end, assignmentId: a.id
+        });
+      }
     } else if (action === "add-shift") {
-      openAddModal(el.dataset.emp, el.dataset.date);
+      var def = cfg.BLOCKS.find(function (b) { return b.custom; }) || cfg.BLOCKS[0];
+      openShiftDialog({
+        employeeId: el.dataset.emp,
+        date: el.dataset.date,
+        start: def.start,
+        end: def.end
+      });
     } else if (action === "show-note") {
       var emp = employees.find(function (x) { return x.id === el.dataset.emp; });
       var note = notesByEmployee()[el.dataset.emp] || "";
@@ -443,7 +459,7 @@
 
   function addAssignment(employeeId, date, start, end, note) {
     var id = Core.uid("asg");
-    justStampedId = id;   // このコマだけ判子が押されるアニメを再生する
+    justStamped[id] = true;   // このコマだけ判子が押されるアニメを再生する
     weekData.assignments.push({
       id: id,
       weekStart: weekStart,
@@ -475,17 +491,23 @@
   function persistAssignments() {
     renderPublishState();
     renderGrid();
+    renderBulkButton();
     storage.saveAssignments(weekStart, weekData.assignments).catch(handleError);
   }
 
-  /* ===== 追加・編集モーダル ===== */
+  /* ===== 記入ダイアログ ===== */
 
-  // モーダル内の時刻ステッパー部品(開始/終了のペア)
+  // 時刻ステッパー(開始/終了のペア)。state.set(start, end) で外から入れ替えられる
   function buildTimeSteppers(container, initial) {
     var state = { start: initial.start, end: initial.end };
     container.innerHTML =
       stepperHtml("開始", "start", state.start) +
       stepperHtml("終了", "end", state.end);
+
+    function paint() {
+      container.querySelector('[data-value="start"]').textContent = state.start;
+      container.querySelector('[data-value="end"]').textContent = state.end;
+    }
 
     container.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-field]");
@@ -499,8 +521,10 @@
         min = Math.min(cfg.CLOSE_HOUR * 60, Math.max(min, Core.timeToMin(state.start) + cfg.TIME_STEP_MIN));
       }
       state[field] = Core.minToTime(min);
-      container.querySelector('[data-value="' + field + '"]').textContent = state[field];
+      paint();
     });
+
+    state.set = function (s, e) { state.start = s; state.end = e; paint(); };
     return state;
   }
 
@@ -508,88 +532,185 @@
     return '<div class="adjuster-line">' +
       '<span class="adjuster-label">' + label + '</span>' +
       '<div class="stepper">' +
-      '<button type="button" class="stepper-btn" data-field="' + field + '" data-dir="-1">−</button>' +
+      '<button type="button" class="stepper-btn" data-field="' + field + '" data-dir="-1" aria-label="' + label + 'を15分もどす">−</button>' +
       '<span class="stepper-value num" data-value="' + field + '">' + value + '</span>' +
-      '<button type="button" class="stepper-btn" data-field="' + field + '" data-dir="1">＋</button>' +
+      '<button type="button" class="stepper-btn" data-field="' + field + '" data-dir="1" aria-label="' + label + 'を15分すすめる">＋</button>' +
       '</div></div>';
   }
 
-  // 空セルタップ: 希望がない従業員にもシフトを追加できる
-  function openAddModal(employeeId, date) {
-    var emp = employees.find(function (x) { return x.id === employeeId; });
-    var p = Core.dateParts(date);
-    // 固定の時間帯だけワンタップの選択肢にする。任意の時間は下のステッパーで決める
-    var blockBtns = cfg.BLOCKS.filter(function (d) { return !d.custom; }).map(function (def) {
-      return '<button type="button" class="btn" data-block="' + def.id + '">' +
-        Core.escapeHtml(def.label) + ' <span class="num">' + def.start + '–' + def.end + '</span>' + '</button>';
+  // 記入をタップしたときのダイアログ。
+  // 希望をタップ → 時間を調整して確定 / 確定をタップ → 変更・取り消し /
+  // 空欄をタップ → 追加。どの入口でも「時間を決めてから押す」形に揃えている。
+  function openShiftDialog(opts) {
+    var emp = employees.find(function (x) { return x.id === opts.employeeId; });
+    var p = Core.dateParts(opts.date);
+    var existing = opts.assignmentId
+      ? weekData.assignments.find(function (a) { return a.id === opts.assignmentId; })
+      : null;
+
+    // その日に出ている希望(「希望どおり」に戻すために使う)
+    var request = weekData.requests.find(function (r) {
+      return r.employeeId === opts.employeeId && r.date === opts.date;
+    });
+    var wishes = request && request.status === "work" ? Core.parseBlocks(request.blocks) : [];
+    var wantsOff = !!(request && request.status === "off");
+
+    var wishLine;
+    if (wantsOff) {
+      wishLine = '<p class="lede-warn">この日は「休み」の希望が出ています</p>';
+    } else if (wishes.length) {
+      wishLine = '<p class="wish-line">希望 ' + wishes.map(function (b) {
+        return '<span class="num">' + b.start + '–' + b.end + '</span>';
+      }).join(" / ") + '</p>';
+    } else {
+      wishLine = '<p class="lede">この日の希望は出ていません</p>';
+    }
+
+    // ワンタップで入れ直せる時間
+    var presets = wishes.map(function (b, i) {
+      return { key: "wish" + i, label: "希望どおり", start: b.start, end: b.end };
+    });
+    cfg.BLOCKS.filter(function (d) { return !d.custom; }).forEach(function (d) {
+      presets.push({ key: d.id, label: d.label, start: d.start, end: d.end });
+    });
+    var presetHtml = presets.map(function (ps) {
+      return '<button type="button" class="btn preset" data-preset="' + ps.key +
+        '" data-start="' + ps.start + '" data-end="' + ps.end + '">' +
+        Core.escapeHtml(ps.label) + ' <span class="num">' + ps.start + '–' + ps.end + '</span></button>';
     }).join("");
 
+    var actions = existing
+      ? '<button type="button" class="btn btn-danger" data-role="delete">確定を取り消す</button>' +
+        '<span class="spacer"></span>' +
+        '<button type="button" class="btn" data-role="cancel">やめる</button>' +
+        '<button type="button" class="btn btn-stamp" data-role="ok">' + Core.stampHtml(false) + ' 変更する</button>'
+      : '<button type="button" class="btn" data-role="cancel">やめる</button>' +
+        '<button type="button" class="btn btn-stamp" data-role="ok">' + Core.stampHtml(false) + ' 確定する</button>';
+
     var m = Core.openModal(
-      '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')に追加</div>' +
+      '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") +
+        ' <span class="num">' + p.md + '</span>(' + p.dow + ')</div>' +
       '<div class="dialog-body">' +
-      '<div><span class="field-label">決まった時間帯から選ぶ</span>' +
-      '<div style="display:flex;flex-direction:column;gap:0.5rem;">' + blockBtns + '</div></div>' +
-      '<div><span class="field-label">時間を指定する</span>' +
-      '<div id="add-steppers"></div></div>' +
+      wishLine +
+      '<div><span class="field-label">時間</span><div id="dlg-steppers"></div></div>' +
+      (presetHtml ? '<div class="preset-row">' + presetHtml + '</div>' : "") +
+      '<div><span class="field-label">備考(任意)</span>' +
+      '<input type="text" id="edit-note" maxlength="40" value="' +
+        Core.escapeHtml(existing ? (existing.note || "") : "") + '"></div>' +
       '</div>' +
-      '<div class="dialog-actions">' +
-      '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-      '<button type="button" class="btn btn-ink" data-role="custom-add">この時間で追加</button>' +
-      '</div>'
+      '<div class="dialog-actions">' + actions + '</div>'
     );
 
-    var firstDef = cfg.BLOCKS.find(function (b) { return b.custom; }) || cfg.BLOCKS[0] || { start: "13:00", end: "19:00" };
-    var timeState = buildTimeSteppers(m.el.querySelector("#add-steppers"),
-      { start: firstDef.start, end: firstDef.end });
+    var timeState = buildTimeSteppers(m.el.querySelector("#dlg-steppers"),
+      { start: opts.start, end: opts.end });
 
-    m.el.querySelectorAll("[data-block]").forEach(function (btn) {
+    m.el.querySelectorAll("[data-preset]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var def = cfg.BLOCKS.find(function (b) { return b.id === btn.dataset.block; });
-        m.close();
-        addAssignment(employeeId, date, def.start, def.end, "");
+        timeState.set(btn.dataset.start, btn.dataset.end);
       });
     });
+
     m.el.querySelector('[data-role="cancel"]').addEventListener("click", m.close);
-    m.el.querySelector('[data-role="custom-add"]').addEventListener("click", function () {
+
+    var del = m.el.querySelector('[data-role="delete"]');
+    if (del) {
+      del.addEventListener("click", function () {
+        m.close();
+        removeAssignment(existing.id);
+      });
+    }
+
+    m.el.querySelector('[data-role="ok"]').addEventListener("click", function () {
+      var note = m.el.querySelector("#edit-note").value.trim();
       m.close();
-      addAssignment(employeeId, date, timeState.start, timeState.end, "");
+      if (existing) {
+        updateAssignment(existing.id, { start: timeState.start, end: timeState.end, note: note });
+      } else {
+        addAssignment(opts.employeeId, opts.date, timeState.start, timeState.end, note);
+      }
     });
   }
 
-  // 確定チップの「…」: 時刻・メモ編集/削除
-  function openEditModal(assignmentId) {
-    var a = weekData.assignments.find(function (x) { return x.id === assignmentId; });
-    if (!a) return;
-    var emp = employees.find(function (x) { return x.id === a.employeeId; });
-    var p = Core.dateParts(a.date);
+  /* ===== 一括確定 ===== */
+
+  // まだ確定していない希望を集める(確定と時間が重なっているものは済みとみなす)
+  function pendingWishes() {
+    var out = [];
+    weekData.requests.forEach(function (r) {
+      if (r.status !== "work") return;
+      Core.parseBlocks(r.blocks).forEach(function (b) {
+        var covered = weekData.assignments.some(function (a) {
+          return a.employeeId === r.employeeId && a.date === r.date &&
+            Core.timeToMin(a.start) < Core.timeToMin(b.end) &&
+            Core.timeToMin(b.start) < Core.timeToMin(a.end);
+        });
+        if (!covered) {
+          out.push({ employeeId: r.employeeId, date: r.date, start: b.start, end: b.end });
+        }
+      });
+    });
+    return out;
+  }
+
+  function onBulkConfirm() {
+    var pending = pendingWishes();
+    if (!pending.length) {
+      Core.toast("まだ確定していない希望はありません");
+      return;
+    }
+
+    // 日ごとに何件つくかを見せてから押してもらう
+    var byDate = {};
+    pending.forEach(function (w) { byDate[w.date] = (byDate[w.date] || 0) + 1; });
+    var lines = Core.weekDates(weekStart).filter(function (d) { return byDate[d]; })
+      .map(function (d) {
+        var p = Core.dateParts(d);
+        return '<li>' + p.md + '(' + p.dow + ') <span class="num">' + byDate[d] + '</span>件</li>';
+      }).join("");
 
     var m = Core.openModal(
-      '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')を編集</div>' +
+      '<div class="dialog-title">希望どおりまとめて確定</div>' +
       '<div class="dialog-body">' +
-      '<div id="edit-steppers"></div>' +
-      '<div><span class="field-label">メモ(任意)</span>' +
-      '<input type="text" id="edit-note" maxlength="40" value="' + Core.escapeHtml(a.note || "") + '"></div>' +
+      '<p class="lede">出された時間のまま、<b class="num">' + pending.length +
+        '</b>件を確定します。すでに確定しているコマはそのままです。</p>' +
+      '<ul class="bulk-list">' + lines + '</ul>' +
+      '<p class="lede">確定したあと、1件ずつタップして時間を直すこともできます。</p>' +
       '</div>' +
       '<div class="dialog-actions">' +
-      '<button type="button" class="btn btn-danger" data-role="delete">削除</button>' +
-      '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-      '<button type="button" class="btn btn-ink" data-role="save">保存</button>' +
+      '<button type="button" class="btn" data-role="cancel">やめる</button>' +
+      '<button type="button" class="btn btn-stamp" data-role="ok">' + Core.stampHtml(false) +
+        ' まとめて確定</button>' +
       '</div>'
     );
-
-    var timeState = buildTimeSteppers(m.el.querySelector("#edit-steppers"),
-      { start: a.start, end: a.end });
-
     m.el.querySelector('[data-role="cancel"]').addEventListener("click", m.close);
-    m.el.querySelector('[data-role="delete"]').addEventListener("click", function () {
+    m.el.querySelector('[data-role="ok"]').addEventListener("click", function () {
       m.close();
-      removeAssignment(assignmentId);
+      pending.forEach(function (w) {
+        var id = Core.uid("asg");
+        justStamped[id] = true;
+        weekData.assignments.push({
+          id: id,
+          weekStart: weekStart,
+          employeeId: w.employeeId,
+          date: w.date,
+          start: w.start,
+          end: w.end,
+          note: "",
+          updatedAt: Core.nowIso()
+        });
+      });
+      persistAssignments();
+      Core.toast(pending.length + "件を確定しました");
     });
-    m.el.querySelector('[data-role="save"]').addEventListener("click", function () {
-      var note = m.el.querySelector("#edit-note").value.trim();
-      m.close();
-      updateAssignment(assignmentId, { start: timeState.start, end: timeState.end, note: note });
-    });
+  }
+
+  // 未確定の希望が無いときはボタンを休ませる
+  function renderBulkButton() {
+    var btn = $("bulk-btn");
+    if (!btn) return;
+    var n = pendingWishes().length;
+    btn.disabled = n === 0;
+    btn.textContent = n ? "希望どおり確定 (" + n + ")" : "希望どおり確定";
   }
 
   /* ===== 公開・共有 ===== */
@@ -620,12 +741,12 @@
       : '<p class="lede-ok">すべてのコマで必要人数を満たしています。</p>';
 
     var m = Core.openModal(
-      '<div class="dialog-title">この週を確定しますか?</div>' +
+      '<div class="dialog-title">この週をスタッフに公開しますか?</div>' +
       '<div class="dialog-body">' + warnHtml +
       '<p class="lede">確定すると、スタッフの画面に確定シフトが出るようになります。</p></div>' +
       '<div class="dialog-actions">' +
       '<button type="button" class="btn" data-role="cancel">やめる</button>' +
-      '<button type="button" class="btn btn-stamp" data-role="ok">確定する</button>' +
+      '<button type="button" class="btn btn-stamp" data-role="ok">公開する</button>' +
       '</div>'
     );
     m.el.querySelector('[data-role="cancel"]').addEventListener("click", m.close);
