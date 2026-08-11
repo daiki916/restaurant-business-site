@@ -537,9 +537,11 @@ input::placeholder, textarea::placeholder {
 }
 
 /* ===== 選択欄(出席簿のチェック欄) ===== */
+/* 選択肢の数は設定で変わるので、列は自動で等分する */
 .choices {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   border: 1px solid var(--rule-mid);
   border-radius: var(--radius);
   overflow: hidden;

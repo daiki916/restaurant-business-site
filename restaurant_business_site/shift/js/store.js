@@ -65,16 +65,21 @@
     var cfg = this.config;
     var nextWeek = Core.getWeekStart(Core.addDays(Core.todayStr(), 7), cfg.WEEK_STARTS_ON);
     var dates = Core.weekDates(nextWeek);
-    var block1 = cfg.BLOCKS[0] || { start: "08:30", end: "13:00" };
-    var block2 = cfg.BLOCKS[1] || { start: "13:00", end: "19:00" };
+    // 「時間指定」の枠は既定値のほか、少しずらした時間も混ぜて実際の使われ方に近づける
+    var spot = cfg.BLOCKS.find(function (b) { return b.custom; }) ||
+               { start: "13:00", end: "19:00" };
+    var full = cfg.BLOCKS.find(function (b) { return !b.custom; }) ||
+               { start: "08:30", end: "19:00" };
+    var early = { start: spot.start, end: "17:00" };
+    var late = { start: "15:00", end: spot.end };
     var patterns = [
       // [dayIndex, employeeIndex, status, blocks]
-      [0, 0, "work", [block1]], [0, 1, "work", [block2]],
-      [1, 0, "work", [block1, block2]], [1, 2, "work", [block2]], [1, 3, "off", []],
-      [2, 1, "work", [block1]], [2, 3, "work", [block2]],
-      [3, 0, "off", []], [3, 2, "work", [block1, block2]],
-      [4, 1, "work", [block2]], [4, 3, "work", [block1]],
-      [5, 0, "work", [block2]], [5, 2, "work", [block2]]
+      [0, 0, "work", [spot]], [0, 1, "work", [late]],
+      [1, 0, "work", [full]], [1, 2, "work", [spot]], [1, 3, "off", []],
+      [2, 1, "work", [early]], [2, 3, "work", [spot]],
+      [3, 0, "off", []], [3, 2, "work", [full]],
+      [4, 1, "work", [spot]], [4, 3, "work", [early]],
+      [5, 0, "work", [late]], [5, 2, "work", [spot]]
     ];
     var requests = patterns.map(function (p) {
       return {

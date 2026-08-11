@@ -99,12 +99,12 @@
     return blocks.map(function (b) { return b.start + "-" + b.end; }).join("|");
   }
 
-  // 実時刻ブロックが設定の時間帯定義と一致すればそのラベルを返す(例: "ランチ")
-  // 一致しなければ時刻表記("11:00-14:30")を返す
+  // 固定の時間帯とぴったり一致すればそのラベルを返す(例: "1日")。
+  // 「時間指定」の枠は時刻そのものが中身なので、ラベルには使わない
   function blockLabel(block, config) {
     var defs = (config && config.BLOCKS) || [];
     for (var i = 0; i < defs.length; i++) {
-      if (defs[i].start === block.start && defs[i].end === block.end) {
+      if (!defs[i].custom && defs[i].start === block.start && defs[i].end === block.end) {
         return defs[i].label;
       }
     }

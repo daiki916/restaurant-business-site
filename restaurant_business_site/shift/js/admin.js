@@ -276,7 +276,7 @@
     var emps = visibleEmployees();
     var notes = notesByEmployee();
     var activeCount = employees.filter(function (e) { return e.active; }).length;
-    var targets = cfg.BLOCKS.filter(function (d) { return cfg.TARGET_HEADCOUNT[d.id]; });
+    var bands = cfg.COVERAGE || [];
 
     grid.style.gridTemplateColumns = "168px repeat(7, minmax(116px, 1fr))";
     var html = "";
@@ -292,8 +292,8 @@
         (weekend ? " is-weekend" : "") + '">' +
         '<span class="head-date">' + p.md + '</span><span class="head-dow">' + p.dow + '</span>';
       html += '<div class="head-tallies">';
-      targets.forEach(function (def) {
-        html += Core.tallyHtml(countCoverage(date, def), cfg.TARGET_HEADCOUNT[def.id], def.label);
+      bands.forEach(function (band) {
+        html += Core.tallyHtml(countCoverage(date, band), band.need, band.label);
       });
       html += '</div></div>';
     });
@@ -349,10 +349,12 @@
     return Object.keys(seen).length;
   }
 
-  // 時間帯定義と完全一致するブロック定義を返す(なければnull)
+  // 固定の時間帯と完全一致する枠を返す(なければnull)。
+  // 「時間指定」の枠はラベルを持たせず、時刻をそのまま見せる
   function findDef(start, end) {
     for (var i = 0; i < cfg.BLOCKS.length; i++) {
-      if (cfg.BLOCKS[i].start === start && cfg.BLOCKS[i].end === end) return cfg.BLOCKS[i];
+      var d = cfg.BLOCKS[i];
+      if (!d.custom && d.start === start && d.end === end) return d;
     }
     return null;
   }
@@ -516,7 +518,8 @@
   function openAddModal(employeeId, date) {
     var emp = employees.find(function (x) { return x.id === employeeId; });
     var p = Core.dateParts(date);
-    var blockBtns = cfg.BLOCKS.map(function (def) {
+    // 固定の時間帯だけワンタップの選択肢にする。任意の時間は下のステッパーで決める
+    var blockBtns = cfg.BLOCKS.filter(function (d) { return !d.custom; }).map(function (def) {
       return '<button type="button" class="btn" data-block="' + def.id + '">' +
         Core.escapeHtml(def.label) + ' <span class="num">' + def.start + '–' + def.end + '</span>' + '</button>';
     }).join("");
@@ -524,18 +527,18 @@
     var m = Core.openModal(
       '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')に追加</div>' +
       '<div class="dialog-body">' +
-      '<div><span class="field-label">時間帯をタップで追加</span>' +
+      '<div><span class="field-label">決まった時間帯から選ぶ</span>' +
       '<div style="display:flex;flex-direction:column;gap:0.5rem;">' + blockBtns + '</div></div>' +
-      '<div><span class="field-label">またはカスタム時間</span>' +
+      '<div><span class="field-label">時間を指定する</span>' +
       '<div id="add-steppers"></div></div>' +
       '</div>' +
       '<div class="dialog-actions">' +
       '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-      '<button type="button" class="btn btn-ink" data-role="custom-add">カスタムで追加</button>' +
+      '<button type="button" class="btn btn-ink" data-role="custom-add">この時間で追加</button>' +
       '</div>'
     );
 
-    var firstDef = cfg.BLOCKS[0] || { start: "11:00", end: "15:00" };
+    var firstDef = cfg.BLOCKS.find(function (b) { return b.custom; }) || cfg.BLOCKS[0] || { start: "13:00", end: "19:00" };
     var timeState = buildTimeSteppers(m.el.querySelector("#add-steppers"),
       { start: firstDef.start, end: firstDef.end });
 
@@ -600,14 +603,13 @@
 
     // 不足コマの警告(公開自体は可能)
     var warnings = [];
-    var targets = cfg.BLOCKS.filter(function (d) { return cfg.TARGET_HEADCOUNT[d.id]; });
+    var bands = cfg.COVERAGE || [];
     Core.weekDates(weekStart).forEach(function (date) {
       var p = Core.dateParts(date);
-      targets.forEach(function (def) {
-        var target = cfg.TARGET_HEADCOUNT[def.id];
-        var count = countCoverage(date, def);
-        if (count < target) {
-          warnings.push(p.md + "(" + p.dow + ") " + def.label + " " + count + "/" + target + "人");
+      bands.forEach(function (band) {
+        var count = countCoverage(date, band);
+        if (count < band.need) {
+          warnings.push(p.md + "(" + p.dow + ") " + band.label + " " + count + "/" + band.need + "人");
         }
       });
     });
@@ -653,7 +655,8 @@
       var dp = Core.dateParts(date);
       var parts = [];
       var listed = {};
-      cfg.BLOCKS.forEach(function (def) {
+      // 固定の時間帯は名前をまとめる。時間指定の人は個別に時刻を書く
+      cfg.BLOCKS.filter(function (d) { return !d.custom; }).forEach(function (def) {
         var names = todays.filter(function (a) {
           return a.start === def.start && a.end === def.end;
         }).map(function (a) {

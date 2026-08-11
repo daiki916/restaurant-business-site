@@ -175,31 +175,21 @@
     }
   }
 
-  // 保存された実時刻ブロックを設定のブロック定義に対応付ける
-  // (完全一致 → 重なりが最大の定義、の順で割り当て)
+  // 保存された実時刻を選択肢に対応付ける。
+  // 固定の時間帯とぴったり一致すればその枠、そうでなければ「時間指定」の枠に入れる
   function mapBlocksToDefs(blocks) {
     var result = {};
     var used = {};
+    var custom = cfg.BLOCKS.find(function (d) { return d.custom; });
+
     blocks.forEach(function (b) {
-      var def = null;
-      for (var i = 0; i < cfg.BLOCKS.length; i++) {
-        var d = cfg.BLOCKS[i];
-        if (!used[d.id] && d.start === b.start && d.end === b.end) { def = d; break; }
-      }
-      if (!def) {
-        var best = null, bestOverlap = -Infinity;
-        cfg.BLOCKS.forEach(function (d) {
-          if (used[d.id]) return;
-          var ov = Math.min(Core.timeToMin(d.end), Core.timeToMin(b.end)) -
-                   Math.max(Core.timeToMin(d.start), Core.timeToMin(b.start));
-          if (ov > bestOverlap) { bestOverlap = ov; best = d; }
-        });
-        def = best;
-      }
-      if (def) {
-        used[def.id] = true;
-        result[def.id] = { start: b.start, end: b.end };
-      }
+      var def = cfg.BLOCKS.find(function (d) {
+        return !d.custom && !used[d.id] && d.start === b.start && d.end === b.end;
+      });
+      if (!def && custom && !used[custom.id]) def = custom;
+      if (!def) return;
+      used[def.id] = true;
+      result[def.id] = { start: b.start, end: b.end };
     });
     return result;
   }
@@ -445,6 +435,8 @@
       });
       d.blocks[defId] = { start: def.start, end: def.end };
       d.status = "work";
+      // 「時間指定」は選んだ時点で時刻を決めてもらう。その場で調整欄を開く
+      if (def.custom) openEditor = { date: date, defId: defId };
     }
 
     if (openEditor && openEditor.date === date &&
