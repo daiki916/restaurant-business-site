@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>シフト希望入力 | Shift Sync</title>
+    <meta name="description" content="スマホから希望の出勤時間をタップで送信できるシフト希望収集システム">
+    <meta name="theme-color" content="#07090F">
+    <link rel="stylesheet" href="css/shift.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="app-header">
+        <div class="brand">
+            <span class="brand-logo">Shift Sync</span>
+            <span class="brand-store" id="store-name"></span>
+        </div>
+        <div class="header-actions">
+            <span class="badge hidden" id="submit-badge"></span>
+            <button class="me-chip hidden" id="me-chip" type="button" title="名前を変更">
+                <span class="dot" id="me-dot"></span>
+                <span id="me-name"></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app">
+        <!-- デモモードバナー(デモモード時のみJSで表示) -->
+        <div class="demo-banner hidden" id="demo-banner">
+            デモモード:データはこのブラウザ内にのみ保存されます
+        </div>
+
+        <!-- ビューA: 名前選択(初回のみ) -->
+        <section id="view-name" class="hidden">
+            <h1 class="view-title">あなたの名前を<br>タップしてください</h1>
+            <p class="view-sub">次回からはこの端末に記憶されます</p>
+            <div class="name-grid" id="name-grid"></div>
+            <div class="empty-state hidden" id="name-empty">
+                <span class="empty-icon">◎</span>
+                まだ従業員が登録されていません。<br>店長に登録を依頼してください。
+            </div>
+            <div class="emp-add-row hidden" id="self-register" style="margin-top: 1.25rem;">
+                <input type="text" id="self-register-name" placeholder="名前を入力して登録" maxlength="20">
+                <button class="btn" id="self-register-btn" type="button">登録</button>
+            </div>
+        </section>
+
+        <!-- ビューB/C: 週入力・確定シフト -->
+        <section id="view-main" class="hidden">
+            <!-- 週セレクタ -->
+            <div class="week-selector" id="week-selector"></div>
+            <p class="deadline-note" id="deadline-note"></p>
+
+            <!-- モード切替タブ(公開済みの週のみ表示) -->
+            <div class="mode-tabs hidden" id="mode-tabs">
+                <button class="mode-tab" id="tab-request" type="button">希望を出す</button>
+                <button class="mode-tab" id="tab-result" type="button">確定シフト</button>
+            </div>
+
+            <!-- 希望入力 -->
+            <div id="request-view">
+                <div class="day-list" id="day-list"></div>
+
+                <!-- メモ欄(週単位・任意) -->
+                <div class="glass" style="margin-top: 1.25rem;">
+                    <button class="note-toggle" id="note-toggle" type="button">
+                        <span>メモ(任意)</span>
+                        <span id="note-toggle-mark">▼</span>
+                    </button>
+                    <div class="note-body hidden" id="note-body">
+                        <textarea id="week-note" rows="2" placeholder="例: 水曜は18時以降なら入れます"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 確定シフト閲覧 -->
+            <div id="result-view" class="hidden">
+                <div class="result-list" id="result-list"></div>
+                <button class="btn btn-block" id="toggle-everyone" type="button" style="margin-top: 1.25rem;">
+                    全員分を見る
+                </button>
+                <div class="result-list hidden" id="everyone-list" style="margin-top: 0.75rem;"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 固定フッター: 送信バー -->
+    <div class="submit-bar hidden" id="submit-bar">
+        <div class="submit-bar-inner">
+            <div class="submit-summary" id="submit-summary"></div>
+            <button class="btn btn-primary" id="submit-btn" type="button">希望を送信</button>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/employee.js"></script>
+</body>
+</html>

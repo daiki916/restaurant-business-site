@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>シフト管理 | Shift Sync</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#07090F">
+    <link rel="stylesheet" href="css/shift.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!--
+      注意: 静的サイトのため、このページ自体はURLを知っていれば誰でも開けます。
+      PINゲートは誤操作防止であり、セキュリティ保護ではありません。
+      本番運用(GASモード)ではデータの書き込みはGAS側の管理者トークンで保護されます。
+      詳しくは SETUP.md を参照してください。
+    -->
+</head>
+<body>
+    <!-- PINゲート(ADMIN_PIN_HASH 設定時のみJSで表示) -->
+    <div class="pin-gate hidden" id="pin-gate">
+        <div class="brand-logo" style="font-size: 1.8rem;">Shift Sync</div>
+        <p class="text-mid">管理者PINを入力してください</p>
+        <div class="pin-dots" id="pin-dots"></div>
+        <div class="pin-pad" id="pin-pad"></div>
+    </div>
+
+    <!-- 管理画面本体 -->
+    <div id="admin-root" class="hidden">
+        <header class="app-header">
+            <div class="brand">
+                <span class="brand-logo">Shift Sync</span>
+                <span class="brand-store" id="store-name"></span>
+            </div>
+            <div class="header-actions">
+                <span class="badge" id="publish-badge">下書き</span>
+            </div>
+        </header>
+
+        <main class="app app-wide">
+            <div class="demo-banner hidden" id="demo-banner">
+                デモモード:データはこのブラウザ内にのみ保存されます(端末間の共有には SETUP.md のGAS設定が必要です)
+            </div>
+
+            <!-- ツールバー -->
+            <div class="admin-toolbar">
+                <div class="week-nav">
+                    <button class="btn btn-icon" id="week-prev" type="button" title="前の週">◀</button>
+                    <span class="week-nav-label" id="week-label"></span>
+                    <button class="btn btn-icon" id="week-next" type="button" title="次の週">▶</button>
+                    <button class="btn btn-sm" id="week-today" type="button">今週へ</button>
+                </div>
+                <div class="toolbar-spacer"></div>
+                <button class="btn btn-sm" id="reload-btn" type="button">↻ 再読込</button>
+                <button class="btn btn-sm" id="emp-btn" type="button">⚙ 従業員管理</button>
+                <button class="btn btn-sm btn-primary" id="publish-btn" type="button">この週を確定して公開</button>
+            </div>
+
+            <!-- 週グリッド -->
+            <div class="grid-scroller glass">
+                <div class="shift-grid" id="shift-grid"></div>
+            </div>
+
+            <p class="text-xs text-mid" style="margin-top: 0.75rem;">
+                操作: 希望チップ(点線)をタップ=確定 / 確定チップをタップ=解除 /
+                確定チップの「…」=時刻・メモ編集 / セルの空き部分をタップ=希望なしでも追加
+            </p>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
