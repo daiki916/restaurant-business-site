@@ -80,12 +80,12 @@
       $("name-empty").classList.remove("hidden");
     } else {
       $("name-empty").classList.add("hidden");
-      employees.forEach(function (emp) {
+      employees.forEach(function (emp, i) {
         var btn = document.createElement("button");
-        btn.className = "name-card glass";
+        btn.className = "roster-name";
         btn.type = "button";
-        btn.innerHTML = '<span class="dot" style="color:' + emp.color + ';background:' + emp.color + '"></span>' +
-          Core.escapeHtml(emp.name);
+        btn.innerHTML = '<span class="tag-dot" style="background:' + Core.tagColor(emp.color, i) + '"></span>' +
+          Core.escapeHtml(emp.name) + '<span class="arrow">›</span>';
         btn.addEventListener("click", function () { selectEmployee(emp); });
         grid.appendChild(btn);
       });
@@ -107,8 +107,8 @@
     $("view-main").classList.remove("hidden");
     $("me-chip").classList.remove("hidden");
     $("me-name").textContent = me.name;
+    me.color = Core.tagColor(me.color, me.sortOrder);
     $("me-dot").style.background = me.color;
-    $("me-dot").style.color = me.color;
     renderWeekSelector();
     loadWeek();
   }
@@ -122,8 +122,8 @@
       var p = Core.dateParts(ws);
       var btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "week-tab" + (ws === selectedWeekStart ? " is-active" : "");
-      btn.innerHTML = label + '<br><span class="text-xs">' + p.md + '〜</span>';
+      btn.className = "period-tab" + (ws === selectedWeekStart ? " is-active" : "");
+      btn.innerHTML = label + '<span class="tab-date">' + p.md + '〜</span>';
       btn.addEventListener("click", function () {
         if (selectedWeekStart === ws) return;
         selectedWeekStart = ws;
@@ -211,6 +211,7 @@
       tabs.classList.remove("hidden");
       $("tab-request").classList.toggle("is-active", mode === "request");
       $("tab-result").classList.toggle("is-active", mode === "result");
+      $("tab-result").innerHTML = "確定シフト " + Core.stampHtml(false);
     } else {
       tabs.classList.add("hidden");
       mode = "request";
@@ -241,12 +242,12 @@
         return a.updatedAt > b.updatedAt ? a : b;
       });
       var d = new Date(latest.updatedAt);
-      var stamp = (d.getMonth() + 1) + "/" + d.getDate() + " " +
+      var when = (d.getMonth() + 1) + "/" + d.getDate() + " " +
         String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
-      badge.className = "badge is-ok";
-      badge.textContent = "提出済み " + stamp;
+      badge.className = "note-mark is-done";
+      badge.innerHTML = '提出済 <span class="num">' + when + '</span>';
     } else {
-      badge.className = "badge is-warn";
+      badge.className = "note-mark is-pending";
       badge.textContent = "未提出";
     }
   }
@@ -256,76 +257,84 @@
   function renderDays() {
     var list = $("day-list");
     var today = Core.todayStr();
+    // 記入した欄は自分の名札色で塗る
+    var tagTint = Core.tint(me.color, 0.12);
     var html = "";
 
     Core.weekDates(selectedWeekStart).forEach(function (date) {
       var d = draft[date];
       var p = Core.dateParts(date);
-      var dowClass = p.dowIndex === 0 ? " is-sun" : (p.dowIndex === 6 ? " is-sat" : "");
-      var statusText = d.status === "work" ? "出勤希望" : (d.status === "off" ? "休み希望" : "未定");
+      var weekend = p.dowIndex === 0 || p.dowIndex === 6;
 
-      html += '<div class="day-card glass' + (date === today ? " is-today" : "") + '">';
-      html += '<div class="day-head">';
-      html += '<span class="day-date">' + p.md + '<span class="dow' + dowClass + '">(' + p.dow + ')</span></span>';
-      html += '<span class="day-status">' + statusText + '</span>';
-      html += '</div>';
+      html += '<div class="ledger-row' + (weekend ? " is-weekend" : "") +
+        (date === today ? " is-today" : "") + '">';
 
-      // ブロック選択ボタン列
-      html += '<div class="block-row">';
+      html += '<div class="row-date">' +
+        '<span class="row-day">' + p.md.split("/")[1] + '</span>' +
+        '<span class="row-dow">' + p.dow + '</span>' +
+        '</div>';
+
+      html += '<div class="row-body">';
+      // 記入済みの日は選択欄が状態を語るので、未入力の日だけ言葉で補う
+      if (d.status === "none") {
+        html += '<div class="row-state">未入力</div>';
+      }
+
+      // 記入欄(出席簿のチェック欄)
+      html += '<div class="choices">';
       cfg.BLOCKS.forEach(function (def) {
         var on = d.status === "work" && d.blocks[def.id];
-        html += '<button type="button" class="block-btn' + (on ? " is-on" : "") + '"' +
+        html += '<button type="button" class="choice' + (on ? " is-on" : "") + '"' +
+          (on ? ' style="--tag:' + me.color + ';--tag-tint:' + tagTint + '"' : "") +
           ' data-action="toggle" data-date="' + date + '" data-def="' + def.id + '">' +
-          (def.icon ? '<span class="block-icon">' + Core.escapeHtml(def.icon) + '</span>' : "") +
           Core.escapeHtml(def.label) + '</button>';
       });
-      var offOn = d.status === "off";
-      html += '<button type="button" class="block-btn block-off' + (offOn ? " is-on" : "") + '"' +
+      html += '<button type="button" class="choice choice-off' + (d.status === "off" ? " is-on" : "") + '"' +
         ' data-action="toggle" data-date="' + date + '" data-def="__off__">休み</button>';
       html += '</div>';
 
-      // 選択済みブロックの時刻表示
+      // 記入された時刻
       if (d.status === "work") {
-        html += '<div class="time-summary">';
+        html += '<div class="entries">';
         cfg.BLOCKS.forEach(function (def) {
           var b = d.blocks[def.id];
           if (!b) return;
-          html += '<button type="button" class="time-pill" data-action="edit" data-date="' + date +
-            '" data-def="' + def.id + '">' + b.start + '-' + b.end +
-            ' <span class="edit-mark">調整 ▾</span></button>';
+          html += '<button type="button" class="entry" data-action="edit" data-date="' + date +
+            '" data-def="' + def.id + '">' + b.start + '–' + b.end +
+            ' <span class="entry-adjust">直す</span></button>';
         });
         html += '</div>';
       }
 
-      // 時刻微調整エディタ(開いている場合)
+      // 時刻の調整(開いている場合)
       if (openEditor && openEditor.date === date && d.status === "work" && d.blocks[openEditor.defId]) {
         var eb = d.blocks[openEditor.defId];
-        html += '<div class="time-editor">';
+        html += '<div class="adjuster">';
         html += stepperRowHtml("開始", date, openEditor.defId, "start", eb.start);
         html += stepperRowHtml("終了", date, openEditor.defId, "end", eb.end);
-        html += '<div class="time-editor-actions">' +
-          '<button type="button" class="btn btn-sm" data-action="reset-time" data-date="' + date +
-          '" data-def="' + openEditor.defId + '">リセット</button>' +
-          '<button type="button" class="btn btn-sm" data-action="close-editor">完了</button>' +
+        html += '<div class="adjuster-actions">' +
+          '<button type="button" class="btn btn-quiet" data-action="reset-time" data-date="' + date +
+          '" data-def="' + openEditor.defId + '">もとに戻す</button>' +
+          '<button type="button" class="btn" data-action="close-editor">閉じる</button>' +
           '</div>';
         html += '</div>';
       }
 
-      html += '</div>';
+      html += '</div></div>';
     });
 
     list.innerHTML = html;
   }
 
   function stepperRowHtml(label, date, defId, field, value) {
-    return '<div class="stepper-row">' +
-      '<span class="stepper-label">' + label + '</span>' +
+    return '<div class="adjuster-line">' +
+      '<span class="adjuster-label">' + label + '</span>' +
       '<div class="stepper">' +
       '<button type="button" class="stepper-btn" data-action="step" data-date="' + date +
-      '" data-def="' + defId + '" data-field="' + field + '" data-dir="-1">−</button>' +
-      '<span class="stepper-value">' + value + '</span>' +
+      '" data-def="' + defId + '" data-field="' + field + '" data-dir="-1" aria-label="15分もどす">−</button>' +
+      '<span class="stepper-value num">' + value + '</span>' +
       '<button type="button" class="stepper-btn" data-action="step" data-date="' + date +
-      '" data-def="' + defId + '" data-field="' + field + '" data-dir="1">＋</button>' +
+      '" data-def="' + defId + '" data-field="' + field + '" data-dir="1" aria-label="15分すすめる">＋</button>' +
       '</div></div>';
   }
 
@@ -337,7 +346,8 @@
     });
     var noneDays = 7 - workDays - offDays;
     $("submit-summary").innerHTML =
-      '<strong>出勤 ' + workDays + '日</strong><br>休み ' + offDays + '日・未入力 ' + noneDays + '日';
+      '出勤 <b>' + workDays + '</b>日<br>' +
+      '<span class="small">休み ' + offDays + '・未入力 ' + noneDays + '</span>';
   }
 
   /* ===== 操作(イベント委譲) ===== */
@@ -371,11 +381,11 @@
 
     $("me-chip").addEventListener("click", function () {
       var m = Core.openModal(
-        '<div class="modal-title">名前を変更しますか?</div>' +
-        '<p class="text-mid text-xs">この端末に記憶された名前をリセットして、名前選択に戻ります。</p>' +
-        '<div class="modal-actions">' +
+        '<div class="dialog-title">名前を変更しますか?</div>' +
+        '<p class="lede">この端末に記憶された名前をリセットして、名前選択に戻ります。</p>' +
+        '<div class="dialog-actions">' +
         '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-        '<button type="button" class="btn btn-primary" data-role="ok">変更する</button>' +
+        '<button type="button" class="btn btn-ink" data-role="ok">変更する</button>' +
         '</div>'
       );
       m.el.querySelector('[data-role="cancel"]').addEventListener("click", m.close);
@@ -540,20 +550,22 @@
 
     Core.weekDates(selectedWeekStart).forEach(function (date) {
       var p = Core.dateParts(date);
-      var dowClass = p.dowIndex === 0 ? " is-sun" : (p.dowIndex === 6 ? " is-sat" : "");
+      var weekend = p.dowIndex === 0 || p.dowIndex === 6;
       var mine = myAssignments.filter(function (a) { return a.date === date; })
         .sort(function (a, b) { return Core.timeToMin(a.start) - Core.timeToMin(b.start); });
 
-      html += '<div class="result-row glass">';
-      html += '<span class="result-date">' + p.md + '<span class="dow' + dowClass + ' text-xs">(' + p.dow + ')</span></span>';
-      html += '<div class="result-chips">';
+      html += '<div class="result-row' + (weekend ? " is-weekend" : "") + '">';
+      html += '<span class="result-date">' + p.md + '<span class="dow">' + p.dow + '</span></span>';
+      html += '<div class="result-entries">';
       if (mine.length === 0) {
-        html += '<span class="shift-chip is-off">休み</span>';
+        html += '<span class="result-entry is-off">休み</span>';
       } else {
         mine.forEach(function (a) {
           var label = Core.blockLabel({ start: a.start, end: a.end }, cfg);
-          var text = label === a.start + "-" + a.end ? label : label + " " + a.start + "-" + a.end;
-          html += '<span class="shift-chip">' + Core.escapeHtml(text) + '</span>';
+          var isNamed = label !== a.start + "-" + a.end;
+          html += '<span class="result-entry">' + Core.stampHtml(false) +
+            (isNamed ? Core.escapeHtml(label) + " " : "") +
+            '<span class="time">' + a.start + '–' + a.end + '</span></span>';
         });
       }
       html += '</div></div>';
@@ -571,21 +583,21 @@
     var ehtml = "";
     Core.weekDates(selectedWeekStart).forEach(function (date) {
       var p = Core.dateParts(date);
+      var weekend = p.dowIndex === 0 || p.dowIndex === 6;
       var todays = weekData.assignments.filter(function (a) { return a.date === date; })
         .sort(function (a, b) { return Core.timeToMin(a.start) - Core.timeToMin(b.start); });
-      ehtml += '<div class="result-row glass">';
-      ehtml += '<span class="result-date">' + p.md + '<span class="text-xs text-mid">(' + p.dow + ')</span></span>';
-      ehtml += '<div class="result-chips">';
+      ehtml += '<div class="result-row' + (weekend ? " is-weekend" : "") + '">';
+      ehtml += '<span class="result-date">' + p.md + '<span class="dow">' + p.dow + '</span></span>';
+      ehtml += '<div class="result-entries">';
       if (todays.length === 0) {
-        ehtml += '<span class="text-xs text-mid">—</span>';
+        ehtml += '<span class="small muted">—</span>';
       } else {
         todays.forEach(function (a) {
           var emp = employees.find(function (e) { return e.id === a.employeeId; });
           var name = emp ? emp.name : "?";
-          var color = emp ? emp.color : "#93A5C4";
-          ehtml += '<span class="shift-chip" style="border-color:' + color + ';color:' + color +
-            ';box-shadow:0 0 8px ' + color + '44">' +
-            Core.escapeHtml(name) + " " + a.start + "-" + a.end + '</span>';
+          var color = Core.tagColor(emp && emp.color, emp && emp.sortOrder);
+          ehtml += '<span class="result-entry is-off" style="border-left:3px solid ' + color + ';color:var(--ink)">' +
+            Core.escapeHtml(name) + ' <span class="time">' + a.start + '–' + a.end + '</span></span>';
         });
       }
       ehtml += '</div></div>';

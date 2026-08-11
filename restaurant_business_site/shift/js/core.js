@@ -8,10 +8,16 @@
 
   var DOW_JP = ["日", "月", "火", "水", "木", "金", "土"];
 
-  // 従業員チップに割り当てるネオンパレット(8色)
-  var NEON_PALETTE = [
-    "#00E5FF", "#FF2EC8", "#B4FF39", "#FFC53D",
-    "#8C6BFF", "#FF7A45", "#3DFFB8", "#FF5C8A"
+  // スタッフの識別色。名札の色から採った8色で、朱肉の色とは重ならない
+  var NAMETAG_PALETTE = [
+    "#5B8FB9", // 空
+    "#6E9B58", // 若草
+    "#8878B0", // 藤
+    "#C4972F", // 山吹
+    "#4E9E96", // 浅葱
+    "#C2707F", // 桃
+    "#A0714C", // 鳶
+    "#6B7A8C"  // 鉛
   ];
 
   /* ===== 日付・週 ===== */
@@ -119,7 +125,58 @@
   }
 
   function pickColor(index) {
-    return NEON_PALETTE[index % NEON_PALETTE.length];
+    return NAMETAG_PALETTE[index % NAMETAG_PALETTE.length];
+  }
+
+  // 旧テーマのネオン色は保存済みデータに焼き付いているため、読み出し時に名札色へ移す
+  var LEGACY_COLORS = {
+    "#00E5FF": "#5B8FB9", "#FF2EC8": "#C2707F", "#B4FF39": "#6E9B58",
+    "#FFC53D": "#C4972F", "#8C6BFF": "#8878B0", "#FF7A45": "#A0714C",
+    "#3DFFB8": "#4E9E96", "#FF5C8A": "#C2707F"
+  };
+
+  // 色を必ず #RRGGBB に正規化して返す(style属性に差し込むため、値の検証も兼ねる)
+  function tagColor(value, index) {
+    var v = String(value || "").trim().toUpperCase();
+    if (LEGACY_COLORS[v]) return LEGACY_COLORS[v];
+    if (/^#[0-9A-F]{6}$/.test(v)) return v;
+    return pickColor(index || 0);
+  }
+
+  // 名札色を薄く敷くための rgba(記入済みのマスの地に使う)
+  function tint(hex, alpha) {
+    var h = hex.replace("#", "");
+    var r = parseInt(h.substring(0, 2), 16);
+    var g = parseInt(h.substring(2, 4), 16);
+    var b = parseInt(h.substring(4, 6), 16);
+    return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+  }
+
+  /* ===== タリー ===== */
+  // 人数の充足を色ではなく形で示す。塗られていない丸が残れば不足が一目で分かる。
+  // 例: 2/3 → ●●○
+
+  function tallyHtml(count, target, label) {
+    var dots = "";
+    var shown = Math.max(count, target);
+    for (var i = 0; i < shown; i++) {
+      var cls = i < count ? (i < target ? " class=\"is-on\"" : " class=\"is-over\"") : "";
+      dots += "<i" + cls + "></i>";
+    }
+    var short = count < target;
+    return '<span class="tally-row' + (short ? " is-short" : "") + '">' +
+      '<span class="tally-label">' + escapeHtml(label) + '</span>' +
+      '<span class="tally">' + dots + '</span>' +
+      '<span class="tally-num">' + count + "/" + target + '</span>' +
+      '</span>';
+  }
+
+  /* ===== 判子 ===== */
+  // 押した直後だけ pressed を付けて、押し込むアニメーションを一度だけ再生する
+
+  function stampHtml(isPressed, large) {
+    return '<span class="stamp-mark' + (large ? " stamp-mark-lg" : "") +
+      (isPressed ? " is-pressed" : "") + '" aria-hidden="true">印</span>';
   }
 
   function escapeHtml(s) {
@@ -131,10 +188,10 @@
   /* ===== UI部品: トースト ===== */
 
   function toast(message, isError) {
-    var container = document.querySelector(".toast-container");
+    var container = document.querySelector(".toast-stack");
     if (!container) {
       container = document.createElement("div");
-      container.className = "toast-container";
+      container.className = "toast-stack";
       document.body.appendChild(container);
     }
     var el = document.createElement("div");
@@ -155,9 +212,9 @@
   function openModal(innerHtml, opts) {
     opts = opts || {};
     var overlay = document.createElement("div");
-    overlay.className = "modal-overlay";
+    overlay.className = "overlay";
     var modal = document.createElement("div");
-    modal.className = "modal";
+    modal.className = "dialog";
     modal.innerHTML = innerHtml;
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
@@ -226,7 +283,7 @@
 
   window.ShiftCore = {
     DOW_JP: DOW_JP,
-    NEON_PALETTE: NEON_PALETTE,
+    NAMETAG_PALETTE: NAMETAG_PALETTE,
     toDateStr: toDateStr,
     fromDateStr: fromDateStr,
     todayStr: todayStr,
@@ -242,6 +299,10 @@
     uid: uid,
     nowIso: nowIso,
     pickColor: pickColor,
+    tagColor: tagColor,
+    tint: tint,
+    tallyHtml: tallyHtml,
+    stampHtml: stampHtml,
     escapeHtml: escapeHtml,
     toast: toast,
     openModal: openModal,

@@ -3,75 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>シフト管理 | Shift Sync</title>
+    <title>出勤簿 | Shift Sync</title>
     <meta name="robots" content="noindex">
-    <meta name="theme-color" content="#07090F">
+    <meta name="theme-color" content="#FAFAF7">
     <link rel="stylesheet" href="css/shift.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Zen+Old+Mincho:wght@700&display=swap" rel="stylesheet">
     <!--
       注意: 静的サイトのため、このページ自体はURLを知っていれば誰でも開けます。
-      PINゲートは誤操作防止であり、セキュリティ保護ではありません。
-      本番運用(GASモード)ではデータの書き込みはGAS側の管理者トークンで保護されます。
+      暗証番号は誤操作を防ぐためのもので、セキュリティ保護ではありません。
+      本番運用(GASモード)では、書き込みはGAS側の管理者トークンで守られます。
       詳しくは SETUP.md を参照してください。
     -->
 </head>
 <body>
-    <!-- PINゲート(ADMIN_PIN_HASH 設定時のみJSで表示) -->
+    <!-- 暗証番号(ADMIN_PIN_HASH 設定時のみ表示) -->
     <div class="pin-gate hidden" id="pin-gate">
-        <div class="brand-logo" style="font-size: 1.8rem;">Shift Sync</div>
-        <p class="text-mid">管理者PINを入力してください</p>
+        <div style="text-align:center;">
+            <div class="wordmark" style="font-size:1.375rem;">出勤簿</div>
+            <p class="lede">管理者の暗証番号を入力してください</p>
+        </div>
         <div class="pin-dots" id="pin-dots"></div>
         <div class="pin-pad" id="pin-pad"></div>
     </div>
 
-    <!-- 管理画面本体 -->
     <div id="admin-root" class="hidden">
-        <header class="app-header">
-            <div class="brand">
-                <span class="brand-badge">S</span>
-                <div class="brand-text">
-                    <span class="brand-logo">SHIFT SYNC</span>
-                    <span class="brand-sub">シフト希望収集システム / <span id="store-name"></span></span>
-                </div>
+        <header class="masthead">
+            <div class="masthead-title">
+                <span class="wordmark">出勤簿</span>
+                <span class="wordmark-sub" id="store-name"></span>
             </div>
-            <div class="header-actions"></div>
+            <div class="masthead-side">
+                <span class="note-mark" id="publish-badge">下書き</span>
+            </div>
         </header>
 
-        <main class="app app-wide">
+        <main class="sheet sheet-wide">
             <div class="demo-banner hidden" id="demo-banner" title="タップで閉じる">
-                デモモード:データはこのブラウザ内にのみ保存されます(端末間の共有には SETUP.md のGAS設定が必要です) ✕
+                デモです。データはこのブラウザにだけ残ります(端末をまたいで共有するには SETUP.md の設定が必要です)
             </div>
 
-            <!-- ツールバー 1段目: 週ナビ+状態 -->
-            <div class="toolbar-row">
-                <div class="week-pill glass">
-                    <button class="week-arrow" id="week-prev" type="button" title="前の週">‹</button>
-                    <div class="week-pill-center">
-                        <span class="week-nav-label" id="week-label"></span>
-                        <span class="week-sublabel" id="week-sublabel"></span>
-                    </div>
-                    <button class="week-arrow" id="week-next" type="button" title="次の週">›</button>
+            <!-- 週の移動 -->
+            <div class="controls">
+                <button class="step-btn" id="week-prev" type="button" title="前の週">‹</button>
+                <div class="period">
+                    <span class="period-range" id="week-label"></span>
+                    <span class="period-rel" id="week-sublabel"></span>
                 </div>
-                <span class="badge" id="publish-badge">下書き</span>
-                <span class="badge" id="submit-counter"></span>
-                <div class="toolbar-spacer"></div>
-                <button class="btn btn-sm" id="week-today" type="button">今週へ</button>
+                <button class="step-btn" id="week-next" type="button" title="次の週">›</button>
+                <button class="btn btn-quiet" id="week-today" type="button">今週</button>
+                <span class="note-mark" id="submit-counter"></span>
+                <div class="spacer"></div>
+                <button class="btn btn-quiet" id="reload-btn" type="button">読み直す</button>
+                <button class="btn" id="emp-btn" type="button">名簿</button>
+                <button class="btn btn-stamp" id="publish-btn" type="button">この週を確定する</button>
             </div>
 
-            <!-- ツールバー 2段目: 操作ボタン -->
-            <div class="toolbar-row">
-                <button class="btn btn-sm" id="reload-btn" type="button">↻ 再読込</button>
-                <button class="btn btn-sm" id="emp-btn" type="button">⚙ スタッフ管理</button>
-                <button class="btn btn-sm btn-publish" id="publish-btn" type="button">この週を確定して公開</button>
+            <!-- 帳簿 -->
+            <div class="register-scroll">
+                <div class="register" id="shift-grid"></div>
             </div>
 
-            <!-- 週グリッド -->
-            <div class="grid-scroller glass">
-                <div class="shift-grid" id="shift-grid"></div>
-            </div>
-
-            <p class="text-xs text-mid" style="margin-top: 0.75rem;">
-                希望(点線)をタップで確定 / 確定をタップで解除 / 「…」で時刻編集 / 空きセルで追加
+            <p class="hint">
+                希望をタップすると確定(印)になります。もう一度タップで取り消し。「…」で時刻と備考、空欄をタップで追加。
             </p>
         </main>
     </div>

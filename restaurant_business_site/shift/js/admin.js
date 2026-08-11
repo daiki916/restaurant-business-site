@@ -18,6 +18,7 @@
   var weekStart = Core.getWeekStart(Core.addDays(Core.todayStr(), 7), cfg.WEEK_STARTS_ON); // デフォルトは来週
   var weekData = { requests: [], assignments: [], meta: { published: false, publishedAt: "" } };
   var pollTimer = null;
+  var justStampedId = null;   // 押した直後の1コマだけ判子アニメを再生する
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -59,7 +60,7 @@
       btn.type = "button";
       btn.className = "pin-key";
       btn.textContent = k;
-      if (k === "OK") btn.style.fontSize = "1rem";
+      if (k === "OK") btn.style.fontSize = "0.95rem";
       btn.addEventListener("click", function () {
         if (k === "C") {
           entered = "";
@@ -115,12 +116,12 @@
 
   function promptToken(message) {
     var m = Core.openModal(
-      '<div class="modal-title">管理者トークン</div>' +
-      '<p class="text-mid text-xs">' + Core.escapeHtml(message) + '</p>' +
-      '<div class="modal-body"><input type="password" id="token-input" placeholder="トークン"></div>' +
-      '<div class="modal-actions">' +
+      '<div class="dialog-title">管理者トークン</div>' +
+      '<p class="lede">' + Core.escapeHtml(message) + '</p>' +
+      '<div class="dialog-body"><input type="password" id="token-input" placeholder="トークン"></div>' +
+      '<div class="dialog-actions">' +
       '<button type="button" class="btn" data-role="skip">閲覧のみ</button>' +
-      '<button type="button" class="btn btn-primary" data-role="save">保存</button>' +
+      '<button type="button" class="btn btn-ink" data-role="save">保存</button>' +
       '</div>'
     );
     m.el.querySelector('[data-role="skip"]').addEventListener("click", m.close);
@@ -214,8 +215,8 @@
     weekData.requests.forEach(function (r) { submitted[r.employeeId] = true; });
     var count = active.filter(function (e) { return submitted[e.id]; }).length;
     var el = $("submit-counter");
-    el.textContent = "提出 " + count + "/" + active.length;
-    el.className = "badge" + (active.length > 0 && count === active.length ? " is-ok" : "");
+    el.innerHTML = '提出 <span class="num">' + count + "/" + active.length + '</span>';
+    el.className = "note-mark" + (active.length > 0 && count === active.length ? " is-done" : " is-pending");
   }
 
   function hasChangesAfterPublish() {
@@ -229,17 +230,17 @@
     var btn = $("publish-btn");
     var meta = weekData.meta || {};
     if (!meta.published) {
-      badge.className = "badge";
+      badge.className = "note-mark";
       badge.textContent = "下書き";
-      btn.textContent = "この週を確定して公開";
+      btn.textContent = "この週を確定する";
     } else if (hasChangesAfterPublish()) {
-      badge.className = "badge is-warn";
+      badge.className = "note-mark is-pending";
       badge.textContent = "公開済み(変更あり)";
-      btn.textContent = "変更を再公開";
+      btn.textContent = "変更を出し直す";
     } else {
-      badge.className = "badge is-ok";
-      badge.textContent = "公開済み";
-      btn.textContent = "共有";
+      badge.className = "note-mark is-done";
+      badge.innerHTML = Core.stampHtml(false) + " 公開済み";
+      btn.textContent = "共有する";
     }
   }
 
@@ -277,49 +278,49 @@
     var activeCount = employees.filter(function (e) { return e.active; }).length;
     var targets = cfg.BLOCKS.filter(function (d) { return cfg.TARGET_HEADCOUNT[d.id]; });
 
-    grid.style.gridTemplateColumns = "150px repeat(7, minmax(100px, 1fr))";
+    grid.style.gridTemplateColumns = "168px repeat(7, minmax(116px, 1fr))";
     var html = "";
 
-    // ヘッダー行(日付+カバレッジピルを統合)
-    html += '<div class="grid-cell grid-head" style="text-align:left;">スタッフ' +
-      '<div class="text-xs text-mid" style="font-weight:400;">' + activeCount + '名 / 週7日</div></div>';
+    // 見出し帯 — 日付と、その日の充足をタリーで示す
+    html += '<div class="cell cell-head cell-corner">' +
+      '<span class="corner-title">スタッフ</span>' +
+      '<span class="corner-sub">' + activeCount + '名 / 週7日</span></div>';
     dates.forEach(function (date) {
       var p = Core.dateParts(date);
-      var dowClass = p.dowIndex === 0 ? " is-sun" : (p.dowIndex === 6 ? " is-sat" : "");
-      html += '<div class="grid-cell grid-head' + (date === today ? " is-today" : "") + '">' +
-        '<span class="head-date">' + p.md + '</span> <span class="dow' + dowClass + '">' + p.dow + '</span>';
-      html += '<div class="cov-pills">';
+      var weekend = p.dowIndex === 0 || p.dowIndex === 6;
+      html += '<div class="cell cell-head' + (date === today ? " is-today" : "") +
+        (weekend ? " is-weekend" : "") + '">' +
+        '<span class="head-date">' + p.md + '</span><span class="head-dow">' + p.dow + '</span>';
+      html += '<div class="head-tallies">';
       targets.forEach(function (def) {
-        var target = cfg.TARGET_HEADCOUNT[def.id];
-        var count = countCoverage(date, def);
-        var cls = count >= target ? " is-ok" : " is-short";
-        html += '<span class="cov-pill' + cls + '">' + Core.escapeHtml(def.icon || def.label) +
-          " " + count + "/" + target + '</span>';
+        html += Core.tallyHtml(countCoverage(date, def), cfg.TARGET_HEADCOUNT[def.id], def.label);
       });
       html += '</div></div>';
     });
 
-    // 従業員行(名前+提出タイムスタンプ)
-    html += "";
+    // スタッフの行 — 名前と提出時刻
     emps.forEach(function (emp) {
       var note = notes[emp.id];
-      var stamp = submitStamp(emp.id);
-      html += '<div class="grid-cell grid-emp' + (emp.active ? "" : " is-inactive") + '"' +
+      var when = submitStamp(emp.id);
+      var color = Core.tagColor(emp.color, emp.sortOrder);
+      html += '<div class="cell cell-name' + (emp.active ? "" : " is-inactive") + '"' +
         (note ? ' data-action="show-note" data-emp="' + emp.id + '" style="cursor:pointer;" title="' + Core.escapeHtml(note) + '"' : "") + '>' +
-        '<span class="dot" style="background:' + emp.color + ';color:' + emp.color + '"></span>' +
-        '<div class="emp-info">' +
-        '<span class="emp-name">' + Core.escapeHtml(emp.name) + (emp.active ? "" : " (無効)") +
-        (note ? ' <span title="メモあり">✎</span>' : "") + '</span>' +
-        (stamp
-          ? '<span class="emp-sub">' + stamp + ' 提出</span>'
-          : '<span class="emp-sub is-missing">未提出</span>') +
-        '</div></div>';
+        '<span class="tag-dot" style="background:' + color + '"></span>' +
+        '<span class="name-block">' +
+        '<span class="name-main">' + Core.escapeHtml(emp.name) + (emp.active ? "" : "(無効)") +
+        (note ? ' <span title="備考あり">✎</span>' : "") + '</span>' +
+        (when
+          ? '<span class="name-sub">' + when + ' 提出</span>'
+          : '<span class="name-sub is-pending">未提出</span>') +
+        '</span></div>';
       dates.forEach(function (date) {
-        html += renderSlotCell(emp, date);
+        var p = Core.dateParts(date);
+        html += renderSlotCell(emp, date, color, p.dowIndex === 0 || p.dowIndex === 6);
       });
     });
 
     grid.innerHTML = html;
+    justStampedId = null;   // アニメは押した直後の1回だけ
   }
 
   // 従業員の最終提出日時("8/9 21:14" 形式)。未提出なら空文字
@@ -356,17 +357,17 @@
     return null;
   }
 
-  // チップの中身(1行目=アイコン+ラベル / 2行目=時刻。カスタム時間は時刻のみ)
-  function chipInner(start, end, moreHtml) {
+  // 記入の中身(1行目=時間帯の名前 / 2行目=時刻。定義外の時間は時刻のみ)
+  function markInner(start, end) {
     var def = findDef(start, end);
     if (def) {
-      return '<span class="chip-label">' + Core.escapeHtml((def.icon ? def.icon + " " : "") + def.label) +
-        (moreHtml || "") + '</span><span class="chip-time">' + start + "-" + end + '</span>';
+      return '<span class="mark-label">' + Core.escapeHtml(def.label) + '</span>' +
+        '<span class="mark-time">' + start + "–" + end + '</span>';
     }
-    return '<span class="chip-label">' + start + "-" + end + (moreHtml || "") + '</span>';
+    return '<span class="mark-label">' + start + "–" + end + '</span>';
   }
 
-  function renderSlotCell(emp, date) {
+  function renderSlotCell(emp, date, color, isWeekend) {
     var assignments = weekData.assignments
       .filter(function (a) { return a.employeeId === emp.id && a.date === date; })
       .sort(function (a, b) { return Core.timeToMin(a.start) - Core.timeToMin(b.start); });
@@ -374,24 +375,24 @@
       return r.employeeId === emp.id && r.date === date;
     });
 
-    var chips = "";
+    var marks = "";
 
-    // 確定チップ(実線・発光)
+    // 確定 — 判子を押した記入
     assignments.forEach(function (a) {
-      var more = '<span class="chip-more" data-action="edit-asg" data-id="' + a.id +
-        '" title="時刻・メモを編集"> …</span>';
-      chips += '<div class="cell-chip is-assigned" style="border-color:' + emp.color + ';color:' + emp.color +
-        ';box-shadow:0 0 9px ' + emp.color + '55;background:' + emp.color + '1A"' +
-        ' data-action="unassign" data-id="' + a.id + '" title="タップで確定解除 / …で編集">' +
-        chipInner(a.start, a.end, more) +
-        (a.note ? '<span class="chip-note">' + Core.escapeHtml(a.note) + '</span>' : "") +
+      marks += '<div class="mark mark-fixed" style="--tag:' + color + '"' +
+        ' data-action="unassign" data-id="' + a.id + '" title="タップで取り消し / …で時刻と備考">' +
+        markInner(a.start, a.end) +
+        (a.note ? '<span class="mark-memo">' + Core.escapeHtml(a.note) + '</span>' : "") +
+        Core.stampHtml(a.id === justStampedId) +
+        '<span class="chip-more" data-action="edit-asg" data-id="' + a.id +
+        '" title="時刻と備考を直す">…</span>' +
         '</div>';
     });
 
-    // 希望チップ(点線・半透明)。すでに確定と重なっている希望は表示しない
+    // 希望 — 鉛筆書き。すでに確定と重なっている希望は出さない
     if (request) {
       if (request.status === "off") {
-        chips += '<div class="cell-chip is-off-request" title="休み希望">休</div>';
+        marks += '<div class="mark mark-off" title="休み希望">休み</div>';
       } else {
         Core.parseBlocks(request.blocks).forEach(function (b) {
           var covered = assignments.some(function (a) {
@@ -399,16 +400,17 @@
                    Core.timeToMin(b.start) < Core.timeToMin(a.end);
           });
           if (covered) return;
-          chips += '<div class="cell-chip is-request" style="border-color:' + emp.color + ';color:' + emp.color + '"' +
+          marks += '<div class="mark mark-wish" style="--tag:' + color + '"' +
             ' data-action="promote" data-emp="' + emp.id + '" data-date="' + date +
             '" data-start="' + b.start + '" data-end="' + b.end + '" title="タップで確定">' +
-            chipInner(b.start, b.end) + '</div>';
+            markInner(b.start, b.end) + '</div>';
         });
       }
     }
 
-    return '<div class="grid-cell grid-slot" data-action="add-shift" data-emp="' + emp.id +
-      '" data-date="' + date + '" title="空き部分をタップで追加">' + chips + '</div>';
+    return '<div class="cell cell-slot' + (isWeekend ? " is-weekend" : "") +
+      '" data-action="add-shift" data-emp="' + emp.id +
+      '" data-date="' + date + '" title="空いているところをタップで追加">' + marks + '</div>';
   }
 
   /* ===== グリッド操作 ===== */
@@ -431,15 +433,17 @@
       var emp = employees.find(function (x) { return x.id === el.dataset.emp; });
       var note = notesByEmployee()[el.dataset.emp] || "";
       Core.openModal(
-        '<div class="modal-title">' + Core.escapeHtml(emp ? emp.name : "") + ' さんのメモ</div>' +
+        '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") + ' さんのメモ</div>' +
         '<p>' + Core.escapeHtml(note) + '</p>'
       );
     }
   }
 
   function addAssignment(employeeId, date, start, end, note) {
+    var id = Core.uid("asg");
+    justStampedId = id;   // このコマだけ判子が押されるアニメを再生する
     weekData.assignments.push({
-      id: Core.uid("asg"),
+      id: id,
       weekStart: weekStart,
       employeeId: employeeId,
       date: date,
@@ -499,11 +503,11 @@
   }
 
   function stepperHtml(label, field, value) {
-    return '<div class="stepper-row">' +
-      '<span class="stepper-label">' + label + '</span>' +
+    return '<div class="adjuster-line">' +
+      '<span class="adjuster-label">' + label + '</span>' +
       '<div class="stepper">' +
       '<button type="button" class="stepper-btn" data-field="' + field + '" data-dir="-1">−</button>' +
-      '<span class="stepper-value" data-value="' + field + '">' + value + '</span>' +
+      '<span class="stepper-value num" data-value="' + field + '">' + value + '</span>' +
       '<button type="button" class="stepper-btn" data-field="' + field + '" data-dir="1">＋</button>' +
       '</div></div>';
   }
@@ -514,20 +518,20 @@
     var p = Core.dateParts(date);
     var blockBtns = cfg.BLOCKS.map(function (def) {
       return '<button type="button" class="btn" data-block="' + def.id + '">' +
-        Core.escapeHtml(def.label) + ' ' + def.start + '-' + def.end + '</button>';
+        Core.escapeHtml(def.label) + ' <span class="num">' + def.start + '–' + def.end + '</span>' + '</button>';
     }).join("");
 
     var m = Core.openModal(
-      '<div class="modal-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')に追加</div>' +
-      '<div class="modal-body">' +
+      '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')に追加</div>' +
+      '<div class="dialog-body">' +
       '<div><span class="field-label">時間帯をタップで追加</span>' +
       '<div style="display:flex;flex-direction:column;gap:0.5rem;">' + blockBtns + '</div></div>' +
       '<div><span class="field-label">またはカスタム時間</span>' +
       '<div id="add-steppers"></div></div>' +
       '</div>' +
-      '<div class="modal-actions">' +
+      '<div class="dialog-actions">' +
       '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-      '<button type="button" class="btn btn-primary" data-role="custom-add">カスタムで追加</button>' +
+      '<button type="button" class="btn btn-ink" data-role="custom-add">カスタムで追加</button>' +
       '</div>'
     );
 
@@ -557,16 +561,16 @@
     var p = Core.dateParts(a.date);
 
     var m = Core.openModal(
-      '<div class="modal-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')を編集</div>' +
-      '<div class="modal-body">' +
+      '<div class="dialog-title">' + Core.escapeHtml(emp ? emp.name : "") + ' — ' + p.md + '(' + p.dow + ')を編集</div>' +
+      '<div class="dialog-body">' +
       '<div id="edit-steppers"></div>' +
       '<div><span class="field-label">メモ(任意)</span>' +
       '<input type="text" id="edit-note" maxlength="40" value="' + Core.escapeHtml(a.note || "") + '"></div>' +
       '</div>' +
-      '<div class="modal-actions">' +
+      '<div class="dialog-actions">' +
       '<button type="button" class="btn btn-danger" data-role="delete">削除</button>' +
       '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-      '<button type="button" class="btn btn-primary" data-role="save">保存</button>' +
+      '<button type="button" class="btn btn-ink" data-role="save">保存</button>' +
       '</div>'
     );
 
@@ -609,17 +613,17 @@
     });
 
     var warnHtml = warnings.length
-      ? '<p class="text-xs" style="color:var(--neon-amber);">⚠ 人数が不足しているコマがあります:<br>' +
+      ? '<p class="lede-warn">人数が足りていないコマがあります<br>' +
         warnings.map(Core.escapeHtml).join("<br>") + '</p>'
-      : '<p class="text-xs" style="color:var(--neon-lime);">すべてのコマで必要人数を満たしています。</p>';
+      : '<p class="lede-ok">すべてのコマで必要人数を満たしています。</p>';
 
     var m = Core.openModal(
-      '<div class="modal-title">この週を確定して公開しますか?</div>' +
-      '<div class="modal-body">' + warnHtml +
-      '<p class="text-mid text-xs">公開すると、従業員ページに確定シフトが表示されるようになります。</p></div>' +
-      '<div class="modal-actions">' +
-      '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
-      '<button type="button" class="btn btn-primary" data-role="ok">公開する</button>' +
+      '<div class="dialog-title">この週を確定しますか?</div>' +
+      '<div class="dialog-body">' + warnHtml +
+      '<p class="lede">確定すると、スタッフの画面に確定シフトが出るようになります。</p></div>' +
+      '<div class="dialog-actions">' +
+      '<button type="button" class="btn" data-role="cancel">やめる</button>' +
+      '<button type="button" class="btn btn-stamp" data-role="ok">確定する</button>' +
       '</div>'
     );
     m.el.querySelector('[data-role="cancel"]').addEventListener("click", m.close);
@@ -673,13 +677,13 @@
   function openShareModal() {
     var text = buildShareText();
     var m = Core.openModal(
-      '<div class="modal-title">確定シフトを共有</div>' +
-      '<div class="modal-body">' +
+      '<div class="dialog-title">確定シフトを共有</div>' +
+      '<div class="dialog-body">' +
       '<button type="button" class="btn btn-block" data-role="copy-url">従業員ページのURLをコピー</button>' +
       '<button type="button" class="btn btn-block" data-role="copy-text">共有テキストをコピー(LINE貼り付け用)</button>' +
       '<div class="share-preview">' + Core.escapeHtml(text) + '</div>' +
       '</div>' +
-      '<div class="modal-actions">' +
+      '<div class="dialog-actions">' +
       '<button type="button" class="btn" data-role="close">閉じる</button>' +
       '</div>'
     );
@@ -696,18 +700,18 @@
 
   function openEmployeeModal() {
     var m = Core.openModal(
-      '<div class="modal-title">スタッフ管理</div>' +
-      '<div class="modal-body">' +
-      '<div class="emp-list" id="emp-list"></div>' +
+      '<div class="dialog-title">スタッフ管理</div>' +
+      '<div class="dialog-body">' +
+      '<div class="roster-edit" id="emp-list"></div>' +
       '<div class="emp-add-row">' +
       '<input type="text" id="emp-add-name" placeholder="名前を入力して追加" maxlength="20">' +
       '<button type="button" class="btn" id="emp-add-btn">追加</button>' +
       '</div>' +
       (storage.mode === "local"
-        ? '<button type="button" class="btn btn-danger btn-sm" id="emp-clear-btn">サンプルデータを全消去</button>'
+        ? '<button type="button" class="btn btn-danger" id="emp-clear-btn">サンプルデータを全消去</button>'
         : "") +
       '</div>' +
-      '<div class="modal-actions"><button type="button" class="btn" data-role="close">閉じる</button></div>'
+      '<div class="dialog-actions"><button type="button" class="btn" data-role="close">閉じる</button></div>'
     );
 
     m.el.querySelector('[data-role="close"]').addEventListener("click", function () {
@@ -722,14 +726,14 @@
         return (a.sortOrder || 0) - (b.sortOrder || 0);
       });
       list.innerHTML = sorted.map(function (emp) {
-        return '<div class="emp-row' + (emp.active ? "" : " is-inactive") + '">' +
+        return '<div class="roster-edit-row' + (emp.active ? "" : " is-inactive") + '">' +
           '<span class="dot" style="background:' + emp.color + ';color:' + emp.color + '"></span>' +
           '<span class="emp-name">' + Core.escapeHtml(emp.name) + '</span>' +
           (emp.active
-            ? '<button type="button" class="btn btn-sm" data-move="-1" data-id="' + emp.id + '">▲</button>' +
-              '<button type="button" class="btn btn-sm" data-move="1" data-id="' + emp.id + '">▼</button>' +
-              '<button type="button" class="btn btn-sm btn-danger" data-off="' + emp.id + '">無効化</button>'
-            : '<button type="button" class="btn btn-sm" data-on="' + emp.id + '">有効化</button>') +
+            ? '<button type="button" class="btn" data-move="-1" data-id="' + emp.id + '">▲</button>' +
+              '<button type="button" class="btn" data-move="1" data-id="' + emp.id + '">▼</button>' +
+              '<button type="button" class="btn btn-danger" data-off="' + emp.id + '">無効化</button>'
+            : '<button type="button" class="btn" data-on="' + emp.id + '">有効化</button>') +
           '</div>';
       }).join("");
     }
@@ -774,9 +778,9 @@
     if (clearBtn) {
       clearBtn.addEventListener("click", function () {
         var c = Core.openModal(
-          '<div class="modal-title">全データを消去しますか?</div>' +
-          '<p class="text-mid text-xs">このブラウザに保存されたスタッフ・希望・確定シフトをすべて削除します。元に戻せません。</p>' +
-          '<div class="modal-actions">' +
+          '<div class="dialog-title">全データを消去しますか?</div>' +
+          '<p class="lede">このブラウザに保存されたスタッフ・希望・確定シフトをすべて削除します。元に戻せません。</p>' +
+          '<div class="dialog-actions">' +
           '<button type="button" class="btn" data-role="cancel">キャンセル</button>' +
           '<button type="button" class="btn btn-danger" data-role="ok">消去する</button>' +
           '</div>'
