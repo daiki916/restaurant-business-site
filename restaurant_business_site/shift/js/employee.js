@@ -336,8 +336,9 @@
       if (draft[date].status === "work") workDays++;
       if (draft[date].status === "off") offDays++;
     });
+    var noneDays = 7 - workDays - offDays;
     $("submit-summary").innerHTML =
-      '<strong>出勤 ' + workDays + '日</strong><br>休み ' + offDays + '日';
+      '<strong>出勤 ' + workDays + '日</strong><br>休み ' + offDays + '日・未入力 ' + noneDays + '日';
   }
 
   /* ===== 操作(イベント委譲) ===== */

@@ -28,12 +28,13 @@
     <div id="admin-root" class="hidden">
         <header class="app-header">
             <div class="brand">
-                <span class="brand-logo">Shift Sync</span>
-                <span class="brand-store" id="store-name"></span>
+                <span class="brand-badge">S</span>
+                <div class="brand-text">
+                    <span class="brand-logo">SHIFT SYNC</span>
+                    <span class="brand-sub">シフト希望収集システム / <span id="store-name"></span></span>
+                </div>
             </div>
-            <div class="header-actions">
-                <span class="badge" id="publish-badge">下書き</span>
-            </div>
+            <div class="header-actions"></div>
         </header>
 
         <main class="app app-wide">
@@ -41,18 +42,27 @@
                 デモモード:データはこのブラウザ内にのみ保存されます(端末間の共有には SETUP.md のGAS設定が必要です)
             </div>
 
-            <!-- ツールバー -->
-            <div class="admin-toolbar">
-                <div class="week-nav">
-                    <button class="btn btn-icon" id="week-prev" type="button" title="前の週">◀</button>
-                    <span class="week-nav-label" id="week-label"></span>
-                    <button class="btn btn-icon" id="week-next" type="button" title="次の週">▶</button>
-                    <button class="btn btn-sm" id="week-today" type="button">今週へ</button>
+            <!-- ツールバー 1段目: 週ナビ+状態 -->
+            <div class="toolbar-row">
+                <div class="week-pill glass">
+                    <button class="week-arrow" id="week-prev" type="button" title="前の週">‹</button>
+                    <div class="week-pill-center">
+                        <span class="week-nav-label" id="week-label"></span>
+                        <span class="week-sublabel" id="week-sublabel"></span>
+                    </div>
+                    <button class="week-arrow" id="week-next" type="button" title="次の週">›</button>
                 </div>
+                <span class="badge" id="publish-badge">下書き</span>
+                <span class="badge" id="submit-counter"></span>
                 <div class="toolbar-spacer"></div>
+                <button class="btn btn-sm" id="week-today" type="button">今週へ</button>
+            </div>
+
+            <!-- ツールバー 2段目: 操作ボタン -->
+            <div class="toolbar-row">
                 <button class="btn btn-sm" id="reload-btn" type="button">↻ 再読込</button>
                 <button class="btn btn-sm" id="emp-btn" type="button">⚙ 従業員管理</button>
-                <button class="btn btn-sm btn-primary" id="publish-btn" type="button">この週を確定して公開</button>
+                <button class="btn btn-sm btn-publish" id="publish-btn" type="button">この週を確定して公開</button>
             </div>
 
             <!-- 週グリッド -->

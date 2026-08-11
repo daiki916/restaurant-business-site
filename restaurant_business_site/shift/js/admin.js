@@ -24,7 +24,7 @@
   /* ===== 初期化・PINゲート ===== */
 
   document.addEventListener("DOMContentLoaded", function () {
-    $("store-name").textContent = cfg.STORE_NAME + " 管理";
+    $("store-name").textContent = cfg.STORE_NAME;
     if (storage.mode === "local") $("demo-banner").classList.remove("hidden");
     bindToolbar();
 
@@ -158,6 +158,7 @@
 
   function renderAll() {
     renderWeekLabel();
+    renderSubmitCounter();
     renderPublishState();
     renderGrid();
   }
@@ -188,8 +189,33 @@
     var end = Core.addDays(weekStart, 6);
     var s = Core.dateParts(weekStart);
     var e = Core.dateParts(end);
-    var year = weekStart.split("-")[0];
-    $("week-label").textContent = year + "年 " + s.md + " 〜 " + e.md;
+    var label = $("week-label");
+    label.textContent = s.md + " 〜 " + e.md;
+    label.title = weekStart.split("-")[0] + "年";
+
+    // 今週からのオフセットでサブラベルを出す
+    var current = Core.getWeekStart(Core.todayStr(), cfg.WEEK_STARTS_ON);
+    var diff = Math.round(
+      (Core.fromDateStr(weekStart) - Core.fromDateStr(current)) / (7 * 24 * 60 * 60 * 1000)
+    );
+    var sub;
+    if (diff === 0) sub = "今週";
+    else if (diff === 1) sub = "来週";
+    else if (diff === 2) sub = "翌々週";
+    else if (diff === -1) sub = "先週";
+    else sub = diff > 0 ? diff + "週後" : (-diff) + "週前";
+    $("week-sublabel").textContent = sub;
+  }
+
+  // 提出カウンタ「提出 5/6」(希望を出した有効従業員数 / 有効従業員数)
+  function renderSubmitCounter() {
+    var active = employees.filter(function (e) { return e.active; });
+    var submitted = {};
+    weekData.requests.forEach(function (r) { submitted[r.employeeId] = true; });
+    var count = active.filter(function (e) { return submitted[e.id]; }).length;
+    var el = $("submit-counter");
+    el.textContent = "提出 " + count + "/" + active.length;
+    el.className = "badge" + (active.length > 0 && count === active.length ? " is-ok" : "");
   }
 
   function hasChangesAfterPublish() {
@@ -248,47 +274,64 @@
     var today = Core.todayStr();
     var emps = visibleEmployees();
     var notes = notesByEmployee();
+    var activeCount = employees.filter(function (e) { return e.active; }).length;
+    var targets = cfg.BLOCKS.filter(function (d) { return cfg.TARGET_HEADCOUNT[d.id]; });
 
-    grid.style.gridTemplateColumns = "150px repeat(7, minmax(96px, 1fr))";
+    grid.style.gridTemplateColumns = "150px repeat(7, minmax(100px, 1fr))";
     var html = "";
 
-    // ヘッダー行
-    html += '<div class="grid-cell grid-head">スタッフ</div>';
+    // ヘッダー行(日付+カバレッジピルを統合)
+    html += '<div class="grid-cell grid-head" style="text-align:left;">スタッフ' +
+      '<div class="text-xs text-mid" style="font-weight:400;">' + activeCount + '名 / 週7日</div></div>';
     dates.forEach(function (date) {
       var p = Core.dateParts(date);
       var dowClass = p.dowIndex === 0 ? " is-sun" : (p.dowIndex === 6 ? " is-sat" : "");
       html += '<div class="grid-cell grid-head' + (date === today ? " is-today" : "") + '">' +
-        '<span class="head-date">' + p.md + '</span> <span class="dow' + dowClass + '">(' + p.dow + ')</span></div>';
-    });
-
-    // カバレッジ行(確定人数 / 必要人数)
-    var targets = cfg.BLOCKS.filter(function (d) { return cfg.TARGET_HEADCOUNT[d.id]; });
-    html += '<div class="grid-cell grid-coverage" style="font-weight:700;">必要人数</div>';
-    dates.forEach(function (date) {
-      html += '<div class="grid-cell grid-coverage">';
+        '<span class="head-date">' + p.md + '</span> <span class="dow' + dowClass + '">' + p.dow + '</span>';
+      html += '<div class="cov-pills">';
       targets.forEach(function (def) {
         var target = cfg.TARGET_HEADCOUNT[def.id];
         var count = countCoverage(date, def);
         var cls = count >= target ? " is-ok" : " is-short";
-        html += '<span class="cov-item' + cls + '">' + Core.escapeHtml(def.label) + " " + count + "/" + target + '</span>';
+        html += '<span class="cov-pill' + cls + '">' + Core.escapeHtml(def.icon || def.label) +
+          " " + count + "/" + target + '</span>';
       });
-      html += '</div>';
+      html += '</div></div>';
     });
 
-    // 従業員行
+    // 従業員行(名前+提出タイムスタンプ)
+    html += "";
     emps.forEach(function (emp) {
       var note = notes[emp.id];
+      var stamp = submitStamp(emp.id);
       html += '<div class="grid-cell grid-emp' + (emp.active ? "" : " is-inactive") + '"' +
         (note ? ' data-action="show-note" data-emp="' + emp.id + '" style="cursor:pointer;" title="' + Core.escapeHtml(note) + '"' : "") + '>' +
         '<span class="dot" style="background:' + emp.color + ';color:' + emp.color + '"></span>' +
-        Core.escapeHtml(emp.name) + (emp.active ? "" : " (無効)") + (note ? ' <span title="メモあり">✎</span>' : "") +
-        '</div>';
+        '<div class="emp-info">' +
+        '<span class="emp-name">' + Core.escapeHtml(emp.name) + (emp.active ? "" : " (無効)") +
+        (note ? ' <span title="メモあり">✎</span>' : "") + '</span>' +
+        (stamp
+          ? '<span class="emp-sub">' + stamp + ' 提出</span>'
+          : '<span class="emp-sub is-missing">未提出</span>') +
+        '</div></div>';
       dates.forEach(function (date) {
         html += renderSlotCell(emp, date);
       });
     });
 
     grid.innerHTML = html;
+  }
+
+  // 従業員の最終提出日時("8/9 21:14" 形式)。未提出なら空文字
+  function submitStamp(employeeId) {
+    var latest = "";
+    weekData.requests.forEach(function (r) {
+      if (r.employeeId === employeeId && r.updatedAt > latest) latest = r.updatedAt;
+    });
+    if (!latest) return "";
+    var d = new Date(latest);
+    return (d.getMonth() + 1) + "/" + d.getDate() + " " +
+      String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
   }
 
   // 確定シフトが時間帯定義と重なっていれば人数にカウント
@@ -305,6 +348,24 @@
     return Object.keys(seen).length;
   }
 
+  // 時間帯定義と完全一致するブロック定義を返す(なければnull)
+  function findDef(start, end) {
+    for (var i = 0; i < cfg.BLOCKS.length; i++) {
+      if (cfg.BLOCKS[i].start === start && cfg.BLOCKS[i].end === end) return cfg.BLOCKS[i];
+    }
+    return null;
+  }
+
+  // チップの中身(1行目=アイコン+ラベル / 2行目=時刻。カスタム時間は時刻のみ)
+  function chipInner(start, end, moreHtml) {
+    var def = findDef(start, end);
+    if (def) {
+      return '<span class="chip-label">' + Core.escapeHtml((def.icon ? def.icon + " " : "") + def.label) +
+        (moreHtml || "") + '</span><span class="chip-time">' + start + "-" + end + '</span>';
+    }
+    return '<span class="chip-label">' + start + "-" + end + (moreHtml || "") + '</span>';
+  }
+
   function renderSlotCell(emp, date) {
     var assignments = weekData.assignments
       .filter(function (a) { return a.employeeId === emp.id && a.date === date; })
@@ -317,12 +378,12 @@
 
     // 確定チップ(実線・発光)
     assignments.forEach(function (a) {
-      var label = Core.blockLabel({ start: a.start, end: a.end }, cfg);
+      var more = '<span class="chip-more" data-action="edit-asg" data-id="' + a.id +
+        '" title="時刻・メモを編集"> …</span>';
       chips += '<div class="cell-chip is-assigned" style="border-color:' + emp.color + ';color:' + emp.color +
-        ';box-shadow:0 0 9px ' + emp.color + '55;background:' + emp.color + '14"' +
+        ';box-shadow:0 0 9px ' + emp.color + '55;background:' + emp.color + '1A"' +
         ' data-action="unassign" data-id="' + a.id + '" title="タップで確定解除 / …で編集">' +
-        Core.escapeHtml(label) +
-        '<span class="chip-more" data-action="edit-asg" data-id="' + a.id + '" title="時刻・メモを編集"> …</span>' +
+        chipInner(a.start, a.end, more) +
         (a.note ? '<span class="chip-note">' + Core.escapeHtml(a.note) + '</span>' : "") +
         '</div>';
     });
@@ -338,21 +399,16 @@
                    Core.timeToMin(b.start) < Core.timeToMin(a.end);
           });
           if (covered) return;
-          var label = Core.blockLabel(b, cfg);
           chips += '<div class="cell-chip is-request" style="border-color:' + emp.color + ';color:' + emp.color + '"' +
             ' data-action="promote" data-emp="' + emp.id + '" data-date="' + date +
             '" data-start="' + b.start + '" data-end="' + b.end + '" title="タップで確定">' +
-            '希望 ' + Core.escapeHtml(label) + '</div>';
+            chipInner(b.start, b.end) + '</div>';
         });
       }
     }
 
-    if (!chips) {
-      chips = '<span class="placeholder">—</span>';
-    }
-
     return '<div class="grid-cell grid-slot" data-action="add-shift" data-emp="' + emp.id +
-      '" data-date="' + date + '">' + chips + '</div>';
+      '" data-date="' + date + '" title="空き部分をタップで追加">' + chips + '</div>';
   }
 
   /* ===== グリッド操作 ===== */

@@ -149,15 +149,37 @@ input::placeholder, textarea::placeholder {
 
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 0.5em;
+  align-items: center;
+  gap: 0.6em;
   min-width: 0;
 }
 
-.brand-logo {
-  font-size: var(--font-lg);
+.brand-badge {
+  width: 2.3em;
+  height: 2.3em;
+  flex-shrink: 0;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: var(--font-md);
+  color: #041018;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-violet));
+  box-shadow: var(--glow-cyan);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.brand-logo {
+  font-size: var(--font-md);
+  font-weight: 700;
+  letter-spacing: 0.22em;
   background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
   -webkit-background-clip: text;
   background-clip: text;
@@ -165,12 +187,18 @@ input::placeholder, textarea::placeholder {
   white-space: nowrap;
 }
 
-.brand-store {
+.brand-sub {
   font-size: var(--font-xs);
   color: var(--text-mid);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 430px) {
+  .brand-sub {
+    display: none;
+  }
 }
 
 .header-actions {
@@ -285,6 +313,20 @@ input::placeholder, textarea::placeholder {
 .btn-danger {
   color: var(--danger);
   border-color: rgba(255, 77, 109, 0.45);
+}
+
+/* 管理画面の公開ボタン(マゼンタ→バイオレットのグラデーション) */
+.btn-publish {
+  border: none;
+  background: linear-gradient(90deg, var(--neon-magenta), var(--neon-violet));
+  color: #FFFFFF;
+  font-weight: 700;
+  box-shadow: var(--glow-magenta);
+}
+
+.btn-publish:hover {
+  filter: brightness(1.1);
+  background: linear-gradient(90deg, var(--neon-magenta), var(--neon-violet));
 }
 
 .btn-sm {
@@ -820,27 +862,59 @@ input::placeholder, textarea::placeholder {
   display: block;
 }
 
-/* ===== 管理者: ツールバー ===== */
-.admin-toolbar {
+/* ===== 管理者: ツールバー(2段構成) ===== */
+.toolbar-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--sp-sm);
-  margin-bottom: var(--sp-md);
+  margin-bottom: var(--sp-sm);
 }
 
-.week-nav {
+/* 週ナビ: 大型ピル */
+.week-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: 0.35em 0.6em;
+  border-radius: var(--radius-pill);
+}
+
+.week-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: var(--sp-xs);
+  justify-content: center;
+  font-size: var(--font-lg);
+  color: var(--text-mid);
+  transition: var(--transition);
+}
+
+.week-arrow:active {
+  color: var(--neon-cyan);
+  transform: scale(0.92);
+}
+
+.week-pill-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 9em;
+  line-height: 1.25;
 }
 
 .week-nav-label {
   font-size: var(--font-lg);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  min-width: 9.5em;
-  text-align: center;
+  white-space: nowrap;
+}
+
+.week-sublabel {
+  font-size: var(--font-xs);
+  color: var(--text-mid);
 }
 
 .toolbar-spacer {
@@ -895,44 +969,42 @@ input::placeholder, textarea::placeholder {
   background: rgba(0, 229, 255, 0.1);
 }
 
-/* カバレッジ行 */
-.grid-coverage {
-  background: rgba(255, 255, 255, 0.03);
-  min-height: 0;
+/* 日付ヘッダー内のカバレッジピル(確定人数/必要人数) */
+.cov-pills {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 3px;
+}
+
+.cov-pill {
   font-size: var(--font-xs);
-  text-align: center;
-  line-height: 1.5;
-  padding: 0.3em 0.2em;
-}
-
-.cov-item {
-  display: block;
-  white-space: nowrap;
+  font-weight: 500;
+  padding: 0.02em 0.55em;
+  border-radius: var(--radius-pill);
   font-variant-numeric: tabular-nums;
-  color: var(--text-mid);
+  white-space: nowrap;
 }
 
-.cov-item.is-ok {
+.cov-pill.is-ok {
   color: var(--neon-lime);
-  text-shadow: 0 0 8px rgba(180, 255, 57, 0.5);
+  background: rgba(180, 255, 57, 0.12);
+  box-shadow: 0 0 8px rgba(180, 255, 57, 0.2);
 }
 
-.cov-item.is-short {
+.cov-pill.is-short {
   color: var(--danger);
-  text-shadow: 0 0 8px rgba(255, 77, 109, 0.55);
+  background: rgba(255, 77, 109, 0.12);
+  box-shadow: 0 0 8px rgba(255, 77, 109, 0.22);
 }
 
-/* 従業員名セル */
+/* 従業員名セル(名前+提出タイムスタンプ) */
 .grid-emp {
   display: flex;
   align-items: center;
-  gap: 0.45em;
-  font-size: var(--font-sm);
-  font-weight: 500;
+  gap: 0.5em;
   background: rgba(255, 255, 255, 0.04);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .grid-emp .dot {
@@ -941,6 +1013,32 @@ input::placeholder, textarea::placeholder {
   border-radius: 50%;
   flex-shrink: 0;
   box-shadow: 0 0 7px currentColor;
+}
+
+.emp-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.emp-info .emp-name {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emp-info .emp-sub {
+  font-size: var(--font-xs);
+  color: var(--text-low);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.emp-info .emp-sub.is-missing {
+  color: var(--neon-amber);
 }
 
 /* データセル */
@@ -965,19 +1063,35 @@ input::placeholder, textarea::placeholder {
   opacity: 0.6;
 }
 
-/* 希望チップ(点線・半透明)と確定チップ(実線・発光) */
+/* 希望チップ(点線・半透明)と確定チップ(実線・発光)。
+   1行目=アイコン+ラベル、2行目=時刻の2行構成 */
 .cell-chip {
   font-size: var(--font-xs);
   font-variant-numeric: tabular-nums;
-  padding: 0.28em 0.5em;
-  border-radius: var(--radius-sm);
+  padding: 0.3em 0.45em;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.25;
   border: 1px dashed;
-  opacity: 0.85;
+  opacity: 0.8;
   transition: var(--transition);
   user-select: none;
   -webkit-user-select: none;
+}
+
+.cell-chip .chip-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cell-chip .chip-time {
+  font-size: 0.92em;
+  opacity: 0.85;
+  white-space: nowrap;
 }
 
 .cell-chip:active {
