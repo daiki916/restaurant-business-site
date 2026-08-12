@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>月間シフト表 | Shift Sync</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#FAFAF7">
+    <link rel="stylesheet" href="css/shift.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Zen+Old+Mincho:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="masthead no-print">
+        <div class="masthead-title">
+            <span class="wordmark">月間シフト表</span>
+            <span class="wordmark-sub" id="store-name"></span>
+        </div>
+        <div class="masthead-side">
+            <a class="btn btn-quiet" id="back-link" href="admin.html">出勤簿へ戻る</a>
+        </div>
+    </header>
+
+    <main class="sheet sheet-wide">
+        <div class="demo-banner hidden no-print" id="demo-banner" title="タップで閉じる">
+            デモです。データはこのブラウザにだけ残ります
+        </div>
+
+        <!-- 月の移動と表示の切替 -->
+        <div class="controls no-print">
+            <button class="step-btn" id="month-prev" type="button" title="前の月">‹</button>
+            <div class="period">
+                <span class="period-range" id="month-label"></span>
+            </div>
+            <button class="step-btn" id="month-next" type="button" title="次の月">›</button>
+            <button class="btn btn-quiet" id="month-today" type="button">今月</button>
+
+            <div class="switch-tabs hidden" id="scope-tabs">
+                <button class="switch-tab" id="scope-all" type="button">全員</button>
+                <button class="switch-tab" id="scope-me" type="button">自分だけ</button>
+            </div>
+
+            <div class="spacer"></div>
+            <button class="btn" id="print-btn" type="button">PDFで保存(印刷)</button>
+            <button class="btn btn-ink" id="image-btn" type="button">画像で保存</button>
+        </div>
+
+        <!-- 出力される用紙 -->
+        <div class="printable" id="printable">
+            <div class="print-head">
+                <span class="print-title" id="print-title"></span>
+                <span class="print-store" id="print-store"></span>
+            </div>
+            <p class="print-note hidden" id="print-note"></p>
+            <div class="month-scroll">
+                <div id="month-body"></div>
+            </div>
+        </div>
+
+        <p class="hint no-print" id="hint"></p>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/monthly.js"></script>
+</body>
+</html>

@@ -1416,6 +1416,268 @@ input::placeholder, textarea::placeholder {
   color: var(--ink-2);
 }
 
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-3);
+}
+
+/* リンクをボタンとして使う場合の見た目合わせ */
+a.btn {
+  text-decoration: none;
+}
+
+/* ===== 月間シフト表 ===== */
+.print-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--rule-bold);
+}
+
+.print-title {
+  font-family: var(--face-mincho);
+  font-weight: 700;
+  font-size: var(--t-xl);
+}
+
+.print-store {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+}
+
+.print-note {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  padding: var(--sp-2) var(--sp-3);
+  margin-bottom: var(--sp-2);
+  background: var(--paper-band);
+  border-left: 3px solid var(--ink-3);
+}
+
+.month-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.month-table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid var(--rule-bold);
+  background: var(--paper);
+}
+
+.month-table th,
+.month-table td {
+  border: 1px solid var(--rule);
+  padding: 3px 2px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.month-table thead th {
+  background: var(--paper-band);
+  border-bottom: 1px solid var(--rule-bold);
+  line-height: 1.2;
+  padding: 5px 2px;
+}
+
+.month-table thead th.is-weekend { background: #E9EBE3; }
+
+.mt-d {
+  display: block;
+  font-family: var(--face-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.mt-w {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--ink-3);
+}
+
+/* スタッフ名の列は横スクロールしても残す */
+.month-table th.mt-name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 104px;
+  text-align: left;
+  padding-left: 6px;
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--paper-band);
+  border-right: 1px solid var(--rule-bold);
+  white-space: nowrap;
+}
+
+.month-table th.mt-name .tag-dot {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  margin-right: 0.4em;
+}
+
+.mt-cell {
+  min-width: 30px;
+  font-family: var(--face-num);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.68rem;
+  line-height: 1.25;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.mt-cell.is-weekend { background: var(--paper-band); }
+.mt-off { color: var(--ink-3); }
+
+.mt-total {
+  min-width: 42px;
+  font-family: var(--face-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-xs);
+  color: var(--ink);
+  border-left: 1px solid var(--rule-bold);
+}
+
+.month-table tfoot td,
+.month-table tfoot th {
+  background: var(--paper-band);
+  border-top: 1px solid var(--rule-bold);
+  font-family: var(--face-num);
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+}
+
+/* 自分だけの一覧 */
+.person-table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 420px;
+  border-top: 1px solid var(--rule-bold);
+  border-bottom: 1px solid var(--rule-bold);
+}
+
+.person-table td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.35em 0.5em;
+}
+
+.person-table tr.is-weekend { background: var(--paper-band); }
+.person-table tr.is-work .pt-time { color: var(--ink); font-weight: 700; }
+
+.pt-date {
+  width: 2.4em;
+  text-align: right;
+  font-family: var(--face-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-md);
+  color: var(--ink);
+}
+
+.pt-dow {
+  width: 2em;
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+}
+
+.pt-time {
+  font-family: var(--face-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+}
+
+.person-total {
+  max-width: 420px;
+  padding: var(--sp-2) 0.5em;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+}
+
+.person-total b {
+  font-family: var(--face-num);
+  font-size: var(--t-md);
+  color: var(--ink);
+}
+
+/* ===== 印刷(PDFとして保存する) ===== */
+@media print {
+  /* 用紙の向きは Core.printWith が @page で切り替える */
+  .no-print,
+  .masthead,
+  .controls,
+  .demo-banner,
+  .hint,
+  .toast-stack,
+  .overlay {
+    display: none !important;
+  }
+
+  html, body {
+    background: #fff;
+    color: #000;
+  }
+
+  .sheet, .sheet-wide {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+
+  .month-scroll {
+    overflow: visible;
+  }
+
+  /* 列幅を固定して用紙の幅に収める。fixed では min-width が効かないので
+     名前と合計だけ明示し、残りを日付の列で分け合わせる */
+  .month-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .month-table th.mt-name {
+    width: 78px;
+    font-size: 9pt;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .month-table .mt-total { width: 30px; }
+  .month-table .mt-cell { font-size: 7pt; }
+  .month-table .mt-d { font-size: 9pt; }
+  .month-table .mt-w { font-size: 6.5pt; }
+
+  /* 罫線と地色は紙でも意味を持つので、ブラウザに落とさせない */
+  .month-table th,
+  .month-table td,
+  .month-table thead th.is-weekend,
+  .mt-cell.is-weekend,
+  .person-table tr.is-weekend,
+  .month-table tfoot td,
+  .month-table tfoot th,
+  .month-table th.mt-name {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 複数ページに渡るときは見出しを毎ページ繰り返す */
+  .month-table thead { display: table-header-group; }
+  .month-table tr { break-inside: avoid; }
+
+  .month-table th.mt-name { position: static; }
+
+  a[href]::after { content: none !important; }
+}
+
 /* ===== ユーティリティ ===== */
 .hidden { display: none !important; }
 .muted { color: var(--ink-2); }

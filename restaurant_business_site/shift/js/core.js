@@ -61,6 +61,37 @@
     return out;
   }
 
+  // その月の全日付("YYYY-MM-DD" の配列)。month は 1〜12
+  function monthDates(year, month) {
+    var out = [];
+    var d = new Date(year, month - 1, 1);
+    while (d.getMonth() === month - 1) {
+      out.push(toDateStr(d));
+      d.setDate(d.getDate() + 1);
+    }
+    return out;
+  }
+
+  // その月に重なる週の開始日を並べる(月は5〜6週にまたがる)
+  function monthWeekStarts(year, month, weekStartsOn) {
+    var dates = monthDates(year, month);
+    var first = getWeekStart(dates[0], weekStartsOn);
+    var last = getWeekStart(dates[dates.length - 1], weekStartsOn);
+    var out = [];
+    var w = first;
+    while (w <= last) {
+      out.push(w);
+      w = addDays(w, 7);
+    }
+    return out;
+  }
+
+  // 月を1つ進める/戻す
+  function shiftMonth(year, month, delta) {
+    var d = new Date(year, month - 1 + delta, 1);
+    return { year: d.getFullYear(), month: d.getMonth() + 1 };
+  }
+
   // "2026-08-12" → { md: "8/12", dow: "水", dowIndex: 3 }
   function dateParts(dateStr) {
     var d = fromDateStr(dateStr);
@@ -270,6 +301,50 @@
     });
   }
 
+  /* ===== ファイルの保存 ===== */
+
+  // 端末が共有に対応していれば共有シートを出し、だめならダウンロードする
+  function saveBlob(blob, filename) {
+    if (navigator.canShare && window.File) {
+      try {
+        var file = new File([blob], filename, { type: blob.type });
+        if (navigator.canShare({ files: [file] })) {
+          return navigator.share({ files: [file] }).catch(function () {
+            download(blob, filename);
+          });
+        }
+      } catch (e) { /* 共有が使えなければ下のダウンロードへ */ }
+    }
+    download(blob, filename);
+    return Promise.resolve();
+  }
+
+  function download(blob, filename) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  /* ===== 印刷 ===== */
+
+  // @page は class で切り替えられないので、style要素ごと差し替える
+  function printWith(orientation) {
+    var id = "page-size";
+    var el = document.getElementById(id);
+    if (!el) {
+      el = document.createElement("style");
+      el.id = id;
+      document.head.appendChild(el);
+    }
+    el.textContent = "@page { size: A4 " + orientation + "; margin: 10mm; }";
+    window.print();
+  }
+
   /* ===== SHA-256(PINゲート用) ===== */
 
   function sha256Hex(text) {
@@ -290,6 +365,9 @@
     getWeekStart: getWeekStart,
     addDays: addDays,
     weekDates: weekDates,
+    monthDates: monthDates,
+    monthWeekStarts: monthWeekStarts,
+    shiftMonth: shiftMonth,
     dateParts: dateParts,
     timeToMin: timeToMin,
     minToTime: minToTime,
@@ -308,6 +386,8 @@
     openModal: openModal,
     setupDemoBanner: setupDemoBanner,
     copyText: copyText,
+    saveBlob: saveBlob,
+    printWith: printWith,
     sha256Hex: sha256Hex
   };
 })();
