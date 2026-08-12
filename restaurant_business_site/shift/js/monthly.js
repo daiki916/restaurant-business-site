@@ -309,11 +309,12 @@
         return new Promise(function (resolve) { canvas.toBlob(resolve, "image/png"); });
       })
       .then(function (blob) {
-        var who = scope === "me" && me ? "_" + me.name : "";
-        return Core.saveBlob(blob, "シフト_" + year + "-" +
-          String(month).padStart(2, "0") + who + ".png");
+        // ファイル名はASCIIにする(日本語だと名前ごと無視される端末があるため)
+        var name = "shift-" + year + "-" + String(month).padStart(2, "0") +
+          (scope === "me" ? "-mine" : "") + ".png";
+        return Core.saveBlob(blob, name).then(function () { return name; });
       })
-      .then(function () { Core.toast("画像を保存しました"); })
+      .then(function (name) { Core.toast(name + " を保存しました"); })
       .catch(function (err) { Core.toast("画像の作成に失敗しました: " + err.message, true); })
       .finally(function () {
         btn.disabled = false;

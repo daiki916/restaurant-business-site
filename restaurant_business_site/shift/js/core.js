@@ -303,31 +303,39 @@
 
   /* ===== ファイルの保存 ===== */
 
-  // 端末が共有に対応していれば共有シートを出し、だめならダウンロードする
+  // ダウンロードフォルダに保存する。
+  // 共有シート(navigator.share)は端末によって挙動が大きく違い、
+  // 「保存したのにファイルが見つからない」ことがあるので使わない。
   function saveBlob(blob, filename) {
-    if (navigator.canShare && window.File) {
-      try {
-        var file = new File([blob], filename, { type: blob.type });
-        if (navigator.canShare({ files: [file] })) {
-          return navigator.share({ files: [file] }).catch(function () {
-            download(blob, filename);
-          });
-        }
-      } catch (e) { /* 共有が使えなければ下のダウンロードへ */ }
-    }
-    download(blob, filename);
-    return Promise.resolve();
-  }
-
-  function download(blob, filename) {
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download = filename;
+    a.download = safeFilename(filename);
+    a.rel = "noopener";
+    a.style.display = "none";
     document.body.appendChild(a);
     a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    // 押した直後に消すとダウンロードが始まらない端末があるので、少し置いてから片付ける
+    setTimeout(function () {
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, 2000);
+    return Promise.resolve();
+  }
+
+  // ダウンロード名は ASCII に寄せる。
+  // 日本語を含む名前はブラウザに丸ごと無視され、「download」という名前で
+  // 保存されてしまうことがあるため(拡張子まで失われる)。
+  function safeFilename(name) {
+    var s = String(name)
+      .replace(/[\u0000-\u001f]/g, "")          // 制御文字
+      .replace(/[^\u0020-\u007e]/g, "")         // 非ASCII
+      .replace(/[\\/:*?"<>|]/g, "_")            // パスに使えない記号
+      .replace(/\s+/g, "-")
+      .replace(/-{2,}/g, "-")
+      .replace(/^[-_.]+/, "")
+      .slice(0, 120);
+    return s || "download.png";
   }
 
   /* ===== 印刷 ===== */
